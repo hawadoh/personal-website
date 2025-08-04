@@ -10,13 +10,12 @@ theme = "PaperMod"
       unsafe = true      # allow raw HTML in front matter (some shortcodes or math might emit it)
     [markup.goldmark.extensions]
       mathjax = true
-
-[module]
-  [[module.imports]]
-    path = "github.com/litao91/goldmark-mathjax"
-    mounts = [
-      { source = ".", target = "layouts/_ext/goldmark-mathjax" }
-    ]
+    [markup.goldmark.extensions.passthrough]
+        enable = true
+        # preserve both block & inline math delimiters
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block  = [['$$','$$'], ['\\[','\\]']]
+          inline = [['$','$'],  ['\\(','\\)']]
 
 [params]
   author = "Howard Cheung"
