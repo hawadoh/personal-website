@@ -34,8 +34,7 @@ header .nav #menu li a:hover span::after {
   transform: scaleX(1);
 }
 
-.katex,
-.katex-display,
-.katex * {
-  font-size: 1em !important;
+/* Prevent KaTeX from breaking equations into two lines in inline mode */
+.katex {
+  white-space: nowrap; 
 }

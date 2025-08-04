@@ -7,15 +7,14 @@ theme = "PaperMod"
   defaultMarkdownHandler = "goldmark"
   [markup.goldmark]
     [markup.goldmark.renderer]
-      unsafe = true      # allow raw HTML in front matter (some shortcodes or math might emit it)
+      unsafe = true # allow raw HTML in front matter (some shortcodes or math might emit it)
     [markup.goldmark.extensions]
       mathjax = true
     [markup.goldmark.extensions.passthrough]
-        enable = true
-        # preserve both block & inline math delimiters
-        [markup.goldmark.extensions.passthrough.delimiters]
-          block  = [['$$','$$'], ['\\[','\\]']]
-          inline = [['$','$'],  ['\\(','\\)']]
+      enable = true # Extract raw math expressions before Markdown parsing to avoid interference
+      [markup.goldmark.extensions.passthrough.delimiters]
+        block  = [['$$','$$'], ['\\[','\\]']]
+        inline = [['$','$'],  ['\\(','\\)']]
 
 [params]
   author = "Howard Cheung"

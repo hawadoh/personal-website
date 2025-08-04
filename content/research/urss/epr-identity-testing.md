@@ -2,6 +2,8 @@
 date = '2025-08-03T23:35:49+01:00'
 draft = false
 title = 'Classical Identity Test for the EPR State'
+ShowToc = true
+TocOpen = true
 +++
 
 **Goal.** Certify that an unknown bipartite state $\rho_{AB}$ held by Alice and Bob is within trace‑distance $\varepsilon$ of
@@ -11,6 +13,7 @@ $$
 using only sequential (one qubit at a time), local measurements in the **standard** ($\{ \ket{0}, \ket{1} \}$) or **Hadamard** ($\{ \ket{+}, \ket{-} \}$) bases, and classical communication.
 
 ---
+
 ## Sequential matching‑outcomes protocol
 
 Alice and Bob share $N$ independent copies of an unknown state $\rho_{AB}$.  For each copy $i = 1, \dots, N$, they do the following **in sequence**:
@@ -37,6 +40,7 @@ $$
 which represents the non-matching fraction of the results.
 
 ---
+
 ## Asymptotic bound
 
 First, recall:
@@ -127,8 +131,8 @@ $$
 $$
 \text{Decision} =
 \begin{cases}
-\text{“close"}, & \hat\delta \leq c,\\
-\text{“far"},   & \hat\delta > c.
+\text{“close”}, & \hat\delta \leq c,\\
+\text{“far”},   & \hat\delta > c.
 \end{cases}
 $$
 
@@ -177,7 +181,7 @@ expected total rounds to be correct with probability $\geq 2/3$.
 
 ---
 
-**Theorem (Sample Complexity with confidence).**
+**Theorem (Sample Complexity with Confidence).**
 Fix a target trace‐distance $\varepsilon>0$. By running the sequential matching‐outcomes protocol for
 $$
 N = O(\varepsilon^{-4})

@@ -7,7 +7,11 @@ draft = false
 
 Hello and welcome to my URSS blog! Over the coming weeks, I'll be sharing my journey into the fascinating field of quantum cryptography. There are two parts to this: "quantum", the strange and powerful world of quantum physics; and "cryptography", the science of securing information via encryption and decryption.
 
-Let's start simple. Take this number: $$1984909$$ Looks random right? Here's the challenge: can you figure out which two numbers, when multiplied together, give you this result?
+Let's start simple. Take this number:
+$$
+1984909
+$$
+Looks random right? Here's the challenge: can you figure out which two numbers, when multiplied together, give you this result?
 
 Try doing it by hand - or even with a calculator. It's not so easy. This task is known as *factoring*.
 
