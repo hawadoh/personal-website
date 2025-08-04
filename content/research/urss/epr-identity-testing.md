@@ -53,6 +53,7 @@ $$
 $$
 D(\rho,\sigma) := \frac{1}{2}\|\rho - \sigma\|_1.
 $$
+
 From the work we've done in Exercise 8.3.1 in the textbook *Introduction to Quantum Cryptography* by Vidick and Wehner (`TODO: write the whole proof out from notes`), when the number of rounds $N \to \infty$,
 $$
 \begin{align*}
