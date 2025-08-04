@@ -11,5 +11,7 @@ $$
 \langle 0 | 1 \rangle = 0
 $$
 
-$$\ket{\text{EPR}}_{AB} = \frac1{\sqrt2}\left(\ket{00}_{AB} + \ket{11}_{AB}\right),$$
+$$
+\ket{\text{EPR}}_{AB} = \frac1{\sqrt2}\left(\ket{00}_{AB} + \ket{11}_{AB}\right),
+$$
 which shows math in **display mode**.

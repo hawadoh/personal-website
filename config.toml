@@ -18,7 +18,6 @@ theme = "PaperMod"
       { source = ".", target = "layouts/_ext/goldmark-mathjax" }
     ]
 
-
 [params]
   author = "Howard Cheung"
   defaultTheme = "auto"
