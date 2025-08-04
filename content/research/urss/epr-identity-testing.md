@@ -143,14 +143,14 @@ $$
 $$
 
 1. **Completeness** ("close" case).
-   If $\delta \leq \delta_{\text{close}} = \frac{\varepsilon^2}{6}$, then on the *good* event $|\hat{\delta}-\delta|< t = \frac{\varepsilon^2}{6}$ we have $\hat{\delta} - \delta < t$, hence
+   If $\delta \leq \delta_{\text{close}} = \frac{\varepsilon^2}{6}$, then conditioned on the *good* event $|\hat{\delta}-\delta|< t = \frac{\varepsilon^2}{6}$ we have $\hat{\delta} - \delta < t$, hence
    $$
    \hat{\delta} < \delta + t \quad\leq \frac{\varepsilon^2}{6} + \frac{\varepsilon^2}{6} = \frac{\varepsilon^2}{3} \leq\quad \frac{5\varepsilon^2}{12} = c.
    $$
    As $\hat{\delta} \leq c$, we declare "close" correctly.
 
 2. **Soundness** ("far" case).
-   If $\delta \geq \delta_{\text{far}} = \frac{2\varepsilon^2}{3}$, then on the same event $|\hat{\delta}-\delta|< t = \frac{\varepsilon^2}{6}$ we have $-t < \hat{\delta} - \delta$, hence
+   If $\delta \geq \delta_{\text{far}} = \frac{2\varepsilon^2}{3}$, then conditioned on the same event $|\hat{\delta}-\delta|< t = \frac{\varepsilon^2}{6}$ we have $-t < \hat{\delta} - \delta$, hence
    $$
    \hat{\delta} > \delta - t \quad\geq \frac{2\varepsilon^2}{3} - \frac{\varepsilon^2}{6} = \frac{\varepsilon^2}{2} >\quad \frac{5\varepsilon^2}{12} = c.
    $$
