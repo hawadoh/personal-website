@@ -20,7 +20,8 @@ Alice and Bob share $N$ independent copies of an unknown state $\rho_{AB}$.  For
 1. **Basis choice:**
    * Alice picks $\theta_i \in \{ 0, 1 \}$ uniformly at random.
    * Bob picks $\tilde{\theta}_i \in \{ 0, 1 \}$ uniformly at random.
-     Here $\theta_i = 0$ means "standard basis" and $\theta_i = 1$ means "Hadamard basis".
+
+    Here $\theta_i = 0$ means "standard basis" and $\theta_i = 1$ means "Hadamard basis".
 2. **Local measurement:**
    * Alice measures her qubit in basis $\theta_i$ to get outcome $x_i \in \{ 0, 1 \}$.
    * Bob measures his qubit in basis $\tilde\theta_i$, obtaining $\tilde x_i \in \{ 0, 1 \}$.
@@ -43,7 +44,7 @@ which represents the non-matching fraction of the results.
 
 ## Asymptotic bound
 
-First, recall:
+First, recall that:
 - The *fidelity* between a state $\rho$ and a pure state $\ket{\psi}$ is defined as
 $$
 F\left(\rho, \ket{\psi}\right) := \sqrt{\bra{\psi}~\rho~\ket{\psi}}.
@@ -52,7 +53,7 @@ $$
 $$
 D(\rho,\sigma) := \frac{1}{2}\|\rho - \sigma\|_1.
 $$
-From the work we've done in Exercise 8.3.1 in the textbook *Introduction to Quantum Cryptography* by Vidick and Wehner, when the number of rounds $N \to \infty$,
+From the work we've done in Exercise 8.3.1 in the textbook *Introduction to Quantum Cryptography* by Vidick and Wehner (`TODO: write the whole proof out`), when the number of rounds $N \to \infty$,
 $$
 F(\rho_{AB}, \ket{\text{EPR}}\bra{\text{EPR}}) = \sqrt{\bra{\text{EPR}}~\rho_{AB}~\ket{\text{EPR}}} \geq \sqrt{1 - 2\delta}
 $$
