@@ -53,13 +53,17 @@ $$
 $$
 D(\rho,\sigma) := \frac{1}{2}\|\rho - \sigma\|_1.
 $$
-From the work we've done in Exercise 8.3.1 in the textbook *Introduction to Quantum Cryptography* by Vidick and Wehner (`TODO: write the whole proof out`), when the number of rounds $N \to \infty$,
+From the work we've done in Exercise 8.3.1 in the textbook *Introduction to Quantum Cryptography* by Vidick and Wehner (`TODO: write the whole proof out from notes`), when the number of rounds $N \to \infty$,
 $$
-F(\rho_{AB}, \ket{\text{EPR}}\bra{\text{EPR}}) = \sqrt{\bra{\text{EPR}}~\rho_{AB}~\ket{\text{EPR}}} \geq \sqrt{1 - 2\delta}
+\begin{align*}
+F &:= F(\rho_{AB}, \ket{\text{EPR}}\bra{\text{EPR}})\\
+&= \sqrt{\bra{\text{EPR}}~\rho_{AB}~\ket{\text{EPR}}}\\
+&\geq \sqrt{1 - 2\delta}
+\end{align*}
 $$
 for some *true* error rate $\delta \in [0, 1]$ where $\delta = \Pr[x_i \neq \tilde{x}_i ~|~ \theta_i = \tilde{\theta}_i]$ is the mismatch probability.
 
-Write $F^2\geq 1-2\delta$, where $F=\sqrt{\bra{\text{EPR}}~\rho_{AB}~\ket{\text{EPR}}}$. Rearranging gives
+Rearranging $F^2\geq 1-2\delta$ gives
 $$
 1 - F^2 \leq 2\delta.
 $$
