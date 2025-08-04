@@ -33,3 +33,9 @@ header .nav #menu li a span::after {
 header .nav #menu li a:hover span::after {
   transform: scaleX(1);
 }
+
+.katex,
+.katex-display,
+.katex * {
+  font-size: 1em !important;
+}

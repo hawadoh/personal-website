@@ -3,11 +3,17 @@ languageCode = "en-us"
 title = "𝗧𝗘𝗔•𝗘𝗚𝗚" # collections of thoughts & brew.
 theme = "PaperMod"
 
-# Allow raw HTML in front matter
 [markup]
+  defaultMarkdownHandler = "goldmark"
   [markup.goldmark]
     [markup.goldmark.renderer]
-      unsafe = true
+      unsafe = true      # allow raw HTML in front matter (some shortcodes or math might emit it)
+    [markup.goldmark.extensions]
+      mathjax = true
+
+[module]
+  [[module.imports]]
+    path = "github.com/litao91/goldmark-mathjax"
 
 [params]
   author = "Howard Cheung"
