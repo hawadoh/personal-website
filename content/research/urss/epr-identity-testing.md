@@ -142,7 +142,7 @@ $$
 $$
 
 1. **Completeness** ("close" case).
-   If $\delta \leq \delta_{\text{close}} = \frac{\varepsilon^2}{6}$, then on the event $|\hat{\delta}-\delta|< t = \frac{\varepsilon^2}{6}$ we have $\hat{\delta} - \delta < t$, hence
+   If $\delta \leq \delta_{\text{close}} = \frac{\varepsilon^2}{6}$, then on the *good* event $|\hat{\delta}-\delta|< t = \frac{\varepsilon^2}{6}$ we have $\hat{\delta} - \delta < t$, hence
    $$
    \hat{\delta} < \delta + t \quad\leq \frac{\varepsilon^2}{6} + \frac{\varepsilon^2}{6} = \frac{\varepsilon^2}{3} \leq\quad \frac{5\varepsilon^2}{12} = c.
    $$
@@ -155,7 +155,7 @@ $$
    $$
    As $\hat{\delta} > c$, we declare "far" correctly.
 
-Completeness ($\delta \leq \delta_{\text{close}}$) and soundness ($\delta \geq \delta_{\text{far}}$) each fail only if $|\hat{\delta} - \delta| \geq t$, which occurs with probability at most $\alpha$.
+Completeness ($\delta \leq \delta_{\text{close}}$) and soundness ($\delta \geq \delta_{\text{far}}$) each fail only if $|\hat{\delta} - \delta| \geq t$ (the *bad* event), which occurs with probability at most $\alpha$.
 
 Now, fix the failure probability to a conventional choice $\frac{1}{3}$. Substituting the values $\alpha = \frac{1}{3}$ and $t = \frac{\varepsilon^2}{6}$ into the $|S|$ equation from earlier gives
 $$
