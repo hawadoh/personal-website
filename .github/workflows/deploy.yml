@@ -15,6 +15,11 @@ jobs:
         with:
           submodules: true  # necessary for PaperMod
           fetch-depth: 0
+          
+      - name: Setup Go (needed for Hugo Modules)
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
