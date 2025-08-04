@@ -14,6 +14,10 @@ theme = "PaperMod"
 [module]
   [[module.imports]]
     path = "github.com/litao91/goldmark-mathjax"
+    mounts = [
+      { source = ".", target = "layouts/_ext/goldmark-mathjax" }
+    ]
+
 
 [params]
   author = "Howard Cheung"
