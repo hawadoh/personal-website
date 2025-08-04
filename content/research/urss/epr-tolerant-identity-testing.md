@@ -1,7 +1,7 @@
 +++
 date = '2025-08-03T23:35:49+01:00'
 draft = false
-title = 'Classical Identity Test for the EPR State'
+title = 'Classical Tolerant Identity Test for the EPR State'
 ShowToc = true
 TocOpen = true
 +++
@@ -10,13 +10,13 @@ TocOpen = true
 $$
 \ket{\text{EPR}}_{AB} = \frac1{\sqrt2}\left(\ket{00}_{AB} + \ket{11}_{AB}\right),
 $$
-using only sequential (one qubit at a time), local measurements in the **standard** ($\{ \ket{0}, \ket{1} \}$) or **Hadamard** ($\{ \ket{+}, \ket{-} \}$) bases, and classical communication.
+using only *sequential\** (one qubit at a time), local measurements in the **standard** ($\{ \ket{0}, \ket{1} \}$) or **Hadamard** ($\{ \ket{+}, \ket{-} \}$) bases, and classical communication.
 
 ---
 
-## Sequential matching‑outcomes protocol
+## Matching‑outcomes protocol
 
-Alice and Bob share $N$ independent copies of an unknown state $\rho_{AB}$.  For each copy $i = 1, \dots, N$, they do the following **in sequence**:
+Alice and Bob share $N$ independent copies of an unknown state $\rho_{AB}$.  For each copy $i = 1, \dots, N$, they do the following *in sequence\**:
 1. **Basis choice:**
    * Alice picks $\theta_i \in \{ 0, 1 \}$ uniformly at random.
    * Bob picks $\tilde{\theta}_i \in \{ 0, 1 \}$ uniformly at random.
@@ -26,13 +26,13 @@ Alice and Bob share $N$ independent copies of an unknown state $\rho_{AB}$.  For
    * Alice measures her qubit in basis $\theta_i$ to get outcome $x_i \in \{ 0, 1 \}$.
    * Bob measures his qubit in basis $\tilde\theta_i$, obtaining $\tilde x_i \in \{ 0, 1 \}$.
 
+> **Remark.** The sequential ordering is purely a hardware convenience and *not* a theoretical requirement: it guarantees that no quantum memory or parallel measurement modules are ever needed. If you already have $N$ measurement setups and don't mind operating them in parallel, you may instead prepare all bases at once, measure in parallel, and only then exchange classical data. Both versions give the same statistical bound.
+
 > **Note.** Apart from the one-off preparation/distribution of the shared state $\rho_{AB}$, there is no need for any further quantum channel or quantum memory; Alice and Bob simply perform immediate local measurements.
 
 After all $N$ rounds, Alice and Bob publicly reveal their basis strings $\theta = (\theta_1, \dots, \theta_N)$ and $\tilde{\theta} = (\tilde{\theta}_1, \dots, \tilde{\theta}_N)$, and their outcome strings $x = (x_1, \dots, x_N)$, $\tilde{x} = (\tilde{x}_1, \dots, \tilde{x}_N)$ over a classical authenticated channel (CAC).
 
-Define the concordant set $$S = \{i : \theta_i = \tilde\theta_i\}.$$On each $i\in S$, Alice and Bob measured in the *same* basis.
-
-> **Remark.** If by rare chance $S = \varnothing$ (no matching bases at all), simply rerun the whole protocol as the probability of $S = \varnothing$ is $2^{-N}$, which is negligible for modest $N$.
+Define the concordant set $$S = \{i : \theta_i = \tilde\theta_i\}.$$On each $i\in S$, Alice and Bob measured in the *same* basis. If by rare chance $S = \varnothing$ (no matching bases at all), simply rerun the whole protocol as the probability of $S = \varnothing$ is $2^{-N}$, which is negligible for modest $N$.
 
 Compute the **observed error rate**
 $$
@@ -76,7 +76,7 @@ Combining the two inequalities give $\varepsilon \leq \sqrt{2\delta}$, and equiv
 
 ---
 
-**Theorem (Asymptotic Sequential EPR Identity Bound).**
+**Theorem (Asymptotic EPR Identity Bound).**
 
 Under the i.i.d. assumption, in the asymptotic limit $N \to \infty$, let Alice and Bob share $N$ copies of an unknown state $\rho_{AB}$. Define the *true* matching-basis error rate $\delta = \Pr[x_i \neq \tilde{x}_i ~|~ \theta_i = \tilde{\theta}_i]$. Then, the trace distance $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) = \varepsilon \in [0, 1]$ between $\rho_{AB}$ and the ideal EPR pair satisfies
 $$
@@ -93,7 +93,7 @@ We now turn the protocol into a binary decision ("close" vs. "far") with bounded
 
 We have $\varepsilon \leq \sqrt{2\delta}$, so *if* we somehow knew the exact error rate $\delta$, we could immediately conclude a bound on $\varepsilon$. But in the lab we don't know $\delta$, so the goal is just to estimate $\delta$ with $\hat{\delta}$ by measuring a finite number of copies as described in the protocol.
 
-First we establish a Bernoulli trial model. Consider $S$, the set of concordant‐basis rounds from the protocol. Let $m = |S|$. For each $i \in S$, define the indicator
+First we establish a Bernoulli trial model. Consider $S \subseteq \{1, \dots, N\}$, the set of concordant‐basis rounds from the protocol. For each $i \in S$, define the indicator
 $$
 Y_i := 
 \begin{cases}
@@ -101,7 +101,11 @@ Y_i :=
 0 &\text{if } x_i = \tilde x_i
 \end{cases}
 $$
-so each $Y_i \in \{0, 1\}$. Under the i.i.d. assumption, $\{ Y_i \}_{i=1}^m$ is a set of independent Bernoulli random variables each with parameter $\delta = \Pr[x_i \neq \tilde{x}_i ~|~ \theta_i = \tilde{\theta}_i]$, the *true* error rate (mismatch probability) conditioned on matching bases. 
+so each $Y_i \in \{0, 1\}$. Under the i.i.d. assumption, $\{ Y_i \}_{i \in S}$ is a set of independent Bernoulli random variables each with parameter $\delta = \Pr[x_i \neq \tilde{x}_i ~|~ \theta_i = \tilde{\theta}_i]$, the *true* error rate (mismatch probability) conditioned on matching bases:
+
+$$
+Y_i \sim \text{Bernoulli}(\delta) \quad\forall i \in S.
+$$
 
 The *empirical* error rate (the observable) is
 $$
@@ -126,9 +130,9 @@ From the theorem above we know that $\delta = \frac{\varepsilon^2}{2}$ is the cr
 $$
 \delta_{\text{close}} = \frac{\varepsilon^2}{2} - t, \qquad \delta_{\text{far}} = \frac{\varepsilon^2}{2} + t.
 $$
-Choose $t = \frac{\varepsilon^2}{6}$. It follows that $\delta_{\text{close}} = \frac{\varepsilon^2}{6}$ and $\delta_{\text{far}} = \frac{2\varepsilon^2}{3}$. Pick any cutoff $c$ that satisfies $\delta_{\text{close}} < c < \delta_{\text{far}}$. For convenience, let's take
+Choose $t = \frac{\varepsilon^2}{6}$. It follows that $\delta_{\text{close}} = \frac{\varepsilon^2}{3}$ and $\delta_{\text{far}} = \frac{2\varepsilon^2}{3}$. Pick any cutoff $c$ that satisfies $\delta_{\text{close}} < c < \delta_{\text{far}}$. For convenience, let's take
 $$
-c = \frac{\delta_{\text{close}} + \delta_{\text{far}}}2 = \frac{5\varepsilon^2}{12}.
+c = \frac{\delta_{\text{close}} + \delta_{\text{far}}}2 = \frac{\varepsilon^2}{2}.
 $$
 
 **Decision rule.** After measuring and computing $\hat{\delta}$,
@@ -143,16 +147,16 @@ $$
 $$
 
 1. **Completeness** ("close" case).
-   If $\delta \leq \delta_{\text{close}} = \frac{\varepsilon^2}{6}$, then conditioned on the *good* event $|\hat{\delta}-\delta|< t = \frac{\varepsilon^2}{6}$ we have $\hat{\delta} - \delta < t$, hence
+   If $\delta \leq \delta_{\text{close}} = \frac{\varepsilon^2}{3}$, then conditioned on the *good* event $|\hat{\delta}-\delta|< t = \frac{\varepsilon^2}{6}$ we have $\hat{\delta} - \delta < t$, hence
    $$
-   \hat{\delta} < \delta + t \quad\leq \frac{\varepsilon^2}{6} + \frac{\varepsilon^2}{6} = \frac{\varepsilon^2}{3} \leq\quad \frac{5\varepsilon^2}{12} = c.
+   \hat{\delta} < \delta + t \quad\leq \frac{\varepsilon^2}{3} + \frac{\varepsilon^2}{6} = \frac{\varepsilon^2}{2} \quad = c.
    $$
    As $\hat{\delta} \leq c$, we declare "close" correctly.
 
 2. **Soundness** ("far" case).
    If $\delta \geq \delta_{\text{far}} = \frac{2\varepsilon^2}{3}$, then conditioned on the same event $|\hat{\delta}-\delta|< t = \frac{\varepsilon^2}{6}$ we have $-t < \hat{\delta} - \delta$, hence
    $$
-   \hat{\delta} > \delta - t \quad\geq \frac{2\varepsilon^2}{3} - \frac{\varepsilon^2}{6} = \frac{\varepsilon^2}{2} >\quad \frac{5\varepsilon^2}{12} = c.
+   \hat{\delta} > \delta - t \quad\geq \frac{2\varepsilon^2}{3} - \frac{\varepsilon^2}{6} = \frac{\varepsilon^2}{2} \quad = c.
    $$
    As $\hat{\delta} > c$, we declare "far" correctly.
 
@@ -177,7 +181,7 @@ $$
 
 Therefore, if we collect $|S| = O(\varepsilon^{-4})$ concordant‐basis samples, then with probability $\geq 1-\alpha=2/3$ we have $|\hat{\delta} - \delta| < t$, which guarantees both completeness and soundness as shown above.
 
-Since matching bases occur uniformly at random with probability $1/2$, we need to run
+`Need more formality here, technically we need to do another concentration bound, maybe do that, maybe just say 'using standard calculations one can claim we need let's say 3|S| (the specific factor k may differ)' but then just do the concentration bound` Since matching bases occur uniformly at random with probability $1/2$, we need to run
 $$
 N ~\approx~ 2|S|
 ~=~
@@ -193,6 +197,7 @@ $$
 N = O(\varepsilon^{-4})
 $$
 rounds, accepting if $\hat{\delta} \leq 5\varepsilon^2/12$ and rejecting otherwise, one obtains the following guarantee with confidence at least $2/3$:
-- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon$, then the protocol **accepts** (outputs "close").
-- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) > \varepsilon$, then the protocol **rejects** (outputs "far").
+- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the protocol **accepts** (outputs "close").
+- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) > \varepsilon_2$, then the protocol **rejects** (outputs "far").
 
+**Remark.** `explain why it isn't possible to have just epsilon in the above bounds using the blackboard, we need a \delta_close (epsilon_1) and \delta_far (epsilon_2).`
