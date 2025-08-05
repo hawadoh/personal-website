@@ -10,7 +10,7 @@ TocOpen = true
 $$
 \ket{\text{EPR}}_{AB} = \frac1{\sqrt2}\left(\ket{00}_{AB} + \ket{11}_{AB}\right),
 $$
-using only *sequential\** (one qubit at a time), local measurements in the **standard** ($\{ \ket{0}, \ket{1} \}$) or **Hadamard** ($\{ \ket{+}, \ket{-} \}$) bases, and classical communication.
+using only *sequential\** (one qubit at a time), local measurements in the **standard** ($\{ \ket{0}, \ket{1} \}$) or **Hadamard** ($\{ \ket{+}, \ket{-} \}$) bases, and classical communication. Importantly, we never perform any joint or Bell‐basis measurement on $AB$.
 
 ---
 
@@ -44,25 +44,223 @@ which represents the non-matching fraction of the results.
 
 ## Asymptotic bound
 
-First, recall that:
+**Motivating question.**
+Can we really conclude that, if the *classical* matching-outcomes test in the protocol above succeeds with high probability (i.e. a small observed error $\hat{\delta}$), then the *quantum* state $\rho_{AB}$ must be close to an ideal EPR pair, *without ever* performing a joint or Bell-basis measurement?
+
+We'll first analyse the idealised, infinite-round limit $N\to\infty$ to see theoretically why a high success rate forces high fidelity to $\ket{\text{EPR}}$. After that, we'll return to the realistic, finite-sample setting to turn this into a practical protocol in the next section.
+
+> **Remark.** For very large $N$, the observed matching and mismatch rates concentrate so tightly around the true error parameter $\delta$ (by the law of large numbers) that we can replace all finite‐sample quantities ($\hat{\delta}$) with $\delta$ itself when deriving the asymptotic bound, making our theoretical analysis easier.
+
+Recall that:
 - The *fidelity* between a state $\rho$ and a pure state $\ket{\psi}$ is defined as
 $$
-F\left(\rho, \ket{\psi}\right) := \sqrt{\bra{\psi}~\rho~\ket{\psi}}.
+F\left(\rho, \ket{\psi}\right) := \sqrt{\bra{\psi}\,\rho\,\ket{\psi}}.
 $$
 - The *trace distance* between two states $\rho$ and $\sigma$ is defined as
 $$
 D(\rho,\sigma) := \frac{1}{2}\|\rho - \sigma\|_1.
 $$
 
-From the work we've done in Exercise 8.3.1 in the textbook *Introduction to Quantum Cryptography* by Vidick and Wehner (`TODO: write the whole proof out from notes`), when the number of rounds $N \to \infty$,
+**Lemma.** Let $\rho_{AB}$ be a bipartite state where $A$ and $B$ are each systems of a single qubit. The probability of Alice and Bob getting matching outcomes (`00` or `11`) when they both measure in the standard basis ($Z$) is given by $\text{tr}(\Pi_1\,\rho_{AB})$, where 
 $$
-\begin{align*}
+\ket{\text{EPR}} = \ket{\Psi_{00}} = \frac{1}{\sqrt{2}}(\ket{00} + \ket{11}), \qquad \ket{\Psi_{01}} = \frac{1}{\sqrt{2}}(\ket{00} - \ket{11}),
+$$
+and
+$$
+\Pi_1 = \ket{\text{EPR}} \bra{\text{EPR}} + \ket{\Psi_{01}} \bra{\Psi_{01}}.
+$$
+Similarly, the probability of Alice and Bob getting matching outcomes (`++` or `--`) when they both measure in the Hadamard basis ($X$) is given by $\text{tr}(\Pi_2\,\rho_{AB})$, with
+$$
+\ket{\Psi_{10}} = \frac{1}{\sqrt{2}}(\ket{01} + \ket{10}),
+$$
+and
+$$
+\Pi_2 = \ket{\text{EPR}} \bra{\text{EPR}} + \ket{\Psi_{10}} \bra{\Psi_{10}}.
+$$
+
+**Proof.**
+The probability of matching outcomes,
+$$
+\begin{aligned}
+\Pr(\text{match}_{Z}) &= \Pr(00) + \Pr(11)
+\\&= \text{tr}(M_{00} + M_{11}) &\text{by Born rule}
+\\&= \text{tr}(\ket{00}\bra{00}\,\rho_{AB}) + \text{tr}(\ket{11}\bra{11}\,\rho_{AB}) &\text{by def. of POVM operator}
+\\&= \text{tr}(\bra{00}\,\rho_{AB}\,\ket{00}) + \text{tr}(\bra{11}\,\rho_{AB}\,\ket{11}) &\text{by cyclicity of trace}
+\\&= \bra{00}\,\rho_{AB}\,\ket{00} + \bra{11}\,\rho_{AB}\,\ket{11} &\text{as trace of scalar = itself.}
+\end{aligned}
+$$
+Expanding $\Pi_1$ we get
+$$
+\begin{aligned}
+\Pi_1 &= \ket{\text{EPR}} \bra{\text{EPR}} + \ket{\Psi_{01}} \bra{\Psi_{01}}
+\\&=\tfrac{1}{2}(\ket{00}\bra{00} + \ket{00}\bra{11} + \ket{11}\bra{00} + \ket{11}\bra{11} 
+\\&\qquad+ \ket{00}\bra{00} - \ket{00}\bra{11} - \ket{11}\bra{00} + \ket{11}\bra{11})
+\\&= \tfrac{1}{2}(2\ket{00}\bra{00} + 2\ket{11}\bra{11})
+\\&= \ket{00}\bra{00} + \ket{11}\bra{11}.
+\end{aligned}
+$$
+
+Then
+$$
+\begin{aligned}
+\text{tr}(\Pi_1\,\rho_{AB}) &= \text{tr}(\,(\ket{00}\bra{00} + \ket{11}\bra{11})\,\rho_{AB}) &\text{by def. of }\Pi_1
+\\&= \text{tr}(\ket{00}\bra{00}\,\rho_{AB}) + \text{tr}(\ket{11}\bra{11}\,\rho_{AB}) &\text{by linearity of trace}
+\\&= \text{tr}(\bra{00}\,\rho_{AB}\,\ket{00}) + \text{tr}(\bra{11}\,\rho_{AB}\,\ket{11}) &\text{by cyclicity of trace}
+\\&= \bra{00}\,\rho_{AB}\,\ket{00} + \bra{11}\,\rho_{AB}\,\ket{11} &\text{as trace of scalar = itself.}
+\end{aligned}
+$$
+Hence $\Pr(\text{match}_Z) = \text{tr}(\Pi_1\,\rho_{AB})$ as required.
+
+Similarly, for the measurement of systems $A$ and $B$ is performed in the Hadamard basis, we can first perform a change in basis and simplify $\Pi_2$. Recall that
+$$
+\ket{0}=\frac1{\sqrt2}(\ket{+}+\ket{-}),\qquad
+\ket{1}=\frac1{\sqrt2}(\ket{+}-\ket{-}).
+$$
+
+Then
+$$
+\begin{aligned}
+\ket{\text{EPR}} &= \frac{1}{\sqrt2}(\ket{00}+\ket{11})
+\\&= \frac{1}{\sqrt2}\left(
+\frac{\ket{+}+\ket{-}}{\sqrt2}\otimes\frac{\ket{+}+\ket{-}}{\sqrt2} + \frac{\ket{+}-\ket{-}}{\sqrt2}\otimes\frac{\ket{+}-\ket{-}}{\sqrt2}
+\right)
+\\&= \frac{1}{\sqrt2}\bigl(\ket{++}+\ket{--}\bigr).
+\end{aligned}
+$$
+
+Similarly one can easily verify
+$$
+\ket{\Psi_{10}}
+= \frac{1}{\sqrt2}(\ket{01} + \ket{10})
+= \frac{1}{\sqrt2}\bigl(\ket{++} - \ket{--}\bigr).
+$$
+
+Expanding $\Pi_2$ we get
+$$
+\begin{aligned}
+\Pi_2 &= \tfrac{1}{2}(\ket{++}\bra{++} + \ket{++}\bra{--} + \ket{--}\bra{++} + \ket{--}\bra{--} 
+\\&\qquad+ \ket{++}\bra{++} - \ket{++}\bra{--} - \ket{--}\bra{++} + \ket{--}\bra{--})
+\\&= \tfrac{1}{2}(2\ket{++}\bra{++} + 2\ket{--}\bra{--})
+\\&= \ket{++}\bra{++} + \ket{--}\bra{--}.
+\end{aligned}
+$$
+
+Finally, by exactly the same Born-rule steps as above (now applied in the Hadamard basis), we have:
+$$
+\Pr(\text{match}_X) = \text{tr}(\ket{++}\bra{++}\,\rho_{AB}) + \text{tr}(\ket{--}\bra{--}\,\rho_{AB}) = \text{tr}(\Pi_2\,\rho_{AB}). \tag*{$\square$} $$
+
+Now suppose that $\rho_{AB}$ is any state such that
+$$
+\underbrace{\frac{1}{2}\,\text{tr}\bigl(\Pi_1\,\rho_{AB}\bigr)}_{\substack{\text{matching outcomes}\\\text{in standard (Z) basis}}}
+\;+\;
+\underbrace{\frac{1}{2}\,\text{tr}\bigl(\Pi_2\,\rho_{AB}\bigr)}_{\substack{\text{matching outcomes}\\\text{in Hadamard (X) basis}}}
+\;\geq\;
+\underbrace{1 - \delta}_{\substack{\text{overall success}\\\text{probability}}}
+\tag{$*$}
+$$
+for some $\delta \geq 0$.
+
+Imagine we're measuring $\rho_{AB}$ in the Bell basis $\{ \ket{\Psi_{00}}, \ket{\Psi_{01}}, \ket{\Psi_{10}}, \ket{\Psi_{11}} \}$ (where $\ket{\text{EPR}} = \ket{\Psi_{00}}$). The measurement has four possible outcomes, corresponding to the four Bell states. Using Born rule and properties of trace, we can deduce the probability of getting each outcome:
+$$
+\begin{aligned}
+&p_{00} = \bra{\Psi_{00}}\,\rho_{AB}\,\ket{\Psi_{00}}, &p_{01} = \bra{\Psi_{01}}\,\rho_{AB}\,\ket{\Psi_{01}},
+\\&p_{10} = \bra{\Psi_{10}}\,\rho_{AB}\,\ket{\Psi_{10}}, &p_{11} = \bra{\Psi_{11}}\,\rho_{AB}\,\ket{\Psi_{11}}.
+\end{aligned}
+$$
+
+Since these are all the possible outcomes,
+$$
+p_{00} + p_{01} + p_{10} + p_{11} = 1. \tag{norm}
+$$
+Also, expanding $\ket{\Psi_{00}}\bra{\Psi_{00}}$ and $\ket{\Psi_{01}}\bra{\Psi_{01}}$ gives
+$$
+\begin{aligned}
+\ket{\Psi_{00}}\bra{\Psi_{00}}
+&= \tfrac{1}{2}\bigl(\ket{00}+\ket{11}\bigr)\bigl(\bra{00}+\bra{11}\bigr)
+\\&= \tfrac{1}{2}\bigl(\ket{00}\bra{00}+\ket{00}\bra{11}+\ket{11}\bra{00}+\ket{11}\bra{11}\bigr),
+\\
+\ket{\Psi_{01}}\bra{\Psi_{01}}
+&= \tfrac{1}{2}\bigl(\ket{00}-\ket{11}\bigr)\bigl(\bra{00}-\bra{11}\bigr)
+\\&= \tfrac{1}{2}\bigl(\ket{00}\bra{00}-\ket{00}\bra{11}-\ket{11}\bra{00}+\ket{11}\bra{11}\bigr).
+\end{aligned}
+$$
+
+Adding them gives
+$$
+\begin{aligned}
+\ket{\Psi_{00}}\bra{\Psi_{00}} + \ket{\Psi_{01}}\bra{\Psi_{01}}
+&= \tfrac{1}{2}\bigl(2\ket{00}\bra{00} + 2\ket{11}\bra{11}\bigr)
+\\
+&= \ket{00}\bra{00} + \ket{11}\bra{11}
+\\&= \Pi_1.
+\end{aligned}
+$$
+Similarly, expanding $\ket{\Psi_{00}}\bra{\Psi_{00}}$ and $\ket{\Psi_{10}}\bra{\Psi_{10}}$ gives
+$$
+\begin{aligned}
+\ket{\Psi_{00}}\bra{\Psi_{00}}
+&= \tfrac{1}{2}\bigl(\ket{++}+\ket{--}\bigr)\bigl(\bra{++}+\bra{--}\bigr)
+\\&=\tfrac12\bigl(\ket{++}\bra{++} + \ket{++}\bra{--} + \ket{--}\bra{++} + \ket{--}\bra{--}\bigr),
+\\\ket{\Psi_{10}}\bra{\Psi_{10}}
+&= \tfrac{1}{2}\bigl(\ket{++}-\ket{--}\bigr)\bigl(\bra{++}-\bra{--}\bigr)\\
+&=\tfrac12\bigl(\ket{++}\bra{++} - \ket{++}\bra{--} - \ket{--}\bra{++} + \ket{--}\bra{--}\bigr).
+\end{aligned}
+$$
+
+Adding these two lines gives
+$$
+\begin{aligned}
+\ket{\Psi_{00}}\bra{\Psi_{00}} + \ket{\Psi_{10}}\bra{\Psi_{10}} &= \tfrac12\bigl(2\ket{++}\bra{++} + 2\ket{--}\bra{--}\bigr)\\
+&= \ket{++}\bra{++} + \ket{--}\bra{--}
+\\&= \Pi_2.
+\end{aligned}
+$$
+Using the definitions of $\Pi_1$ and $\Pi_2$ in terms of Bell states, Born rule, and properties of the trace, we can rewrite the average test success probability using these new terms.
+
+For the standard basis part:
+$$
+\begin{aligned}
+\text{tr}\bigl(\Pi_1\,\rho_{AB}\bigr) &= \bra{00}\,\rho_{AB}\,\ket{00} + \bra{11}\,\rho_{AB}\,\ket{11}
+\\&= \bra{\Psi_{00}}\,\rho_{AB}\,\ket{\Psi_{00}} + \bra{\Psi_{01}}\,\rho_{AB}\,\ket{\Psi_{01}}
+\\&= p_{00} + p_{01},
+\end{aligned}
+$$
+and similarly for the Hadamard basis part:
+$$
+\begin{aligned}
+\text{tr}\bigl(\Pi_2\,\rho_{AB}\bigr) &= \bra{++}\,\rho_{AB}\,\ket{++} + \bra{--}\,\rho_{AB}\,\ket{--}
+\\&= \bra{\Psi_{00}}\,\rho_{AB}\,\ket{\Psi_{00}} + \bra{\Psi_{10}}\,\rho_{AB}\,\ket{\Psi_{10}}
+\\&= p_{00} + p_{10}.
+\end{aligned}
+$$
+Hence,
+$$
+\begin{aligned}
+\tfrac{1}{2}\,\text{tr}\bigl(\Pi_1\,\rho_{AB}\bigr) + \tfrac{1}{2}\,\text{tr}\bigl(\Pi_2\,\rho_{AB}\bigr) &\geq 1 - \delta &\text{from $(*)$ above}
+\\\tfrac{1}{2}(p_{00} + p_{01}) + \tfrac{1}{2}(p_{00} + p_{10}) &\geq 1 - \delta
+\\p_{00} + \tfrac{1}{2}(p_{01} + p_{10}) &\geq 1 - \delta
+\\p_{00} + \tfrac{1}{2}(1 - p_{00} - p_{11}) &\geq 1 - \delta &\text{by (norm)}
+\\\tfrac{1}{2}p_{00} - \tfrac{1}{2}p_{11} &\geq \tfrac{1}{2} - \delta
+\\p_{00} - p_{11} &\geq 1 - 2\delta.
+\end{aligned}
+$$
+Since $p_{11}$ is a probability, $p_{11} \geq 0$. Hence we can remove it without affecting the inequality and get
+$$
+p_{00} \geq 1 - 2\delta.
+$$
+
+Therefore, the fidelity, as the number of rounds $N \to \infty$,
+$$
+\begin{aligned}
 F &:= F(\rho_{AB}, \ket{\text{EPR}}\bra{\text{EPR}})\\
-&= \sqrt{\bra{\text{EPR}}~\rho_{AB}~\ket{\text{EPR}}}\\
+&= \sqrt{\bra{\text{EPR}}\,\rho_{AB}\,\ket{\text{EPR}}}\\
+&= \sqrt{p_{00}}\\
 &\geq \sqrt{1 - 2\delta}
-\end{align*}
+\end{aligned}
 $$
 for some *true* error rate $\delta \in [0, 1]$ where $\delta = \Pr[x_i \neq \tilde{x}_i ~|~ \theta_i = \tilde{\theta}_i]$ is the mismatch probability.
+
+From $(*)$, we've derived that if the average success probability of the classical outcomes test above is high ($\geq 1 - \delta$), then the fidelity (a measure of overlap between two states) of the shared quantum state $\rho_{AB}$ with a perfect EPR pair between Alice and Bob must also be high ($\geq \sqrt{1 - 2\delta}$), provided $\delta$ is sufficiently small.
 
 Rearranging $F^2\geq 1-2\delta$ gives
 $$
@@ -89,11 +287,26 @@ $$
 
 ## Finite-sample analysis
 
-We now turn the protocol into a binary decision ("close" vs. "far") with bounded error probability.
+With the asymptotic bound in hand, our task becomes a practical one: we must decide, from a finite sample, whether to declare "close" or "far" while keeping the probability of error below some small threshold.
 
-We have $\varepsilon \leq \sqrt{2\delta}$, so *if* we somehow knew the exact error rate $\delta$, we could immediately conclude a bound on $\varepsilon$. But in the lab we don't know $\delta$, so the goal is just to estimate $\delta$ with $\hat{\delta}$ by measuring a finite number of copies as described in the protocol.
+Although
+$$
+\varepsilon \leq \sqrt{2\delta}
+$$
+holds exactly once we know the true mismatch rate $\delta$, in practice we only observe the empirical rate $\hat{\delta}$ from a finite number of rounds. Therefore, in the finite-sample setting we cannot hope to pinpoint the true $\delta$ exactly, so a single "hard" cutoff won't do, because using a single cutoff means we'd suffer both false-accept and false-reject errors due to statistical fluctuations and edge cases at the cutoff boundary (this is explained at the end). Instead we introduce two thresholds
 
-First we establish a Bernoulli trial model. Consider $S \subseteq \{1, \dots, N\}$, the set of concordant‐basis rounds from the protocol. For each $i \in S$, define the indicator
+$$
+\delta_{\text{close}} < \frac{\varepsilon^2}{2} < \delta_{\text{far}}
+$$
+
+and proceed as follows:
+
+* If $\hat{\delta} \leq \delta_{\text{close}}$, we safely declare "close".
+* If $\hat{\delta} \geq \delta_{\text{far}}$, we safely declare "far".
+
+By choosing $\delta_{\text{close}}$ and $\delta_{\text{far}}$ symmetrically around, and close enough to the critical true error rate $\tfrac{\varepsilon^2}{2}$, and then applying a *concentration bound* to $\hat{\delta}$, we guarantee that with high probability $\hat{\delta}$ falls on the correct side of both cutoffs whenever the true $\delta$ lies on its corresponding side of the gap. Let's make this intuition precise.
+
+First, we establish a Bernoulli trial model. Consider $S \subseteq \{1, \dots, N\}$, the set of concordant‐basis rounds from the protocol. For each $i \in S$, define the indicator
 $$
 Y_i := 
 \begin{cases}
@@ -122,7 +335,7 @@ $$
 
 We want this failure probability to be at most $\alpha := 2e^{-2|S|t^2}$. Rearranging gives
 $$
-|S| = \frac{1}{2t^2}~\ln\!\left(\frac{2}{\alpha}\right)
+|S| = \frac{1}{2t^2}\,\ln\!\left(\frac{2}{\alpha}\right)
 $$
 which will be useful soon.
 
@@ -141,8 +354,8 @@ $$
 $$
 \text{Decision} =
 \begin{cases}
-\text{“close”}, & \hat\delta \leq c,\\
-\text{“far”},   & \hat\delta > c.
+\text{“close”}, & \hat{\delta} \leq c,\\
+\text{“far”},   & \hat{\delta} > c.
 \end{cases}
 $$
 
@@ -164,7 +377,7 @@ Completeness ($\delta \leq \delta_{\text{close}}$) and soundness ($\delta \geq \
 
 Now, fix the failure probability to a conventional choice $\frac{1}{3}$. Substituting the values $\alpha = \frac{1}{3}$ and $t = \frac{\varepsilon^2}{6}$ into the $|S|$ equation from earlier gives
 $$
-\begin{align*}
+\begin{aligned}
 |S|
 ~&=~
 \frac{1}{2t^2}\,\ln\!\left(\frac{2}{\alpha}\right)
@@ -176,7 +389,7 @@ $$
 \frac{18}{\varepsilon^4}\,\ln(6)
 ~=~
 O\!\left(\frac1{\varepsilon^4}\right).
-\end{align*}
+\end{aligned}
 $$
 
 Therefore, if we collect $|S| = O(\varepsilon^{-4})$ concordant‐basis samples, then with probability $\geq 1-\alpha=2/3$ we have $|\hat{\delta} - \delta| < t$, which guarantees both completeness and soundness as shown above.
