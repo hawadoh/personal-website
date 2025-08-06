@@ -38,3 +38,18 @@ header .nav #menu li a:hover span::after {
 .katex {
   white-space: nowrap; 
 }
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+  -ms-overflow-style: none;  /* IE/Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.katex-display::-webkit-scrollbar {
+  display: none;
+}
+
+
