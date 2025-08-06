@@ -39,31 +39,17 @@ header .nav #menu li a:hover span::after {
   white-space: nowrap; 
 }
 
-.katex-display {
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
-  -ms-overflow-style: none;  /* IE/Edge */
-  scrollbar-width: none;     /* Firefox */
-}
+@media (max-width: 768px) {
+  .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
 
-.katex-display::-webkit-scrollbar {
-  display: none;
+  .katex-display::-webkit-scrollbar {
+    display: none;
+  }
 }
-
-/* make every display-math container scrollable */
-mjx-container[data-display="true"] {
-  display: block;         /* ensure it’s a block-level box */
-  width: 100%;            /* fill its parent’s width */
-  max-width: 100%;        /* don’t overflow the page */
-  overflow-x: auto;       /* enable horizontal scrolling */
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch; /* smooth iOS scroll */
-}
-
-/* optional: hide the scrollbar in WebKit/Firebase */
-mjx-container[data-display="true"]::-webkit-scrollbar {
-  display: none;
-}
-

@@ -147,7 +147,8 @@ $$
 
 Finally, by exactly the same Born-rule steps as above (now applied in the Hadamard basis), we have:
 $$
-\Pr(\text{match}_X) = \text{tr}(\ket{++}\bra{++}\,\rho_{AB}) + \text{tr}(\ket{--}\bra{--}\,\rho_{AB}) = \text{tr}(\Pi_2\,\rho_{AB}). \tag*{$\square$} $$
+\Pr(\text{match}_X) = \text{tr}(\ket{++}\bra{++}\,\rho_{AB}) + \text{tr}(\ket{--}\bra{--}\,\rho_{AB}) = \text{tr}(\Pi_2\,\rho_{AB}),$$
+so the proof is complete.
 
 Now suppose that $\rho_{AB}$ is any state such that
 $$
@@ -155,8 +156,7 @@ $$
 \;+\;
 \underbrace{\frac{1}{2}\,\text{tr}\bigl(\Pi_2\,\rho_{AB}\bigr)}_{\substack{\text{matching outcomes}\\\text{in Hadamard (X) basis}}}
 \;\geq\;
-\underbrace{1 - \delta}_{\substack{\text{overall success}\\\text{probability}}}
-\tag{$*$}
+\underbrace{1 - \delta}_{\substack{\text{overall success}\\\text{probability}}} \qquad (*)
 $$
 for some $\delta \geq 0$.
 
@@ -170,7 +170,7 @@ $$
 
 Since these are all the possible outcomes,
 $$
-p_{00} + p_{01} + p_{10} + p_{11} = 1. \tag{norm}
+p_{00} + p_{01} + p_{10} + p_{11} = 1. \qquad \text{(Norm)}
 $$
 Also, expanding $\ket{\Psi_{00}}\bra{\Psi_{00}}$ and $\ket{\Psi_{01}}\bra{\Psi_{01}}$ gives
 $$
