@@ -289,24 +289,29 @@ $$
 
 With the asymptotic bound in hand, our task becomes a practical one: we must decide, from a finite sample, whether to declare "close" or "far" while keeping the probability of error below some small threshold.
 
+With the asymptotic bound in hand, our task becomes a practical one: from a finite sample we must decide "close" or "far" while keeping the error probability below some target, say $\alpha$.
+
 Although
 $$
 \varepsilon \leq \sqrt{2\delta}
 $$
-holds exactly once we know the true mismatch rate $\delta$, in practice we only observe the empirical rate $\hat{\delta}$ from a finite number of rounds. Therefore, in the finite-sample setting we cannot hope to pinpoint the true $\delta$ exactly, so a single "hard" cutoff won't do, because using a single cutoff means we'd suffer both false-accept and false-reject errors due to statistical fluctuations and edge cases at the cutoff boundary (this is explained at the end). Instead we introduce two thresholds
-
+holds exactly once we know the true mismatch rate $\delta$, in practice we only observe the empirical rate $\hat{\delta}$ from a finite number of rounds; in the finite-sample setting we cannot hope to pinpoint the true $\delta$ exactly. If we tried to draw a single "hard" cutoff line at
 $$
-\delta_{\text{close}} < \frac{\varepsilon^2}{2} < \delta_{\text{far}}
+\delta_* = \frac{\varepsilon^2}{2},
 $$
+then sadly we would suffer both false-accept and false-reject errors due to statistical fluctuations at non-negligible rates whenever $\delta$ sits near $\hat{\delta}$. 
 
-and proceed as follows:
+Instead, we tolerantly introduce a small gap around $\delta_*$ and build in a buffer zone to absorb those fluctuations. 
 
-* If $\hat{\delta} \leq \delta_{\text{close}}$, we safely declare "close".
-* If $\hat{\delta} \geq \delta_{\text{far}}$, we safely declare "far".
+Intuitively, we choose two cut-points - one just below $\delta_*$ and one just above:
+$$
+\delta_{\text{close}} < \delta_* < \delta_{\text{far}}.
+$$
+By making this gap just large enough and then applying a *concentration bound* to $\hat{\delta}$, we can guarantee that, with probability at least $1 - \alpha$, the empirical error rate $\hat{\delta}$ stays on the correct side of its respective cutoff - so we will correctly declare "close" whenever $\hat{\delta} \leq \delta_{\text{close}}$ and "far" whenever $\hat{\delta} \geq \delta_{\text{far}}$, each with error at most $\alpha$.
 
-By choosing $\delta_{\text{close}}$ and $\delta_{\text{far}}$ symmetrically around, and close enough to the critical true error rate $\tfrac{\varepsilon^2}{2}$, and then applying a *concentration bound* to $\hat{\delta}$, we guarantee that with high probability $\hat{\delta}$ falls on the correct side of both cutoffs whenever the true $\delta$ lies on its corresponding side of the gap. Let's make this intuition precise.
+Let's make this intuition precise.
 
-First, we establish a Bernoulli trial model. Consider $S \subseteq \{1, \dots, N\}$, the set of concordant‐basis rounds from the protocol. For each $i \in S$, define the indicator
+First, starting from the matching-outcomes protocol, we establish a Bernoulli trial model. Consider $S \subseteq \{1, \dots, N\}$, the set of matching‐basis rounds. For each $i \in S$, define the indicator
 $$
 Y_i := 
 \begin{cases}
@@ -326,31 +331,86 @@ $$
 $$
 This is the sample mean of $|S|$ independent bounded variables in $[0, 1]$.
 
-The Chernoff-Hoeffding concentration bound (for Bernoulli RVs) tells us that if we average $|S|$ independent $\{ 0, 1 \}$ variables whose true mean is $\delta$, then the chance our empirical average $\hat{\delta}$ deviates from $\delta$ by more than some amount $t > 0$ is tiny:
+The Chernoff-Hoeffding concentration bound (for Bernoulli RVs) tells us that if we average $|S|$ independent $\{ 0, 1 \}$ variables whose true mean is $\delta$, then the chance our empirical average $\hat{\delta}$ deviates from $\delta$ by more than some amount $t > 0$ (the *bad* event) is tiny:
 $$
 \Pr\left(|\hat{\delta} - \delta| \geq t\right) \leq 2e^{-2|S|t^2}.
 $$
 - The bigger $|S|$ is, the smaller this probability becomes.
 - The larger we demand $t$ (a looser estimate), the fewer samples we need.
 
-We want this failure probability to be at most $\alpha := 2e^{-2|S|t^2}$. Rearranging gives
+To make this failure probability to be at most $\alpha$, it suffices that (by rearranging)
 $$
 |S| = \frac{1}{2t^2}\,\ln\!\left(\frac{2}{\alpha}\right)
 $$
 which will be useful soon.
 
-From the theorem above we know that $\delta = \frac{\varepsilon^2}{2}$ is the critical value of $\delta$ at which the state sits exactly $\varepsilon$-close in trace distance to the EPR pair. To decide in finite samples, we need two thresholds $\delta_{\text{close}} < \frac{\varepsilon^2}{2} < \delta_{\text{far}}$. For some margin $t > 0$, a perfectly symmetric choice around $\frac{\varepsilon^2}{2}$ is
+From the theorem above we know that the critical value of the true mismatch rate at which the state $\rho_{AB}$ sits exactly $\varepsilon$-close in trace distance to the perfect EPR state is
 $$
-\delta_{\text{close}} = \frac{\varepsilon^2}{2} - t, \qquad \delta_{\text{far}} = \frac{\varepsilon^2}{2} + t.
-$$
-Choose $t = \frac{\varepsilon^2}{6}$. It follows that $\delta_{\text{close}} = \frac{\varepsilon^2}{3}$ and $\delta_{\text{far}} = \frac{2\varepsilon^2}{3}$. Pick any cutoff $c$ that satisfies $\delta_{\text{close}} < c < \delta_{\text{far}}$. For convenience, let's take
-$$
-c = \frac{\delta_{\text{close}} + \delta_{\text{far}}}2 = \frac{\varepsilon^2}{2}.
+\delta_* = \frac{\varepsilon^2}{2}.
 $$
 
-**Decision rule.** After measuring and computing $\hat{\delta}$,
-- If $\hat{\delta} \leq c$, declare "close" i.e. accept that $\rho_{AB}$ is within trace distance $\varepsilon$ of the EPR pair.
-- If $\hat{\delta} > c$, declare "far" i.e. reject.
+In a tolerant test, instead of a single decision point $\varepsilon$, we have to fix two trace-distance tolerances
+$$
+0 \leq \varepsilon_1 < \varepsilon_2 \leq 1.
+$$
+where
+- $\varepsilon_1$ is the acceptance tolerance ($D(\rho_{AB}, \ket{\text{EPR}}\bra{\text{EPR}})\leq \varepsilon_1$ implies "close"), and
+- $\varepsilon_2$ is the rejection threshold ($D(\rho_{AB}, \ket{\text{EPR}}\bra{\text{EPR}}) \geq \varepsilon_2$ implies "far").
+
+We translate these into *matching‐basis* thresholds by
+$$
+\delta_{\text{close}} := \frac{\varepsilon_1^2}{2},
+\qquad
+\delta_{\text{far}} := \frac{\varepsilon_2^2}{2}.
+$$
+
+Now let's look at a natural proposal for the decision rule...
+
+> **Decision rule *(flawed)*.** After measuring and computing the empirical error rate $\hat{\delta}$:
+> - If $\hat{\delta} \leq \delta_{\text{close}}$, declare **"close"** (accept).
+> - If $\hat{\delta} \geq \delta_{\text{far}}$, declare **"far"** (reject).
+> - If $\delta_{\text{close}} < \hat{\delta} < \delta_{\text{far}}$, declare the result **inconclusive**.
+
+It looks promising and intuitive. But is this viable? Unfortunately, no. The reason is that this rule fails to provide a high-confidence guarantee for the very states it's supposed to certify.
+
+Consider a state whose true error rate is exactly on the boundary, $\delta = \delta_{\text{close}}$. The measured value $\hat{\delta}$ is a random variable centred on this true value. Due to statistical noise, there is roughly a $50\%$ chance that the measurement will yield $\hat{\delta} > \delta_{\text{close}}$. According to this rule, we would declare the result "inconclusive" i.e. fail to accept about half the time! An error rate of $\sim\!50\%$ is unacceptably high and provides no meaningful confidence. If $\delta = \delta_{\text{far}}$ exactly then we suffer from the same problem.
+
+To fix this, we need to relax the decision boundary: instead of testing directly at the promise thresholds $\delta_{\text{close}}$ and $\delta_{\text{far}}$, we introduce a "buffer zone" to absorb statistical fluctuations. 
+
+To implement this we introduce a *margin* $t > 0$, which:
+- widens our decision zone so random fluctuations don't flip us at the boundary, and
+- serves as the deviation parameter in our Chernoff–Hoeffding bound, which tells us that with very high probability we have $|\hat{\delta} - \delta| < t$, meaning the measured value $\hat{\delta}$ won't fluctuate upwards or downwards by more than $t$.
+
+By choosing our single cutoff
+$$
+c = \delta_{\text{close}} + t
+$$
+we build in exactly enough "slack" so that even if the *true* rate sits at the lower promise boundary, $\delta = \delta_{\text{close}}$, then
+$$
+\Pr\bigl[\hat{\delta} \geq c\bigr]
+\;\leq\;\Pr\bigl[\hat{\delta} - \delta \geq t\bigr]
+\;\leq\;2e^{-2|S|t^2}\,,
+$$
+i.e. the completeness error is only the exponentially small Chernoff tail and not the horrible $50\%$ we were getting.  By the same choice $c = \delta_{\text{far}} - t$ on the upper side, we get a *symmetric* buffer $(c, \delta_{\text{far}})$ that makes the soundness error equally tiny.
+
+A very natural way to pick the margin $t > 0$ is to split the gap between $\delta_{\text{close}}$ and $\delta_{\text{far}}$ in half:
+
+$$
+t = \frac{\delta_{\text{far}} - \delta_{\text{close}}}{2} = \frac{\varepsilon_2^2 - \varepsilon_1^2}{4}.
+$$
+As $\varepsilon_2 > \varepsilon_1$ by definition, we have $\delta_{\text{far}} > \delta_{\text{close}}$, satisfying the requirement $t > 0$. Then
+$$
+c 
+= \frac{\delta_{\text{close}} + \delta_{\text{far}}}{2}
+= \frac{\varepsilon_1^2 + \varepsilon_2^2}{4}
+= \delta_{\text{close}} + t 
+= \delta_{\text{far}} - t
+$$
+would conveniently place our decision boundary exactly in the middle for perfect symmetry.
+
+> **Decision rule.** After measuring and computing $\hat{\delta}$,
+> - If $\hat{\delta} \leq c$, declare "close" i.e. accept that $\rho_{AB}$ is within trace distance $\varepsilon$ of the EPR pair.
+> - If $\hat{\delta} > c$, declare "far" i.e. reject.
 $$
 \text{Decision} =
 \begin{cases}
@@ -359,58 +419,89 @@ $$
 \end{cases}
 $$
 
-1. **Completeness** ("close" case).
-   If $\delta \leq \delta_{\text{close}} = \frac{\varepsilon^2}{3}$, then conditioned on the *good* event $|\hat{\delta}-\delta|< t = \frac{\varepsilon^2}{6}$ we have $\hat{\delta} - \delta < t$, hence
+1. **Completeness** ("close" case).  
+   If the true $\delta \leq \delta_{\text{close}} = c - t$, then conditioned on the *good* event $|\hat{\delta} - \delta| < t$ we can unpack the inequality and get 
    $$
-   \hat{\delta} < \delta + t \quad\leq \frac{\varepsilon^2}{3} + \frac{\varepsilon^2}{6} = \frac{\varepsilon^2}{2} \quad = c.
+   -t < \hat{\delta} - \delta < t.
    $$
-   As $\hat{\delta} \leq c$, we declare "close" correctly.
+	Using the right half of the inequality ($\hat{\delta} - \delta < t$), we have
+   $$\hat{\delta} <\quad \delta + t 
+   ~~\leq~~ (c - t) + t 
+   \quad= c,
+   $$
+   and hence $\hat{\delta} \leq c$, so we correctly declare "close".
 
-2. **Soundness** ("far" case).
-   If $\delta \geq \delta_{\text{far}} = \frac{2\varepsilon^2}{3}$, then conditioned on the same event $|\hat{\delta}-\delta|< t = \frac{\varepsilon^2}{6}$ we have $-t < \hat{\delta} - \delta$, hence
+2. **Soundness** ("far" case).  
+   If the true $\delta \geq \delta_{\text{far}} = c + t$, then conditioned on the same good event, using the left half of the inequality ($-t < \hat{\delta} - \delta$), we have
    $$
-   \hat{\delta} > \delta - t \quad\geq \frac{2\varepsilon^2}{3} - \frac{\varepsilon^2}{6} = \frac{\varepsilon^2}{2} \quad = c.
+   \hat{\delta} >\quad \delta - t
+   ~~\geq~~ (c + t) - t
+   \quad= c,
    $$
-   As $\hat{\delta} > c$, we declare "far" correctly.
+   and hence $\hat{\delta} > c$, so we correctly declare "far".
 
-Completeness ($\delta \leq \delta_{\text{close}}$) and soundness ($\delta \geq \delta_{\text{far}}$) each fail only if $|\hat{\delta} - \delta| \geq t$ (the *bad* event), which occurs with probability at most $\alpha$.
+Both completeness ($\delta \leq \delta_{\text{close}}$) and soundness ($\delta \geq \delta_{\text{far}}$) can fail only if $|\hat{\delta} - \delta| \geq t$ (i.e., the *bad* event), which the concentration bound guarantees occurs with probability at most $\alpha$.
 
-Now, fix the failure probability to a conventional choice $\frac{1}{3}$. Substituting the values $\alpha = \frac{1}{3}$ and $t = \frac{\varepsilon^2}{6}$ into the $|S|$ equation from earlier gives
+Now, fix the failure probability to a conventional choice $\frac{1}{3}$. Substituting the values $\alpha = \frac{1}{3}$ and $t = \frac{\varepsilon_2^2 - \varepsilon_1^2}{4}$ into the $|S|$ equation from earlier gives
 $$
 \begin{aligned}
 |S|
 ~&=~
 \frac{1}{2t^2}\,\ln\!\left(\frac{2}{\alpha}\right)
 ~=~
-\frac{1}{2(\varepsilon^2/6)^2}\,\ln\!\left(\frac{2}{1/3}\right)
+\frac{1}{2\bigl( \,(\varepsilon_2^2 - \varepsilon_1^2)/4\, \bigr)^2}\,\ln\!\left(\frac{2}{1/3}\right)
 \\\\~&=~
-\frac{36}{2\varepsilon^4}\,\ln(6)
+\frac{8\,\ln(6)}{(\varepsilon_2^2 - \varepsilon_1^2)^2}
 ~=~
-\frac{18}{\varepsilon^4}\,\ln(6)
-~=~
-O\!\left(\frac1{\varepsilon^4}\right).
+O\!\left(\frac{1}{(\varepsilon_2^2 - \varepsilon_1^2)^2}\right).
 \end{aligned}
 $$
 
-Therefore, if we collect $|S| = O(\varepsilon^{-4})$ concordant‐basis samples, then with probability $\geq 1-\alpha=2/3$ we have $|\hat{\delta} - \delta| < t$, which guarantees both completeness and soundness as shown above.
+Therefore, if we collect $|S| = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr)$ concordant‐basis samples, then with probability $\geq 1 - \alpha = 2/3$ we have $|\hat{\delta} - \delta| < t$, which guarantees both completeness and soundness as shown above.
 
-`Need more formality here, technically we need to do another concentration bound, maybe do that, maybe just say 'using standard calculations one can claim we need let's say 3|S| (the specific factor k may differ)' but then just do the concentration bound` Since matching bases occur uniformly at random with probability $1/2$, we need to run
+Finally, we need to determine a bound on $N$, the actual number of rounds we'll run the protocol for. Our overall success requires guarding against two distinct types of errors: estimation failure ($E_{\text{estimation}}$), for which we already know $\Pr(E_{\text{estimation}}) = \alpha \leq 1/3$, and sampling failure ($E_{\text{sample}}$), where we fail to collect enough data in the first place. The total failure probability is bounded by their sum using the *union bound*.
+
+Since the probability of the measurement bases matching in any given round is $1/2$, as it occurs uniformly at random, the expected number of concordant samples is $\mathbb{E}[|S|] = N/2$. To safeguard against statistical fluctuations, we should choose $N$ to be larger than the simple estimate of $2|S|$. A robust and standard choice is $N = 4|S|$. With this choice, the probability of obtaining fewer than $|S|$ concordant samples - the event $E_{\text{sample}}$ - can be shown via a standard Chernoff bound to be less than $e^{-|S|/4}$. Let the random variable for the number of concordant-basis rounds from a total of $N$ trials be $X$. Then
 $$
-N ~\approx~ 2|S|
-~=~
-O\!\left(\frac{1}{\varepsilon^4}\right).
+X \sim \text{Binomial}\!\left(N, \tfrac{1}{2}\right).
 $$
-expected total rounds to be correct with probability $\geq 2/3$.
+As we have chosen $N = 4|S|$, note that
+$$
+\mathbb{E}[X] = \frac{N}{2} = 2|S|.
+$$
+The multiplicative Chernoff bound gives, for any $0 < \delta < 1$,
+$$
+\Pr\bigl[X < (1-\delta)\,\mathbb{E}[X]\bigr]
+\;\leq\;\exp\Bigl(-\tfrac{\delta^2}{2}\,\mathbb{E}[X]\Bigr).
+$$
+
+Setting $\delta = \tfrac{1}{2}$ so that $(1 - \delta)\,\mathbb{E}[X]=|S|$ yields
+$$
+\Pr\bigl[X < |S|\bigr]
+\;\leq\;
+\exp\Bigl(-\tfrac{(1/2)^2}{2}\cdot 2|S|\Bigr)
+\;=\;
+e^{-|S|/4}.
+$$
+
+With this, we can now use the union bound to find the total probability of failure:
+$$
+\Pr(\text{Total Failure}) = \Pr(E_{\text{sample}}) + \Pr(E_{\text{estimation}}) \leq e^{-|S|/4} + \frac{1}{3}
+$$
+
+Since the $e^{-|S|/4}$ term is negligibly small for any reasonably large $|S|$ (comparing to $1/3$), our overall failure probability is still robustly bounded by approximately $1/3$. Therefore, the choice of $N = 4|S|$ is sufficient. The total number of rounds required for the protocol is:
+
+$$
+N = 4|S| = \frac{32 \ln(6)}{(\varepsilon_2^2 - \varepsilon_1^2)^2} = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr).
+$$
 
 ---
 
-**Theorem (Sample Complexity with Confidence).**
-Fix a target trace‐distance $\varepsilon>0$. By running the sequential matching‐outcomes protocol for
+**Theorem (Finite-Sample Tolerant EPR Test).**
+Fix two trace-distance tolerances $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$, and set a cutoff $c = (\varepsilon_1^2 + \varepsilon_2^2)/4$. By running the sequential matching-outcomes protocol for
 $$
-N = O(\varepsilon^{-4})
+N = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr)
 $$
-rounds, accepting if $\hat{\delta} \leq 5\varepsilon^2/12$ and rejecting otherwise, one obtains the following guarantee with confidence at least $2/3$:
-- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the protocol **accepts** (outputs "close").
-- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) > \varepsilon_2$, then the protocol **rejects** (outputs "far").
-
-**Remark.** `explain why it isn't possible to have just epsilon in the above bounds using the blackboard, we need a \delta_close (epsilon_1) and \delta_far (epsilon_2).`
+rounds, computing the empirical mismatch rate $\hat{\delta}$, and then accepting if $\hat{\delta} \leq c$ and rejecting otherwise, one obtains the following guarantee with confidence at least $2/3$ for this test in both directions:
+- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the test **accepts** (outputs "close").
+- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) > \varepsilon_2$, then the test **rejects** (outputs "far").
