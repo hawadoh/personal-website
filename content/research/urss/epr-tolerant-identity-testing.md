@@ -373,7 +373,7 @@ Now let's look at a natural proposal for the decision rule...
 
 It looks promising and intuitive. But is this viable? Unfortunately, no. The reason is that this rule fails to provide a high-confidence guarantee for the very states it's supposed to certify.
 
-Consider a state whose true error rate is exactly on the boundary, $\delta = \delta_{\text{close}}$. The measured value $\hat{\delta}$ is a random variable centred on this true value. Due to statistical noise, there is roughly a $50\%$ chance that the measurement will yield $\hat{\delta} > \delta_{\text{close}}$. According to this rule, we would declare the result "inconclusive" i.e. fail to accept about half the time! An error rate of $\sim\!50\%$ is unacceptably high and provides no meaningful confidence. If $\delta = \delta_{\text{far}}$ exactly then we suffer from the same problem.
+Consider a state whose true error rate is exactly on the boundary, $\delta = \delta_{\text{close}}$. The measured value $\hat{\delta}$ is a random variable centred on this true value. Due to statistical noise, there is roughly a $50\%$ chance that the measurement will yield $\hat{\delta} > \delta_{\text{close}}$. According to this rule, we would declare the result "inconclusive" i.e. fail to accept about half the time! An error rate of $\sim\!50\%$ is unacceptably high and provides no meaningful confidence. If $\delta = \delta_{\text{far}}$ exactly, then again we suffer from the same problem.
 
 To fix this, we need to relax the decision boundary: instead of testing directly at the promise thresholds $\delta_{\text{close}}$ and $\delta_{\text{far}}$, we introduce a "buffer zone" to absorb statistical fluctuations. 
 
@@ -385,7 +385,7 @@ By choosing our single cutoff
 $$
 c = \delta_{\text{close}} + t
 $$
-we build in exactly enough "slack" so that even if the *true* rate sits at the lower promise boundary, $\delta = \delta_{\text{close}}$, then
+we build in exactly enough "slack" so that even if the *true* rate sits at the lower promise boundary, $\delta = \delta_{\text{close}}$, then by the Chernoff-Hoeffding bound
 $$
 \Pr\bigl[\hat{\delta} \geq c\bigr]
 \;\leq\;\Pr\bigl[\hat{\delta} - \delta \geq t\bigr]
@@ -498,10 +498,26 @@ $$
 ---
 
 **Theorem (Finite-Sample Tolerant EPR Test).**
-Fix two trace-distance tolerances $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$, and set a cutoff $c = (\varepsilon_1^2 + \varepsilon_2^2)/4$. By running the sequential matching-outcomes protocol for
+Fix two trace-distance tolerances
+$$
+0 \leq \varepsilon_1 < \varepsilon_2 \leq 1
+$$
+and set a cutoff $$
+c = \frac{\varepsilon_1^2 + \varepsilon_2^2}{4}.
+$$
+Run the sequential matching-outcomes protocol for
 $$
 N = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr)
 $$
-rounds, computing the empirical mismatch rate $\hat{\delta}$, and then accepting if $\hat{\delta} \leq c$ and rejecting otherwise, one obtains the following guarantee with confidence at least $2/3$ for this test in both directions:
-- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the test **accepts** (outputs "close").
-- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) > \varepsilon_2$, then the test **rejects** (outputs "far").
+rounds, compute the empirical mismatch rate $\hat{\delta}$, and then apply the single-threshold test
+$$
+\text{Decision} =
+\begin{cases}
+\text{“close”}, & \hat{\delta} \leq c,\\
+\text{“far”},   & \hat{\delta} > c.
+\end{cases}
+$$
+Then one can fix a desired failure probability $\alpha$ (say $1/3$) and obtain the following for this test:
+- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the test **accepts** (outputs "close") with confidence at least $1 - \alpha$.
+- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \geq \varepsilon_2$, then the test **rejects** (outputs "far") with confidence at least $1 - \alpha$.
+- When $\varepsilon_1 < D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) < \varepsilon_2$, the test may go either way (no guarantee).
