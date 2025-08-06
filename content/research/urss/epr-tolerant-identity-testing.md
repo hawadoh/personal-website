@@ -460,7 +460,7 @@ O\!\left(\frac{1}{(\varepsilon_2^2 - \varepsilon_1^2)^2}\right).
 \end{aligned}
 $$
 
-Therefore, if we collect $|S| = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr)$ concordant‐basis samples, then with probability $\geq 1 - \alpha = 2/3$ we have $|\hat{\delta} - \delta| < t$, which guarantees both completeness and soundness as shown above.
+Therefore, if we manage to collect $|S| = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr)$ concordant‐basis samples, then with probability $\geq 1 - \alpha = 2/3$ we have $|\hat{\delta} - \delta| < t$, which guarantees both completeness and soundness as shown above.
 
 Finally, we need to determine a bound on $N$, the actual number of rounds we'll run the protocol for. Our overall success requires guarding against two distinct types of errors: estimation failure ($E_{\text{estimation}}$), for which we already know $\Pr(E_{\text{estimation}}) = \alpha \leq 1/3$, and sampling failure ($E_{\text{sample}}$), where we fail to collect enough data in the first place. The total failure probability is bounded by their sum using the *union bound*.
 
