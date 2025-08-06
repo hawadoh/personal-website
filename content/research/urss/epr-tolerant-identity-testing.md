@@ -299,7 +299,7 @@ holds exactly once we know the true mismatch rate $\delta$, in practice we only 
 $$
 \delta_* = \frac{\varepsilon^2}{2},
 $$
-then sadly we would suffer both false-accept and false-reject errors due to statistical fluctuations at non-negligible rates whenever $\delta$ sits near $\hat{\delta}$. 
+then sadly we would suffer both false-accept and false-reject errors because the statistical fluctuations would cause the measured error rate $\hat{\delta}$ to frequently land on the wrong side of the cutoff line whenever the true value $\delta$ is too close to $\delta_*$.
 
 Instead, we tolerantly introduce a small gap around $\delta_*$ and build in a buffer zone to absorb those fluctuations. 
 
