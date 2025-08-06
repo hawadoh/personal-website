@@ -502,7 +502,7 @@ Putting everything together, we arrive at our main result. All the hard work we'
 
 ---
 
-**Theorem (Finite-Sample Tolerant EPR Test).**
+**Theorem (Finite-Sample Tolerant EPR Identity Test).**
 
 Fix two trace-distance tolerances
 $$
