@@ -301,13 +301,13 @@ $$
 $$
 then sadly we would suffer both false-accept and false-reject errors because the statistical fluctuations would cause the measured error rate $\hat{\delta}$ to frequently land on the wrong side of the cutoff line whenever the true value $\delta$ is too close to $\delta_*$.
 
-Instead, we tolerantly introduce a small gap around $\delta_*$ and build in a buffer zone to absorb those fluctuations. 
+In other words, with a finite number of samples, it is **impossible** to reliably distinguish between two scenarios that are infinitesimally close but on opposite sides of a sharp boundary. The statistical "noise" from finite sampling is larger than the tiny difference we are trying to measure. This means that an identity test that distinguishs states that are $\varepsilon$-close from those that are more than $\varepsilon$-far is not robust! The solution is to adopt a *tolerant* testing framework. 
 
-Intuitively, we choose two cut-points - one just below $\delta_*$ and one just above:
-$$
-\delta_{\text{close}} < \delta_* < \delta_{\text{far}}.
-$$
-By making this gap just large enough and then applying a *concentration bound* to $\hat{\delta}$, we can guarantee that, with probability at least $1 - \alpha$, the empirical error rate $\hat{\delta}$ stays on the correct side of its respective cutoff - so we will correctly declare "close" whenever $\hat{\delta} \leq \delta_{\text{close}}$ and "far" whenever $\hat{\delta} \geq \delta_{\text{far}}$, each with error at most $\alpha$.
+Instead of a single distance threshold $\varepsilon$, we define two: an acceptance tolerance $\varepsilon_2$ and a rejection tolerance $\varepsilon_2$, where $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$. Our goal is no longer to pinpoint a single boundary, but to reliably distinguish states that are "close" ($D(\rho_{AB}, \ket{\text{EPR}}) \leq \varepsilon_1$) from those that are "far" ($D(\rho_{AB}, \ket{\text{EPR}}) \geq \varepsilon_2$).
+
+This framework creates a small "promise gap" around $\delta_*$. By translating our trace distance tolerances ($\varepsilon_1$ and $\varepsilon_2$) into error rate thresholds, $\delta_{\text{close}}$ and $\delta_{\text{far}}$, which are functions of $\varepsilon_1$ and $\varepsilon_2$ respectively, we establish a "buffer zone" that can absorb those statistical fluctuations.
+
+By making this "promise gap" just large enough and then applying a *concentration bound* to $\hat{\delta}$, we can guarantee that, with probability at least $1 - \alpha$, the empirical error rate $\hat{\delta}$ stays on the correct side of its respective cutoff - so we will correctly declare "close" whenever $\hat{\delta} \leq \delta_{\text{close}}$ and "far" whenever $\hat{\delta} \geq \delta_{\text{far}}$, each with error at most $\alpha$.
 
 Let's make this intuition precise.
 
@@ -325,7 +325,7 @@ $$
 Y_i \sim \text{Bernoulli}(\delta) \quad\forall i \in S.
 $$
 
-The *empirical* error rate (the observable) is
+The *empirical* error rate is the observable:
 $$
 \hat{\delta} = \frac{1}{|S|}\sum_{i \in S} Y_i.
 $$
@@ -349,7 +349,7 @@ $$
 \delta_* = \frac{\varepsilon^2}{2}.
 $$
 
-In a tolerant test, instead of a single decision point $\varepsilon$, we have to fix two trace-distance tolerances
+As we've discussed, in a tolerant test, instead of a single decision point $\varepsilon$, we have to fix two trace-distance tolerances
 $$
 0 \leq \varepsilon_1 < \varepsilon_2 \leq 1.
 $$
@@ -363,6 +363,7 @@ $$
 \qquad
 \delta_{\text{far}} := \frac{\varepsilon_2^2}{2}.
 $$
+These thresholds naturally share the same mathematical form as the critical boundary $\delta_* = \frac{\varepsilon^2}{2}$ as they are all derived from the same underlying theorem relating trace distance to the error rate of the protocol, from the previous section!
 
 Now let's look at a natural proposal for the decision rule...
 
@@ -371,7 +372,7 @@ Now let's look at a natural proposal for the decision rule...
 > - If $\hat{\delta} \geq \delta_{\text{far}}$, declare **"far"** (reject).
 > - If $\delta_{\text{close}} < \hat{\delta} < \delta_{\text{far}}$, declare the result **inconclusive**.
 
-It looks promising and intuitive. But is this viable? Unfortunately, no. The reason is that this rule fails to provide a high-confidence guarantee for the very states it's supposed to certify.
+It looks promising and intuitive. But is this viable? Unfortunately, no. The reason this rule is flawed is the same reason a single hard cutoff $\delta_*$ is flawed! So this rule fails to provide a high-confidence guarantee for the very states it's supposed to certify.
 
 Consider a state whose true error rate is exactly on the boundary, $\delta = \delta_{\text{close}}$. The measured value $\hat{\delta}$ is a random variable centred on this true value. Due to statistical noise, there is roughly a $50\%$ chance that the measurement will yield $\hat{\delta} > \delta_{\text{close}}$. According to this rule, we would declare the result "inconclusive" i.e. fail to accept about half the time! An error rate of $\sim\!50\%$ is unacceptably high and provides no meaningful confidence. If $\delta = \delta_{\text{far}}$ exactly, then again we suffer from the same problem.
 
@@ -392,6 +393,8 @@ $$
 \;\leq\;2e^{-2|S|t^2}\,,
 $$
 i.e. the completeness error is only the exponentially small Chernoff tail and not the horrible $50\%$ we were getting.  By the same choice $c = \delta_{\text{far}} - t$ on the upper side, we get a *symmetric* buffer $(c, \delta_{\text{far}})$ that makes the soundness error equally tiny.
+
+So... the correct, albeit counter-intuitive, solution is to use a single decision cutoff $c$ placed strategically inside the promise gap $(\delta_{\text{close}}, \delta_{\text{far}})$. We've gone full circle!
 
 A very natural way to pick the margin $t > 0$ is to split the gap between $\delta_{\text{close}}$ and $\delta_{\text{far}}$ in half:
 
