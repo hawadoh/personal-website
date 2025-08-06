@@ -52,16 +52,18 @@ header .nav #menu li a:hover span::after {
   display: none;
 }
 
-/* Block math container (display=true) */
-mjx-container[data-jax="CHTML"][data-display="true"] {
-  overflow-x: auto;
+/* make every display-math container scrollable */
+mjx-container[data-display="true"] {
+  display: block;         /* ensure it’s a block-level box */
+  width: 100%;            /* fill its parent’s width */
+  max-width: 100%;        /* don’t overflow the page */
+  overflow-x: auto;       /* enable horizontal scrolling */
   overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch; /* smooth iOS scroll */
 }
 
-/* hide scrollbar in WebKit */
-mjx-container[data-jax="CHTML"][data-display="true"]::-webkit-scrollbar {
+/* optional: hide the scrollbar in WebKit/Firebase */
+mjx-container[data-display="true"]::-webkit-scrollbar {
   display: none;
 }
+
