@@ -423,7 +423,7 @@ $$
 $$
 
 1. **Completeness** ("close" case).  
-   If the true $\delta \leq \delta_{\text{close}} = c - t$, then conditioned on the *good* event $|\hat{\delta} - \delta| < t$ we can unpack the inequality and get 
+   If the true $\delta \leq \delta_{\text{close}} = c - t$, then conditioned on the *good* event $|\hat{\delta} - \delta| < t$, we can unpack the inequality and get 
    $$
    -t < \hat{\delta} - \delta < t.
    $$
