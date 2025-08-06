@@ -52,4 +52,16 @@ header .nav #menu li a:hover span::after {
   display: none;
 }
 
+/* Block math container (display=true) */
+mjx-container[data-jax="CHTML"][data-display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
+/* hide scrollbar in WebKit */
+mjx-container[data-jax="CHTML"][data-display="true"]::-webkit-scrollbar {
+  display: none;
+}

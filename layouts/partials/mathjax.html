@@ -4,7 +4,16 @@
 		tex: {
 			inlineMath: [['$', '$'], ['\\(', '\\)']],
 			displayMath: [['$$', '$$'], ['\\[', '\\]']],
-			packages: {'[+]': ['physics']},
+			packages: { '[+]': ['physics', 'tagformat'] }, // enable tag formatting
+			tags: 'ams', // enables \tag{} and equation numbers
+		},
+		options: {
+			renderActions: {
+				addMenu: [] // disables ugly right-click menu
+			}
+		},
+		startup: {
+			renderer: 'chtml' // selectable, accessible output
 		}
 	};
 </script>
