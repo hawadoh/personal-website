@@ -351,7 +351,7 @@ $$
 
 As we've discussed, in a tolerant test, instead of a single decision point $\varepsilon$, we have to fix two trace-distance tolerances
 $$
-0 \leq \varepsilon_1 < \varepsilon_2 \leq 1.
+0 \leq \varepsilon_1 < \varepsilon_2 \leq 1,
 $$
 where
 - $\varepsilon_1$ is the acceptance tolerance ($D(\rho_{AB}, \ket{\text{EPR}}\bra{\text{EPR}})\leq \varepsilon_1$ implies "close"), and
@@ -384,7 +384,7 @@ To implement this we introduce a *margin* $t > 0$, which:
 
 By choosing our single cutoff
 $$
-c = \delta_{\text{close}} + t
+c = \delta_{\text{close}} + t,
 $$
 we build in exactly enough "slack" so that even if the *true* rate sits at the lower promise boundary, $\delta = \delta_{\text{close}}$, then by the Chernoff-Hoeffding bound
 $$
@@ -489,7 +489,7 @@ $$
 
 With this, we can now use the union bound to find the total probability of failure:
 $$
-\Pr(\text{Total Failure}) = \Pr(E_{\text{sample}}) + \Pr(E_{\text{estimation}}) \leq e^{-|S|/4} + \frac{1}{3}
+\Pr(\text{Total Failure}) = \Pr(E_{\text{sample}}) + \Pr(E_{\text{estimation}}) \leq e^{-|S|/4} + \frac{1}{3}.
 $$
 
 Since the $e^{-|S|/4}$ term is negligibly small for any reasonably large $|S|$ (comparing to $1/3$), our overall failure probability is still robustly bounded by approximately $1/3$. Therefore, the choice of $N = 4|S|$ is sufficient. The total number of rounds required for the protocol is:
@@ -498,21 +498,26 @@ $$
 N = 4|S| = \frac{32 \ln(6)}{(\varepsilon_2^2 - \varepsilon_1^2)^2} = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr).
 $$
 
+Putting everything together, we arrive at our main result. All the hard work we've done in this finite-sample analysis provides a complete description for the number of rounds $N$ needed to achieve a desired confidence level ($1 - \alpha$). The key takeaway is that the required sample complexity scales as $N = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr)$, so the closer the gap between $\varepsilon_1$ and $\varepsilon_2$, the number of samples needed grows extremely rapidly. The formal statement is as follows:
+
 ---
 
 **Theorem (Finite-Sample Tolerant EPR Test).**
+
 Fix two trace-distance tolerances
 $$
-0 \leq \varepsilon_1 < \varepsilon_2 \leq 1
+0 \leq \varepsilon_1 < \varepsilon_2 \leq 1,
 $$
-and set a cutoff $$
+and the desired maximum failure probability $\alpha \in (0, 1)$.
+Set the cutoff
+$$
 c = \frac{\varepsilon_1^2 + \varepsilon_2^2}{4}.
 $$
-Run the sequential matching-outcomes protocol for
+Consider the matching-outcomes protocol executed for a total of
 $$
-N = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr)
+N \geq \frac{32\,\ln(2/\alpha)}{(\varepsilon_2^2 - \varepsilon_1^2)^2} \qquad\left( = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr) \right)
 $$
-rounds, compute the empirical mismatch rate $\hat{\delta}$, and then apply the single-threshold test
+rounds. Let the decision rule be to accept if and only if the observed error rate, $\hat{\delta}$, is less than or equal to the cutoff, $c$:
 $$
 \text{Decision} =
 \begin{cases}
@@ -520,7 +525,7 @@ $$
 \text{“far”},   & \hat{\delta} > c.
 \end{cases}
 $$
-Then one can fix a desired failure probability $\alpha$ (say $1/3$) and obtain the following for this test:
+Then, the test, defined by the pair $(N, c)$, provides the following guarantees:
 - If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the test **accepts** (outputs "close") with confidence at least $1 - \alpha$.
 - If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \geq \varepsilon_2$, then the test **rejects** (outputs "far") with confidence at least $1 - \alpha$.
-- When $\varepsilon_1 < D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) < \varepsilon_2$, the test may go either way (no guarantee).
+- If $\varepsilon_1 < D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) < \varepsilon_2$, no guarantee is made on the outcome; the test may go either way.
