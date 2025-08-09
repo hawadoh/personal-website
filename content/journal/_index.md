@@ -1,4 +1,0 @@
----
-title: "📝 Journal"
-ShowBreadCrumbs: false
----
