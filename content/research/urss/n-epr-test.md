@@ -37,11 +37,11 @@ In particular, we will show how the same matching-outcomes protocol extends in t
 
 We will analyse the number of protocol rounds, $N$, required to certify $n$ EPR pairs.
 
-~Can we achieve the same sample complexity
+Can we achieve the same sample complexity
 $$
-N = O\!\left(n^4\,(\varepsilon_2^2 - \varepsilon_1^2)^{-2}\right)\!.
+N = O\!\left(n^2\,(\varepsilon_2^2 - \varepsilon_1^2)^{-2}\right)\!.
 $$
-in all three cases?~ `idk`
+in all three cases?
 
 > **Note.** In the context of BB'84, these three scenarios correspond directly to the class of attacks that an eavesdropper (Eve) might do:
 >
@@ -72,17 +72,14 @@ and in the $n$-copy i.i.d. case we have the bound
 $$
 D_n ~:=~ D\bigl(\rho^{\otimes n},\,\Phi^{\otimes n}\bigr) ~\leq~ n\,D_1.
 $$
-
 * **Per-copy tolerance must shrink.**
   To guarantee that the full product state satisfies $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq \varepsilon_1$, the trace-distance of *each* copy must be at most $\varepsilon_1/n$; otherwise the sub-additivity bound $D_n\leq nD_1$ could exceed $\varepsilon_1$.
-
 * **Promise gap narrows by a factor $n$.**
   Replacing $\varepsilon_j$ by $\varepsilon_j/n$ shrinks the gap $\varepsilon_2^2 - \varepsilon_1^2$ by $n^{2}$. For the single-pair test the sample size scales as the inverse square of that gap, so one copy now needs
-  $$
-    O\bigl(n^{4}(\varepsilon_2^2-\varepsilon_1^2)^{-2}\bigr)
-  $$
+$$
+O\bigl(n^{4}(\varepsilon_2^2-\varepsilon_1^2)^{-2}\bigr)
+$$
   samples.
-
 * **Union bound over $n$ copies.**
   Running $n$ such tests and combining them with a union bound multiplies the sample cost by another factor $n$.
 
@@ -90,7 +87,7 @@ Hence the naïve strategy costs
 $$
 N_{\text{naïve}} ~=~ O\bigl(n^{5}(\varepsilon_2^2-\varepsilon_1^2)^{-2}\bigr),
 $$
-which is one full power of $n$ ($n^{5}$ vs. $n^{4}$) worse than the collective $n$-copy analysis we develop below. The lesson is that testing each pair in isolation achieves a *stronger* (per-copy) guarantee than we need and pays a steep statistical price; exploiting the product structure directly using just one global test is markedly more efficient.
+which is three full powers of $n$ ($n^{5}$ vs. $n^{2}$) worse than the collective $n$-copy analysis we develop below. The lesson is that testing each pair in isolation achieves a *stronger* (per-copy) guarantee than we need and pays a steep statistical price; exploiting the product structure directly using just one global test is markedly more efficient.
 
 ### Global block test via fidelity
 
@@ -106,15 +103,16 @@ F_n ~:=~ F\bigl(\rho^{\otimes n},\,\Phi^{\otimes n}\bigr) ~=~ F_1^{n},
 \qquad
 D_n ~:=~ D\bigl(\rho^{\otimes n},\,\Phi^{\otimes n}\bigr) ~\leq~ n\,D_1.
 $$
+This means we can express the $n$-copy closeness conditions entirely in terms of the single-copy fidelity $F_1$, thanks to the exact tensor-product rule $F(\rho^{\otimes n},\Phi^{\otimes n}) = F(\rho,\Phi)^n$ (or equivalently $F_n = F_1^n$). Working directly with fidelity avoids the looser trace-distance bound $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq n\,D(\rho,\Phi)$, which would give a much weaker bound than the tight scaling we get from fidelity.
 
-We switch to fidelity because it multiplies exactly under tensor powers: $F(\rho^{\otimes n},\Phi^{\otimes n}) = F(\rho,\Phi)^n$. This means that we can rewrite the $n$-copy test as a per-copy promise, and only at the very end convert back to trace distance via Fuchs–van de Graaf. In contrast, trace distance only obeys the looser sub-additivity bound $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq n\,D(\rho,\Phi)$, which, as we've seen, would introduce an unwieldy factor of $n$ and weaken our bounds.
+---
 
 Our goal is to distinguish
 $$
 \begin{cases}
-~\text{H}_0: &D_n \,\leq\,\varepsilon_1
+~\mathbf{H_0}: &D_n \,\leq\,\varepsilon_1
       \quad\iff\quad \rho^{\otimes n}\text{ is “close” to }\Phi^{\otimes n},\\[6pt]
-~\text{H}_1: &D_n \,\geq\,\varepsilon_2
+~\mathbf{H_1}: &D_n \,\geq\,\varepsilon_2
       \quad\iff\quad \rho^{\otimes n}\text{ is “far” from }\Phi^{\otimes n},
 \end{cases}
 $$
@@ -122,87 +120,204 @@ with $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$. By Fuchs–van de Graaf,
 $$
 1 - F_n ~\leq~ D_n ~\leq~ \sqrt{1 - F_n^{2}},
 $$
-so controlling $F_n$ tightly leads to a corresponding control on $D_n$. Since $F_n = F_1^{n}$, we can use this and the left half of Fuchs–van de Graaf to rewrite the hypotheses as fidelity conditions per-copy:
+so controlling $F_n$ tightly leads to a corresponding control on $D_n$. Since $F_n = F_1^{n}$, we can use this and the upper bound of Fuchs–van de Graaf to rewrite the hypotheses as fidelity conditions per-copy:
+$$
+\begin{cases}
+~\mathbf{H_0}: \quad &D_n \,\leq\,\varepsilon_1 &\impliedby &F_n^2 ~\geq~ 1 - \varepsilon_1^2
+&\iff
+&F_1 ~\geq~ (1 - \varepsilon_1^2)^{1/(2n)}
+\\[4pt]
+~\mathbf{H_1}: \quad &D_n \,\geq\,\varepsilon_2 &\implies &F_n^2 ~\leq~ 1 - \varepsilon_2^2
+&\iff
+&F_1 ~\leq~ (1 - \varepsilon_2^2)^{1/(2n)}
+\end{cases}\quad.
+$$
+Let's quickly verify that $F_n^2 \geq 1 - \varepsilon_1^2$ is a sufficient condition for $D_n \leq \varepsilon_1$ ($\mathbf{H_0}$):
+$$
+F_n^2 \geq 1 - \varepsilon_1^2 \quad\iff\quad 1 - F_n^2 \leq \varepsilon_1^2
+$$
+by rearranging. Substituting this into the upper bound of Fuchs–van de Graaf yields
+$$
+D_n ~\leq~ \sqrt{1 - F_n^2} ~\leq~ \sqrt{\varepsilon_1^2} ~=~ \varepsilon_1
+$$
+so indeed $[F_n^2 \geq 1 - \varepsilon_1^2] \implies [D_n \leq \varepsilon_1]$. Similarly we can verify that $F_n^2 \leq 1 - \varepsilon_2^2$ is a necessary condition for $D_n \geq \varepsilon_2$ ($\mathbf{H_1}$) by plugging $\mathbf{H_1}$ into the upper bound of Fuchs–van de Graaf:
+$$
+\varepsilon_2 \leq D_n \quad\implies\quad \varepsilon_2 ~\leq~ D_n ~\leq~ \sqrt{1 - F_n^2}.
+$$
+Rearranging
+$$
+\varepsilon_2 \leq \sqrt{1 - F_n^2} \quad\iff\quad F_n^2 \leq 1 - \varepsilon_2^2
+$$
+immediately shows that $[D_n \geq \varepsilon_2] \implies [F_n^2 \leq 1 - \varepsilon_2^2]$ as required.
+
+> **Remark.** You might be wondering why we need a <u>sufficient</u> condition for $\mathbf{H_0}$ and a <u>necessary</u> condition for $\mathbf{H_1}$. This is because our decision rule (defined later) is written in terms of the true error rate $\delta$. For the test outcome to be a reliable guarantee, our proof must rigorously connect the decision to the true state. This requires establishing two conditions:
+> 
+> - **Acceptance (completeness).** Whenever we accept (small $\delta$), the state is indeed *close*, i.e. the acceptance region lies inside $\{ 0 \leq D_n \leq \varepsilon_1 \}$. That means we need a condition on fidelity that is strong enough to imply $D_n\le \varepsilon_1$. The only direction that does this is the right-hand Fuchs–van de Graaf inequality $D_n\le\sqrt{1-F_n^2}$, which yields the sufficient target $F_n \geq \sqrt{1 - \varepsilon_1^2}$ (and hence $F_1 \geq (1 - \varepsilon_1^2)^{1 / (2n)}$). Using the weaker implication $D_n \leq \varepsilon_1 \Rightarrow F_n \geq 1 - \varepsilon_1$ would not be enough: e.g. if $\varepsilon_1 = 0.1$, $F_n=0.9$ implies $\sqrt{1 - F_n^2} \approx 0.436$, so $D_n$ could still exceed $\varepsilon_1 = 0.1$. We'd risk false accepts.
+> - **Rejection (soundness).** whenever the state is truly *far* ($D_n \geq \varepsilon_2$), our rule must reject. Here we want the *far* set to be contained in the rejection region. Thus we need a property that must hold for every far state i.e. a necessary consequence of $D_n \geq \varepsilon_2$. From Fuchs–van de Graaf we get $D_n \geq \varepsilon_2 \Rightarrow F_n \leq \sqrt{1 - \varepsilon_2^2}$, and combining with $\sqrt{1 - 2\delta} \leq F_1$ forces the necessary lower bound $\delta \geq \delta_{\text{far}} = \frac{1 - (1 - \varepsilon_2^2)^{1 / n}}{2}$. If we instead used a sufficient condition ("if $\delta$ is very large then the state is far"), some far states might not satisfy it and could slip through as false accepts.
+
+---
+
+The link between fidelity $F_1$ and true error rate $\delta$ from the single-copy asymptotic bound analysis is
+$$
+F_1 \geq \sqrt{1 - 2\delta} \quad\implies\quad \delta \leq \frac{1 - F_1^2}{2}.
+$$
+We will use this relation to define thresholds on $\delta$. Concretely, let
+$$
+f(\varepsilon) := \frac{1 - (1 - \varepsilon^2)^{1/n}}{2},
+$$
+and
+$$
+\qquad \delta_{\text{close}} := \frac{1 - (1 - \varepsilon_1^2)^{1/n}}{2} = f(\varepsilon_1),
+\qquad \delta_{\text{far}} := \frac{1 - (1 - \varepsilon_2^2)^{1/n}}{2} = f(\varepsilon_2).
+$$
+
+These choices are justified as follows:
+
+* (**Close**) If $\delta \leq \delta_{\text{close}}$, then $F_1 \geq \sqrt{1 - 2\delta} \geq \sqrt{1-2\delta_{\text{close}}}$, hence
+$$
+F_n \geq (1 - 2\delta_{\text{close}})^{n/2} = \sqrt{1 - \varepsilon_1^{2}},
+$$
+so from above $D_n \leq \varepsilon_1$.
+
+* (**Far**) If $D_n \geq \varepsilon_2$, then $F_n \leq \sqrt{1 - \varepsilon_2^{2}}$, i.e. $F_1 \leq (1 - \varepsilon_2^{2})^{1/(2n)}$. Combining with $\sqrt{1 - 2\delta} \leq F_1$ forces
+
+$$
+1 - 2\delta \leq (1-\varepsilon_2^{2})^{1/n} \quad\implies\quad \delta \geq \delta_{\text{far}}.
+$$
+The promise gap in $\delta$ is
+$$
+\Delta_{\delta} ~=~ \delta_{\text{far}} - \delta_{\text{close}} ~=~ f(\varepsilon_2) - f(\varepsilon_1).
+$$
+To get a lower bound on the promise gap, we first note that
+$$
+f(\varepsilon) = \frac{1 - (1 - \varepsilon^2)^{1/n}}{2}
+$$
+is continuous on $[0, 1]$ for any $n \geq 2$; we only consider $n \geq 2$ since $n$ is the number of EPR pairs and so $n = 1$ reduces to the single-copy test. Indeed, $f$ is build by composing several maps on $[0, 1]$:
+- $\varepsilon \mapsto \varepsilon^2$ (continuous),
+- $x \mapsto 1 - x$ (continuous),
+- $y \mapsto y^{1/n}$ (continuous for $y \geq 0$).
+Each of these components is continuous on the domain $[0, 1]$. Hence their composition, $f$, is also continuous on the closed interval $[0, 1]$.
+
+By the fundamental theorem of calculus,
+$$
+\Delta_\delta
+= f(\varepsilon_2)-f(\varepsilon_1)
+= \int_{\varepsilon_1}^{\varepsilon_2} f'(\varepsilon)\,d\varepsilon.
+$$
+For $n\ge2$, differentiating $f(\varepsilon)$ gives
+$$
+f'(\varepsilon) = \frac{\varepsilon}{n}(1 - \varepsilon^2)^{\frac{1}{n} - 1}.
+$$
+Since $0 \leq \varepsilon < 1$ implies $1 - \varepsilon^2 \in (0, 1]$ and $\frac{1}{n} - 1 \leq 0$ as $n \geq 2$, we have
+$$
+(1 - \varepsilon^2)^{\frac{1}{n} - 1} \geq 1 \qquad\left[\,\forall \varepsilon \in [0, 1)\,\right].
+$$
+Multiplying through by $\varepsilon/n$ we get
+$$
+f'(\varepsilon) \geq \frac{\varepsilon}{n}.
+$$
+Therefore,
+$$
+\Delta_\delta = \int_{\varepsilon_1}^{\varepsilon_2} f'(\varepsilon)\,d\varepsilon
+~\geq~ \int_{\varepsilon_1}^{\varepsilon_2}\frac{\varepsilon}{n}\,d\varepsilon
+=\frac{\varepsilon_2^2 - \varepsilon_1^2}{2n}.
+$$
+
+Taking $\varepsilon_2\to 1^{-}$ (and using continuity of $f$) shows the same bound holds when $\varepsilon_2 = 1$. Hence, for all $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$,
+$$
+\Delta_\delta \geq \frac{\varepsilon_2^2 - \varepsilon_1^2}{2n}.
+$$
+> **Note.** At $\varepsilon=1$, the factor $(1 - \varepsilon^2)^{\frac{1}{n} - 1}$ diverges (for $n > 2$), which only strengthens $(1 - \varepsilon^2)^{\frac{1}{n} - 1} \geq 1$ and $f'(\varepsilon) \geq \varepsilon/n$. The integral is interpreted as a limit *from below* when the upper limit is $1$.
+
+---
+
+Define a margin 
+$$
+t := \frac{\Delta_{\delta}}{2} = \frac{\delta_{\text{far}} - \delta_{\text{close}}}{2}.
+$$
+Pick a single cutoff inside the gap (the midpoint):
+$$
+c := \frac{\delta_{\text{close}} + \delta_{\text{far}}}{2} = \frac{f(\varepsilon_1) + f(\varepsilon_2)}{2}.
+$$
+After running the protocol and computing the empirical mismatch rate $\hat\delta$ on the matching‑basis rounds $S$, we define the decision rule as
+$$
+\text{Decision} =
+\begin{cases}
+\text{“close”} & \text{if } \hat\delta \leq c,\\
+\text{“far”}   & \text{if } \hat\delta > c.
+\end{cases}
+$$
+On matching‑basis rounds, the indicators $\{ Y_i \}_{i \in S}$ are i.i.d. Bernoulli with mean $\delta$. Chernoff–Hoeffding gives, for any $t > 0$,
+$$
+\Pr\!\left[|\hat\delta - \delta| \geq t\right] \leq 2e^{-2|S|t^2}.
+$$
+- **Completeness** ($\delta \leq \delta_{\text{close}}$):
+  If the *good* event $|\hat\delta - \delta| < t$ holds, then
+  $\hat\delta \leq \delta_{\text{close}} + t = c \Rightarrow$ accept.
+
+- **Soundness** ($\delta \geq \delta_{\text{far}}$):
+  If $|\hat\delta-\delta| < t$, then
+  $\hat\delta > \delta_{\text{far}} - t = c \Rightarrow$ reject.
+
+Therefore, each error (completeness or soundness) occurs only if $|\hat\delta-\delta|\ge t$ (the bad event). To make this probability $\le \alpha$, it suffices that
+$$
+2e^{-2|S|t^2} \leq \alpha
+\quad\iff\quad
+|S| \geq \frac{2}{\Delta_\delta^{2}}\,\ln\!\frac{2}{\alpha} \qquad (t = \Delta_\delta/2).
+$$
+The bound on $\Delta_\delta$ from the integral earlier states that
+$$
+\Delta_\delta \geq \frac{\varepsilon_2^2 - \varepsilon_1^2}{2n}.
+$$
+From this, we can derive that
 $$
 \begin{aligned}
-\text{H}_0: \quad F_1^n ~\geq~ 1 - \varepsilon_1
-&\quad\iff\quad
-F_1 ~\geq~ (1 - \varepsilon_1)^{1/n}
-~=:~1-\tilde{\varepsilon}_1,\\[4pt]
-\text{H}_1: \quad F_1^n ~\leq~ 1 - \varepsilon_2
-&\quad\iff\quad
-F_1 ~\leq~ (1 - \varepsilon_2)^{1/n}
-~=:~ 1 - \tilde{\varepsilon}_2,
+\Delta_\delta ~\geq~ \frac{\varepsilon_2^2 - \varepsilon_1^2}{2n} &{\quad\iff\quad} \Delta_\delta^2 ~\geq~ \left(\frac{\varepsilon_2^2 - \varepsilon_1^2}{2n}\right)^2
+\\[10pt]&{\quad\iff\quad} \Delta_\delta^2 ~\geq~ \frac{\left(\varepsilon_2^2 - \varepsilon_1^2\right)^2}{4n^2}
+\\[10pt]&{\quad\iff\quad} \frac{1}{\Delta_\delta^2} ~\leq~ \frac{4n^2}{\left(\varepsilon_2^2 - \varepsilon_1^2\right)^2}
+\\[15pt]&{\quad\iff\quad} \frac{2}{\Delta_\delta^2} \ln \frac{2}{\alpha} ~\leq~ \frac{8n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2} \ln \frac{2}{\alpha} \quad[\,=: L].
 \end{aligned}
 $$
-where $0 < \tilde{\varepsilon}_1 < \tilde{\varepsilon}_2$. For moderate $n$ one often uses the first-order approximation
+Since $\Delta_\delta \geq (\varepsilon_2^2 - \varepsilon_1^2)/(2n)$ and $\frac{2}{\Delta_\delta^2}\,\ln\!\frac{2}{\alpha}$ is strictly decreasing in $\Delta_\delta$, the true requirement is always at most $L$. Therefore, choosing $|S| \geq L$ guarantees the condition is satisfied for all admissible $\Delta_\delta$:
 $$
-\tilde{\varepsilon}_j \approx \frac{\varepsilon_j}{n},
+|S| \geq \underbrace{\frac{8\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha}}_{\text{Our choice (worst-case }L\text{)}}
+\quad\geq\quad
+\underbrace{\frac{2}{\Delta_\delta^{2}}\,\ln\!\frac{2}{\alpha}}_{\text{What we actually need}}.
 $$
-but nothing in the proof requires it. In the single-copy tolerant test we set matching-basis error thresholds
+In other words, a sufficient condition for $|S|$ is:
 $$
-\delta_{\text{close}} = \frac{\varepsilon_1^2}{2},
-\quad
-\delta_{\text{far}} = \frac{\varepsilon_2^2}{2},
+|S| ~\geq~ \frac{8\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha}.
 $$
-and chose a cutoff
+As before, only about half of the $N$ rounds are matching-basis. Taking $N = 4|S|$,
 $$
-c = \frac{\delta_{\text{close}} + \delta_{\text{far}}}{2} = \frac{\varepsilon_1^2 + \varepsilon_2^2}{4},
+N ~\geq~ \frac{32\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha}.
 $$
-then showed 
-$$
-|S| \geq \frac{8\,\ln(2/\alpha)}{(\varepsilon_2^2-\varepsilon_1^2)^2}
-$$samples suffice. In the $n$-copy test we simply replace each $\varepsilon_j$ by its rescaled $\tilde\varepsilon_j$:
-$$
-\tilde{\delta}_{\text{close}}
-=\frac12\,\tilde{\varepsilon}_1^{\,2},
-\quad
-\tilde{\delta}_{\text{far}}
-=\frac12\,\tilde{\varepsilon}_2^{\,2}.
-$$
-Everything in the finite-sample proof *carries over verbatim*, except that the **promise gap** shrinks by a factor $n$, the number of i.i.d. copies:
-$$
-\varepsilon_2^2-\varepsilon_1^2 \quad\longrightarrow\quad
-\tilde\varepsilon_2^{\,2}-\tilde\varepsilon_1^{\,2}
-~\approx~ \frac{\varepsilon_2^{2}-\varepsilon_1^{2}}{n^{2}}.
-$$
-The same Chernoff-Hoeffding argument yields
-$$
-|S| ~\geq~ \frac{8\,\ln(2/\alpha)}{\left((\varepsilon_2^2-\varepsilon_1^2)/n^2\right)^2} ~=~ \frac{8\,n^4\,\ln(2/\alpha)}{(\varepsilon_2^2-\varepsilon_1^2)^2}
-\qquad\left[=
-O\bigl(n^{4}\,(\varepsilon_2^2-\varepsilon_1^2)^{-2}\bigr)\right].
-$$
-Taking $N=4|S|$ rounds then guarantees both completeness and soundness at the confidence level $1 - \alpha$. So the i.i.d. extension is indeed "trivial" algorithmically (exact same test), but **not** free: the price is a quartic blow-up in $n$ coming from the much narrower promise gap.
+So extending the test from a single copy to $n$ i.i.d. copies is **not** free: the price is a quadratic blow-up in $n$ coming from the much narrower promise gap. Put succinctly:
 
-> **Back-of-envelope:** If your original single-pair tolerances were $\varepsilon_1 < \varepsilon_2$ and you move to $n = 10$ copies with the same global promises, the promise gap $\Delta = \varepsilon_2^2 - \varepsilon_1^2$ is *divided* by a factor $n^2 = 100$. Since the sample complexity scales as $O(\Delta^{-2})$, this multiplies the cost by $n^4 = 10^4$, meaning you need roughly ten-thousand times more matching-basis samples than in the single-pair test.
+**Theorem (Finite-sample tolerant EPR identity test, i.i.d. product version).**
 
-Put succinctly:
-
-> **Theorem (Finite-sample tolerant EPR identity test, i.i.d. product version).**
->
-> Let $n \in \mathbb{N}$ be the number of i.i.d. copies of $\rho_{AB}$ held by Alice and Bob. For brevity write
-> $$
-\rho = \rho_{AB},
-\qquad
-\Phi = \ket{\text{EPR}}\bra{\text{EPR}}_{AB}.
+Let $n \geq 2$ be the number of i.i.d. copies of $\rho_{AB}$ held by Alice and Bob. For brevity, write
 $$
-> Fix global trace distance tolerances $0\leq \varepsilon_1<\varepsilon_2\le1$ and confidence $1-\alpha$. Define the cutoff
-> $$
-\tilde{c} = \frac{\tilde{\varepsilon}_1^{\,2}+\tilde{\varepsilon}_2^{\,2}}{4},
-\quad\text{where}\quad \tilde{\varepsilon}_j=(1-\varepsilon_j)^{1/n} ~~\text{ for } j \in \{1, 2\}.
+\rho = \rho_{AB},\qquad \Phi=\ket{\mathrm{EPR}}\bra{\mathrm{EPR}}_{AB}.
 $$
-> Run the matching-outcomes protocol for
-> $$
-N ~\geq~ \frac{32\,n^4\,\ln(2/\alpha)}{\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{2}}
-\qquad\left[= O\left(n^4\,\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right]
+Fix global trace-distance tolerances $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$ and confidence $1 - \alpha$. Define
 $$
-> rounds, and accept *if and only if* the observed error $\hat{\delta} \leq \tilde{c}$. Then with probability $\geq 1 - \alpha$:
-> - If $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq \varepsilon_1$, the test accepts.
-> - If $D(\rho^{\otimes n},\Phi^{\otimes n}) \geq \varepsilon_2$, the test rejects.
-> - If $\varepsilon_1 < D(\rho^{\otimes n},\Phi^{\otimes n}) < \varepsilon_2$, no guarantee is provided; the test may accept or reject.
+f(\varepsilon)=\frac12\left[1 - (1 - \varepsilon^2)^{1/n}\right],\quad
+\delta_{\text{close}} = f(\varepsilon_1),\quad
+\delta_{\text{far}} = f(\varepsilon_2),\quad
+c = \frac{\delta_{\text{close}} + \delta_{\text{far}}}{2}.
+$$
+Run the matching-outcomes protocol for
+$$
+N ~\geq~ \frac{32\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha}
+\qquad\left[= O\left(n^2\,\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right]
+$$
+rounds, and accept *if and only if* the observed error $\hat{\delta} \leq c$. Then with probability $\geq 1 - \alpha$:
+- If $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq \varepsilon_1$, the test accepts.
+- If $D(\rho^{\otimes n},\Phi^{\otimes n}) \geq \varepsilon_2$, the test rejects.
+- If $\varepsilon_1 < D(\rho^{\otimes n},\Phi^{\otimes n}) < \varepsilon_2$, no guarantee is provided; the test may accept or reject.
 
 That completes the "easy" i.i.d. case. Next, we'll remove the identical-copy assumption.
-`maybe add the more specific case here that requires a stricter choice for \varepsilon_1 and \varepsilon_2`
 
 ## Medium case (independent, non-identical copies)
 `copy from obsidian`
