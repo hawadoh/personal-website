@@ -1,0 +1,42 @@
+# Hugo build output
+/public/
+/resources/
+
+# Hugo cache
+/.hugo_build.lock
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.code-workspace
+*.sublime-workspace
+*.sublime-project
+
+# Backup and swap files
+*~
+*.swp
+*.bak
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Node (if you ever add tooling)
+/node_modules/
+
+# Go modules cache (if you install via modules)
+/go.mod
+/go.sum
+
+# Generated site files (if you ever export)
+/exported/
+/public_html/
+
+# Misc temp
+*.tmp
+*.temp

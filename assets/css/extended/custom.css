@@ -1,0 +1,55 @@
+/* desktop-only portion of footer: hide on screens ≤768px */
+.only-desktop {
+  display: inline;
+}
+@media (max-width: 640px) {
+  .only-desktop {
+    display: none !important;
+  }
+
+  body {
+    font-size: 16px !important; /* shrink the base font-size on small screens */
+  }
+}
+
+/* Underline nav bar on hover */
+header .nav #menu li a span {
+  position: relative;
+}
+
+header .nav #menu li a span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: center center;
+  transition: transform 0.35s ease;
+}
+
+header .nav #menu li a:hover span::after {
+  transform: scaleX(1);
+}
+
+/* Prevent KaTeX from breaking equations into two lines in inline mode */
+.katex {
+  white-space: nowrap; 
+}
+
+@media (max-width: 768px) {
+  .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+
+  .katex-display::-webkit-scrollbar {
+    display: none;
+  }
+}

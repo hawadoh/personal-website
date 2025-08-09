@@ -1,0 +1,22 @@
+<!-- MathJax -->
+<script>
+	window.MathJax = {
+		tex: {
+			inlineMath: [['$', '$'], ['\\(', '\\)']],
+			displayMath: [['$$', '$$'], ['\\[', '\\]']],
+			packages: { '[+]': ['physics', 'tagformat'] }, // enable tag formatting
+			tags: 'ams', // enables \tag{} and equation numbers
+		},
+		options: {
+			renderActions: {
+				addMenu: [] // disables ugly right-click menu
+			}
+		},
+		startup: {
+			renderer: 'chtml' // selectable, accessible output
+		}
+	};
+</script>
+<script id="MathJax-script" async
+	src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>

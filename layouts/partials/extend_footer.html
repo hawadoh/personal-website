@@ -1,0 +1,21 @@
+<script>
+  (function() {
+    const el = document.getElementById("greeting");
+    if (!el) return;
+
+    const hour = new Date().getHours();
+    let text;
+
+    if (hour >= 6 && hour < 12) {
+      text = "꧁ ɢօօօɖ ʍօʀռɨռɢ! 🌻 ꧂";
+    } else if (hour >= 12 && hour < 18) {
+      text = "𝐆𝐨𝐨𝐝 𝐚𝐟𝐭𝐞𝐫𝐧𝐨𝐨𝐧. ☀️🌳☕";
+    } else if (hour >= 18 && hour < 22) {
+      text = "𝘎𝘰𝘰𝘥 𝘦𝘷𝘦𝘯𝘪𝘯𝘨. 🌄🛋️📖";
+    } else {
+      text = "𝕙𝕖𝕪 𝕟𝕚𝕘𝕙𝕥 𝕠𝕨𝕝... 🦉🌙🌃";
+    }
+
+    el.textContent = text;
+  })();
+</script>
