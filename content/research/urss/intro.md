@@ -1,5 +1,5 @@
 +++
-title = 'URSS Introduction'
+title = 'URSS introduction'
 date = 2025-06-24T16:10:31+01:00
 ShowBreadCrumbs = true
 draft = false

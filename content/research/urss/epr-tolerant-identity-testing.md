@@ -1,7 +1,7 @@
 +++
 date = '2025-08-03T23:35:49+01:00'
 draft = false
-title = 'Classical Tolerant Identity Test for the EPR State'
+title = 'Classical tolerant identity test for the EPR state'
 ShowToc = true
 TocOpen = true
 +++
@@ -16,7 +16,7 @@ using only *sequential\** (one qubit at a time), local measurements in the **sta
 
 ## Matching‑outcomes protocol
 
-Alice and Bob share $N$ independent copies of an unknown state $\rho_{AB}$.  For each copy $i = 1, \dots, N$, they do the following *in sequence\**:
+Alice and Bob share $N$ independent copies of an unknown state $\rho_{AB}$. For each copy $i = 1, \dots, N$, they do the following *in sequence\**:
 1. **Basis choice:**
    * Alice picks $\theta_i \in \{ 0, 1 \}$ uniformly at random.
    * Bob picks $\tilde{\theta}_i \in \{ 0, 1 \}$ uniformly at random.
@@ -392,7 +392,7 @@ $$
 \;\leq\;\Pr\bigl[\hat{\delta} - \delta \geq t\bigr]
 \;\leq\;2e^{-2|S|t^2}\,,
 $$
-i.e. the completeness error is only the exponentially small Chernoff tail and not the horrible $50\%$ we were getting.  By the same choice $c = \delta_{\text{far}} - t$ on the upper side, we get a *symmetric* buffer $(c, \delta_{\text{far}})$ that makes the soundness error equally tiny.
+i.e. the completeness error is only the exponentially small Chernoff tail and not the horrible $50\%$ we were getting. By the same choice $c = \delta_{\text{far}} - t$ on the upper side, we get a *symmetric* buffer $(c, \delta_{\text{far}})$ that makes the soundness error equally tiny.
 
 So... the correct, albeit counter-intuitive, solution is to use a single decision cutoff $c$ placed strategically inside the promise gap $(\delta_{\text{close}}, \delta_{\text{far}})$. We've gone full circle!
 
@@ -526,6 +526,6 @@ $$
 \end{cases}
 $$
 Then, the test, defined by the pair $(N, c)$, provides the following guarantees:
-- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the test **accepts** (outputs "close") with confidence at least $1 - \alpha$.
-- If $D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \geq \varepsilon_2$, then the test **rejects** (outputs "far") with confidence at least $1 - \alpha$.
-- If $\varepsilon_1 < D(\rho_{AB},\ket{\text{EPR}} \bra{\text{EPR}}_{AB}) < \varepsilon_2$, no guarantee is made on the outcome; the test may go either way.
+- If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the test **accepts** (outputs "close") with confidence at least $1 - \alpha$.
+- If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \geq \varepsilon_2$, then the test **rejects** (outputs "far") with confidence at least $1 - \alpha$.
+- If $\varepsilon_1 < D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) < \varepsilon_2$, no guarantee is made on the outcome; the test may go either way (accept or reject).
