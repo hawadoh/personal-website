@@ -174,36 +174,32 @@ O\bigl(n^{4}\,(\varepsilon_2^2-\varepsilon_1^2)^{-2}\bigr)\right].
 $$
 Taking $N=4|S|$ rounds then guarantees both completeness and soundness at the confidence level $1 - \alpha$. So the i.i.d. extension is indeed "trivial" algorithmically (exact same test), but **not** free: the price is a quartic blow-up in $n$ coming from the much narrower promise gap.
 
-> **Back-of-envelope**: if your original single-pair tolerances were some $\varepsilon_1 < \varepsilon_2$ and you move to $n = 10$ copies with the same global promises, the denominator in the $O\bigl((\Delta)^{{-2}}\bigr)$ scaling shrinks by $n^{2}=100$, so you need roughly $10^{4}$ times as many matching-basis samples.
+> **Back-of-envelope:** If your original single-pair tolerances were $\varepsilon_1 < \varepsilon_2$ and you move to $n = 10$ copies with the same global promises, the promise gap $\Delta = \varepsilon_2^2 - \varepsilon_1^2$ is *divided* by a factor $n^2 = 100$. Since the sample complexity scales as $O(\Delta^{-2})$, this multiplies the cost by $n^4 = 10^4$, meaning you need roughly ten-thousand times more matching-basis samples than in the single-pair test.
 
 Put succinctly:
 
----
-
-**Theorem (Finite-sample tolerant EPR identity test, i.i.d. product version).**
-
-Let $n \in \mathbb{N}$ be the number of i.i.d. copies of $\rho_{AB}$ held by Alice and Bob. For brevity write
-$$
+> **Theorem (Finite-sample tolerant EPR identity test, i.i.d. product version).**
+>
+> Let $n \in \mathbb{N}$ be the number of i.i.d. copies of $\rho_{AB}$ held by Alice and Bob. For brevity write
+> $$
 \rho = \rho_{AB},
 \qquad
 \Phi = \ket{\text{EPR}}\bra{\text{EPR}}_{AB}.
 $$
-Fix global trace distance tolerances $0\leq \varepsilon_1<\varepsilon_2\le1$ and confidence $1-\alpha$. Define the cutoff
-$$
-c = \frac{\tilde{\varepsilon}_1^{\,2}+\tilde{\varepsilon}_2^{\,2}}{4},
+> Fix global trace distance tolerances $0\leq \varepsilon_1<\varepsilon_2\le1$ and confidence $1-\alpha$. Define the cutoff
+> $$
+\tilde{c} = \frac{\tilde{\varepsilon}_1^{\,2}+\tilde{\varepsilon}_2^{\,2}}{4},
 \quad\text{where}\quad \tilde{\varepsilon}_j=(1-\varepsilon_j)^{1/n} ~~\text{ for } j \in \{1, 2\}.
 $$
-Run the matching-outcomes protocol for
-$$
+> Run the matching-outcomes protocol for
+> $$
 N ~\geq~ \frac{32\,n^4\,\ln(2/\alpha)}{\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{2}}
 \qquad\left[= O\left(n^4\,\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right]
 $$
-rounds, and accept *if and only if* the observed error $\hat{\delta} \leq c$. Then with probability $\geq 1 - \alpha$:
-- If $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq \varepsilon_1$, the test accepts.
-- If $D(\rho^{\otimes n},\Phi^{\otimes n}) \geq \varepsilon_2$, the test rejects.
-- If $\varepsilon_1 < D(\rho^{\otimes n},\Phi^{\otimes n}) < \varepsilon_2$, no guarantee is provided; the test may accept or reject.
-
----
+> rounds, and accept *if and only if* the observed error $\hat{\delta} \leq \tilde{c}$. Then with probability $\geq 1 - \alpha$:
+> - If $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq \varepsilon_1$, the test accepts.
+> - If $D(\rho^{\otimes n},\Phi^{\otimes n}) \geq \varepsilon_2$, the test rejects.
+> - If $\varepsilon_1 < D(\rho^{\otimes n},\Phi^{\otimes n}) < \varepsilon_2$, no guarantee is provided; the test may accept or reject.
 
 That completes the "easy" i.i.d. case. Next, we'll remove the identical-copy assumption.
 `maybe add the more specific case here that requires a stricter choice for \varepsilon_1 and \varepsilon_2`

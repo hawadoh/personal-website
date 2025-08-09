@@ -272,18 +272,14 @@ $$
 $$
 Combining the two inequalities give $\varepsilon \leq \sqrt{2\delta}$, and equivalently, $\delta \geq \frac{1}{2}\varepsilon^2$.
 
----
-
-**Theorem (Asymptotic EPR Identity Bound).**
-
-Under the i.i.d. assumption, in the asymptotic limit $N \to \infty$, let Alice and Bob share $N$ copies of an unknown state $\rho_{AB}$. Define the *true* matching-basis error rate $\delta = \Pr[x_i \neq \tilde{x}_i ~|~ \theta_i = \tilde{\theta}_i]$. Then, the trace distance $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) = \varepsilon \in [0, 1]$ between $\rho_{AB}$ and the ideal EPR pair satisfies
-$$
+> **Theorem (Asymptotic EPR Identity Bound).**
+>
+> Under the i.i.d. assumption, in the asymptotic limit $N \to \infty$, let Alice and Bob share $N$ copies of an unknown state $\rho_{AB}$. Define the *true* matching-basis error rate $\delta = \Pr[x_i \neq \tilde{x}_i ~|~ \theta_i = \tilde{\theta}_i]$. Then, the trace distance $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) = \varepsilon \in [0, 1]$ between $\rho_{AB}$ and the ideal EPR pair satisfies
+> $$
    \varepsilon \leq \sqrt{2\delta},
    \quad\iff\quad
    \delta \geq \frac{\varepsilon^2}{2}.
 $$
-
----
 
 ## Finite-sample analysis
 
@@ -500,32 +496,30 @@ $$
 
 Putting everything together, we arrive at our main result. All the hard work we've done in this finite-sample analysis provides a complete description for the number of rounds $N$ needed to achieve a desired confidence level ($1 - \alpha$). The key takeaway is that the required sample complexity scales as $N = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr)$, so the closer the gap between $\varepsilon_1$ and $\varepsilon_2$, the number of samples needed grows extremely rapidly. The formal statement is as follows:
 
----
-
-**Theorem (Finite-Sample Tolerant EPR Identity Test).**
-
-Fix two trace-distance tolerances
-$$
+> **Theorem (Finite-Sample Tolerant EPR Identity Test).**
+>
+> Fix two trace-distance tolerances
+> $$
 0 \leq \varepsilon_1 < \varepsilon_2 \leq 1,
 $$
-and the desired maximum failure probability $\alpha \in (0, 1)$.
-Set the cutoff
-$$
+> and the desired maximum failure probability $\alpha \in (0, 1)$.
+> Set the cutoff
+> $$
 c = \frac{\varepsilon_1^2 + \varepsilon_2^2}{4}.
 $$
-Consider the matching-outcomes protocol executed for a total of
-$$
+> Consider the matching-outcomes protocol executed for a total of
+> $$
 N \geq \frac{32\,\ln(2/\alpha)}{(\varepsilon_2^2 - \varepsilon_1^2)^2} \qquad\left( = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr) \right)
 $$
-rounds. Let the decision rule be to accept if and only if the observed error rate, $\hat{\delta}$, is less than or equal to the cutoff, $c$:
-$$
+> rounds. Let the decision rule be to accept if and only if the observed error rate, $\hat{\delta}$, is less than or equal to the cutoff, $c$:
+> $$
 \text{Decision} =
 \begin{cases}
 \text{“close”}, & \hat{\delta} \leq c,\\
 \text{“far”},   & \hat{\delta} > c.
 \end{cases}
 $$
-Then, the test, defined by the pair $(N, c)$, provides the following guarantees:
-- If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the test **accepts** (outputs "close") with confidence at least $1 - \alpha$.
-- If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \geq \varepsilon_2$, then the test **rejects** (outputs "far") with confidence at least $1 - \alpha$.
-- If $\varepsilon_1 < D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) < \varepsilon_2$, no guarantee is made on the outcome; the test may go either way (accept or reject).
+> Then, the test, defined by the pair $(N, c)$, provides the following guarantees:
+> - If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the test **accepts** (outputs "close") with confidence at least $1 - \alpha$.
+> - If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \geq \varepsilon_2$, then the test **rejects** (outputs "far") with confidence at least $1 - \alpha$.
+> - If $\varepsilon_1 < D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) < \varepsilon_2$, no guarantee is made on the outcome; the test may go either way (accept or reject).
