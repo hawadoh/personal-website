@@ -281,6 +281,8 @@ Combining the two inequalities give $\varepsilon \leq \sqrt{2\delta}$, and equiv
    \delta \geq \frac{\varepsilon^2}{2}.
 $$
 
+---
+
 ## Finite-sample analysis
 
 With the asymptotic bound in hand, our task becomes a practical one: we must decide, from a finite sample, whether to declare "close" or "far" while keeping the probability of error below some small threshold.
