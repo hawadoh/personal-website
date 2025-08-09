@@ -39,7 +39,7 @@ We will analyse the number of protocol rounds, $N$, required to certify $n$ EPR 
 
 ~Can we achieve the same sample complexity
 $$
-N = O\!\left(n^4\,(\varepsilon_2^2 - 2\varepsilon_1^2)^{-2}\right)\!.
+N = O\!\left(n^4\,(\varepsilon_2^2 - \varepsilon_1^2)^{-2}\right)\!.
 $$
 in all three cases?~ `idk`
 
