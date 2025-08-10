@@ -85,7 +85,7 @@ $$
 * **Replicated testing scales linearly.**
   Running $n$ such tests and combining them multiplies the sample cost by $n$.
 
-Hence the naïve strategy costs
+Hence by a very high-level analysis, we obtain a cost for the naïve strategy
 $$
 N_{\text{naïve}} ~=~ O\bigl(n^{5}(\varepsilon_2^2-\varepsilon_1^2)^{-2}\bigr),
 $$
