@@ -285,9 +285,7 @@ $$
 
 ## Finite-sample analysis
 
-With the asymptotic bound in hand, our task becomes a practical one: we must decide, from a finite sample, whether to declare "close" or "far" while keeping the probability of error below some small threshold.
-
-With the asymptotic bound in hand, our task becomes a practical one: from a finite sample we must decide "close" or "far" while keeping the error probability below some target, say $\alpha$.
+With the asymptotic bound in hand, our task becomes a practical one: from a finite sample we must decide "close" or "far" while keeping the probability of error below some small target, say $\alpha$.
 
 Although
 $$
@@ -299,9 +297,9 @@ $$
 $$
 then sadly we would suffer both false-accept and false-reject errors because the statistical fluctuations would cause the measured error rate $\hat{\delta}$ to frequently land on the wrong side of the cutoff line whenever the true value $\delta$ is too close to $\delta_*$.
 
-In other words, with a finite number of samples, it is **impossible** to reliably distinguish between two scenarios that are infinitesimally close but on opposite sides of a sharp boundary. The statistical "noise" from finite sampling is larger than the tiny difference we are trying to measure. This means that an identity test that distinguishs states that are $\varepsilon$-close from those that are more than $\varepsilon$-far is not robust! The solution is to adopt a *tolerant* testing framework. 
+In other words, with a finite number of samples, it is **impossible** to reliably distinguish between two scenarios that are infinitesimally close but on opposite sides of a sharp boundary. The statistical "noise" from finite sampling is larger than the tiny difference we are trying to measure. This means that an identity test that distinguishes states that are $\varepsilon$-close from those that are more than $\varepsilon$-far is not robust! The solution is to adopt a *tolerant* testing framework. 
 
-Instead of a single distance threshold $\varepsilon$, we define two: an acceptance tolerance $\varepsilon_2$ and a rejection tolerance $\varepsilon_2$, where $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$. Our goal is no longer to pinpoint a single boundary, but to reliably distinguish states that are "close" ($D(\rho_{AB}, \ket{\text{EPR}}) \leq \varepsilon_1$) from those that are "far" ($D(\rho_{AB}, \ket{\text{EPR}}) \geq \varepsilon_2$).
+Instead of a single distance threshold $\varepsilon$, we define two: an acceptance tolerance $\varepsilon_1$ and a rejection tolerance $\varepsilon_2$, where $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$. Our goal is no longer to pinpoint a single boundary, but to reliably distinguish states that are "close" ($D(\rho_{AB}, \ket{\text{EPR}}) \leq \varepsilon_1$) from those that are "far" ($D(\rho_{AB}, \ket{\text{EPR}}) \geq \varepsilon_2$).
 
 This framework creates a small "promise gap" around $\delta_*$. By translating our trace distance tolerances ($\varepsilon_1$ and $\varepsilon_2$) into error rate thresholds, $\delta_{\text{close}}$ and $\delta_{\text{far}}$, which are functions of $\varepsilon_1$ and $\varepsilon_2$ respectively, we establish a "buffer zone" that can absorb those statistical fluctuations.
 
