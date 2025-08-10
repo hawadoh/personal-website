@@ -303,7 +303,7 @@ $$
 \Delta_\delta ~\geq~ \frac{\varepsilon_2^2 - \varepsilon_1^2}{2n} &{\quad\iff\quad} \Delta_\delta^2 ~\geq~ \left(\frac{\varepsilon_2^2 - \varepsilon_1^2}{2n}\right)^2
 \\[10pt]&{\quad\iff\quad} \Delta_\delta^2 ~\geq~ \frac{\left(\varepsilon_2^2 - \varepsilon_1^2\right)^2}{4n^2}
 \\[10pt]&{\quad\iff\quad} \frac{1}{\Delta_\delta^2} ~\leq~ \frac{4n^2}{\left(\varepsilon_2^2 - \varepsilon_1^2\right)^2}
-\\[15pt]&{\quad\iff\quad} \frac{2}{\Delta_\delta^2} \ln \frac{2}{\alpha} ~\leq~ \frac{8n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2} \ln \frac{2}{\alpha} \quad[\,=: L].
+\\[15pt]&{\quad\iff\quad} \frac{2}{\Delta_\delta^2} \ln \frac{2}{\alpha} ~\leq~ \frac{8n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2} \ln \frac{2}{\alpha} \quad[\,=: L\,].
 \end{aligned}
 $$
 Since $\Delta_\delta \geq (\varepsilon_2^2 - \varepsilon_1^2)/(2n)$ and $\frac{2}{\Delta_\delta^2}\,\ln\!\frac{2}{\alpha}$ is strictly decreasing in $\Delta_\delta$, the true requirement is always at most $L$. Therefore, choosing $|S| \geq L$ guarantees the condition is satisfied for all admissible $\Delta_\delta$:
@@ -316,7 +316,7 @@ In other words, a sufficient condition for $|S|$ is:
 $$
 |S| ~\geq~ \frac{8\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha}.
 $$
-As before, only about half of the $N$ rounds are matching-basis. Taking $N = 4|S|$ (by the same argument as in the single-copy case),
+As before, only about half of the $N$ rounds are matching-basis. Taking $N = 4|S|$ (by the same argument from the single-copy case),
 $$
 N ~\geq~ \frac{32\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha} \qquad\left[= O\left(n^2\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right].
 $$
