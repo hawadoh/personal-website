@@ -298,9 +298,12 @@ $$
 $$
 As before, only about half of the $N$ rounds are matching-basis. Taking $N = 4|S|$,
 $$
-N ~\geq~ \frac{32\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha}.
+N ~\geq~ \frac{32\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha} \qquad\left[= O\left(n^2\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right].
 $$
-So extending the test from a single copy to $n$ i.i.d. copies is **not** free: the price is a quadratic blow-up in $n$ coming from the much narrower promise gap. Put succinctly:
+
+So it turns out that extending the test from a single copy to $n$ i.i.d. copies is **not** free: the price is a quadratic blow-up in sample complexity, which is intuitive and expected when you consider the difference in the guarantees. Certifying that the *entire collection* of $n$ states is globally $\varepsilon$-close is a much stricter requirement than certifying a single state. This is because a tiny imperfection in each copy, when compounded over the tensor product of all $n$ states, can result in a large global deviation. To compensate for this, the required fidelity of each copy must be much higher, which in turn forces the promise gap $\Delta_\delta$ for the true error rate $\delta$ to become approximately $n$ times narrower as there are $n$ copies.
+
+A core principle of statistics is that the uncertainty of an estimated average is proportional to the inverse square root of the number of samples (in our case, this is $1 / \sqrt{|S|}$). To reliably measure a promise gap that is $n$ times smaller, our estimate for $\Delta_\delta$ must be $n$ times more precise. Achieving this $n$-fold increase in precision requires an $n^2$-fold increase in the number of samples, which leads directly to the $O(n^2)$ scaling in complexity we're seeing. Putting everything together succinctly:
 
 > **Theorem (Finite-sample tolerant EPR identity test, i.i.d. product version).**
 > 
