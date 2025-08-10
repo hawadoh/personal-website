@@ -82,8 +82,8 @@ $$
 O\bigl(n^{4}(\varepsilon_2^2-\varepsilon_1^2)^{-2}\bigr)
 $$
   samples.
-* **Union bound over $n$ copies.**
-  Running $n$ such tests and combining them with a union bound multiplies the sample cost by another factor $n$.
+* **Replicated testing scales linearly.**
+  Running $n$ such tests and combining them multiplies the sample cost by $n$.
 
 Hence the naïve strategy costs
 $$
@@ -115,9 +115,9 @@ Our goal is to distinguish
 $$
 \begin{cases}
 ~\mathbf{H_0}: &D_n \,\leq\,\varepsilon_1
-      \quad\iff\quad \rho^{\otimes n}\text{ is “close” to }\Phi^{\otimes n},\\[6pt]
+	\quad\iff\quad \rho^{\otimes n}\text{ is “close” to }\Phi^{\otimes n},\\[6pt]
 ~\mathbf{H_1}: &D_n \,\geq\,\varepsilon_2
-      \quad\iff\quad \rho^{\otimes n}\text{ is “far” from }\Phi^{\otimes n},
+	\quad\iff\quad \rho^{\otimes n}\text{ is “far” from }\Phi^{\otimes n},
 \end{cases}
 $$
 with $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$. By Fuchs–van de Graaf,
@@ -138,10 +138,26 @@ $$
 $$
 
 You might be wondering why we need a <u>sufficient</u> condition for $\mathbf{H_0}$ and a <u>necessary</u> condition for $\mathbf{H_1}$. This is because our decision rule (defined later) is written in terms of the true error rate $\delta$. For the test outcome to be a reliable guarantee, our proof must rigorously connect the decision to the true state. This requires establishing two conditions:
-- **Acceptance (completeness).** Whenever we accept (by observing a small $\delta$), the state is indeed *close*, i.e. $D_n \leq \varepsilon_1$. That means we need a condition on fidelity that is strong enough to imply $D_n\le \varepsilon_1$. The only direction that does this is the right-hand Fuchs–van de Graaf inequality $D_n\le\sqrt{1-F_n^2}$, which yields the sufficient target $F_n \geq \sqrt{1 - \varepsilon_1^2}$ (and hence $F_1 \geq (1 - \varepsilon_1^2)^{1 / (2n)}$). Using the weaker implication $D_n \leq \varepsilon_1 \Rightarrow F_n \geq 1 - \varepsilon_1$ would not be enough: e.g. if $\varepsilon_1 = 0.1$, $F_n=0.9$ implies $\sqrt{1 - F_n^2} \approx 0.436$, so $D_n$ could still exceed $\varepsilon_1 = 0.1$. We'd risk false accepts.
-- **Rejection (soundness).** whenever the state is truly *far* ($D_n \geq \varepsilon_2$), our rule must reject. Here we want the *far* set to be contained in the rejection region. Thus we need a property that must hold for every far state i.e. a necessary consequence of $D_n \geq \varepsilon_2$. From Fuchs–van de Graaf we get $D_n \geq \varepsilon_2 \Rightarrow F_n \leq \sqrt{1 - \varepsilon_2^2}$, and combining with $\sqrt{1 - 2\delta} \leq F_1$ forces the necessary lower bound $\delta \geq \delta_{\text{far}} = \frac{1 - (1 - \varepsilon_2^2)^{1 / n}}{2}$. If we instead used a sufficient condition ("if $\delta$ is very large then the state is far"), some far states might not satisfy it and could slip through as false accepts.
 
-> **Remark.** You might notice that this explicit discussion of sufficient and necessary conditions was not needed for the single-copy test. This is because the single-copy proof is more direct - in that case, the Asymptotic EPR Identity Bound ($\delta \geq \varepsilon^2/2$) provides a single, powerful, and symmetric link between the trace distance $\varepsilon$ and the error rate $\delta$, without needing to use fidelity as an intermediary, so it implicitly contains both the necessary and sufficient logic needed to construct the test. In contrast, the multi-copy proof uses the asymmetric Fuchs-van de Graaf inequalities, forcing us to an explicitly analyse the logical direction for each guarantee.
+- **Soundness of acceptance (Accept ⇒ Close; avoid false accepts).**
+  Why do we use a "sufficient" $F\!\to\!D$ direction? We want "if the test accepts, the global state is close", i.e. no false accept. That needs an *upper* bound on distance from fidelity, which comes from the **right-hand** FvG:
+  $$
+  D_n \leq \sqrt{1 - F_n^2}.
+  $$
+  So we enforce $F_n \geq \sqrt{1 - \varepsilon_1^2}$ (equivalently $F_1 \geq (1 - \varepsilon_1^2)^{1/(2n)}$), which *forces* $D_n \leq \varepsilon_1$.
+  If instead you used the left-hand side $1 - F_n \leq D_n$ with a threshold $F_n \geq 1-\varepsilon_1$, you could **falsely accept** a far state. Example: take $\varepsilon_1 = 0.1$ and a state with $F_n = 0.90$. The right-hand FvG still allows $D_n$ to be as high as $\sqrt{1 - 0.9^2} \approx 0.436 > 0.1$, so the state could be far from the target yet would be accepted by this flawed rule.
+
+- **Soundness of rejection (Far ⇒ Reject; again avoid false accepts).**
+  Why do we use a "necessary" $D\!\to\!F$ direction? We want every far state to be rejected, i.e. no false accept. We start from "far ⇒ small fidelity", and again consider the **right-hand** FvG:
+  $$
+  D_n \geq \varepsilon_2 \implies F_n \leq \sqrt{1 - \varepsilon_2^2}.
+  $$
+  Together with $\sqrt{1 - 2\delta} \leq F_1$, this yields $\delta \geq \delta_{\text{far}} = \frac{1}{2}[1 - (1 - \varepsilon_2^2)^{1/n}]$. Any simpler rule like "reject if $F_n \leq \tau$" with $\tau < \sqrt{1 - \varepsilon_2^2}$ will **falsely accept** some far states. Example: $\varepsilon_2 = 0.8 \implies \sqrt{1 - \varepsilon_2^2} = 0.6$; a state with $F_n = 0.55$ has $D_n = \sqrt{1 - 0.55^2} \approx 0.835 > \varepsilon_2$ yet would be accepted by $\tau = 0.4$.
+
+**What about completeness?** 
+The proof for completeness (avoiding **false rejects** of close states) is not a deterministic guarantee, but a statistical one. It's the promise that if you are given a good state, your experiment will correctly identify it with very high confidence $1 - \alpha$. This guarantee comes from the power of the Chernoff-Hoeffding concentration bound, and we will see the full reasoning below.
+
+> **Remark.** You might notice that this explicit discussion of sufficient and necessary conditions was not needed for the single-copy test. This is because the single-copy proof is more direct - in that case, the Asymptotic EPR Identity Bound ($\delta \geq \varepsilon^2/2$) provides a single, powerful, and symmetric link between the trace distance $\varepsilon$ and the error rate $\delta$, without needing to use fidelity as an intermediary, so it implicitly contains both the necessary and sufficient logic needed to construct the test. In contrast, the multi-copy proof uses the asymmetric Fuchs-van de Graaf inequalities, forcing us to explicitly analyse the logical direction for each guarantee.
 
 Let's quickly verify that $F_n^2 \geq 1 - \varepsilon_1^2$ is a sufficient condition for $D_n \leq \varepsilon_1$ ($\mathbf{H_0}$):
 $$
@@ -165,9 +181,13 @@ immediately shows that $[D_n \geq \varepsilon_2] \implies [F_n^2 \leq 1 - \varep
 
 The link between fidelity $F_1$ and true error rate $\delta$ from the single-copy asymptotic bound analysis is
 $$
-F_1 \geq \sqrt{1 - 2\delta} \quad\implies\quad \delta \leq \frac{1 - F_1^2}{2}.
+F_1 \geq \sqrt{1 - 2\delta} \quad\iff\quad \delta \geq \frac{1 - F_1^2}{2}.
 $$
-We will use this relation to define thresholds on $\delta$. Concretely, let
+We will use this relation to define thresholds on $\delta$.
+
+> **Convention.** For each basis, we relabel Bob's outcomes if needed so the mismatch rate is $\leq 1/2$ (i.e., replace $\delta_b$ by $\min \{\delta_b, 1 - \delta_b\}$). With this standard symmetrisation, the aggregated $\delta \in [0, 1/2]$ and the bound $F_1 \geq \sqrt{1-2\delta}$ is always meaningful.
+
+Concretely, let
 $$
 f(\varepsilon) := \frac{1 - (1 - \varepsilon^2)^{1/n}}{2},
 $$
@@ -200,7 +220,7 @@ To get a lower bound on the promise gap, we first note that
 $$
 f(\varepsilon) = \frac{1 - (1 - \varepsilon^2)^{1/n}}{2}
 $$
-is continuous on $[0, 1]$ for any $n \geq 2$; we only consider $n \geq 2$ since $n$ is the number of EPR pairs and so $n = 1$ reduces to the single-copy test. Indeed, $f$ is build by composing several maps on $[0, 1]$:
+is continuous on $[0, 1]$ for any $n \geq 2$; we only consider $n \geq 2$ since $n$ is the number of EPR pairs and so $n = 1$ reduces to the single-copy test. Indeed, $f$ is built by composing several maps on $[0, 1]$:
 - $\varepsilon \mapsto \varepsilon^2$ (continuous),
 - $x \mapsto 1 - x$ (continuous),
 - $y \mapsto y^{1/n}$ (continuous for $y \geq 0$).
@@ -255,7 +275,7 @@ $$
 \text{“far”}   & \text{if } \hat\delta > c.
 \end{cases}
 $$
-On matching‑basis rounds, the indicators $\{ Y_i \}_{i \in S}$ are i.i.d. Bernoulli with mean $\delta$. Chernoff–Hoeffding gives, for any $t > 0$,
+On matching‑basis rounds, the indicators $\{ Y_i \}_{i \in S}$ are i.i.d. Bernoulli random variables with mean $\delta$. Chernoff–Hoeffding gives, for any $t > 0$,
 $$
 \Pr\!\left[|\hat\delta - \delta| \geq t\right] \leq 2e^{-2|S|t^2}.
 $$
@@ -267,7 +287,7 @@ $$
   If $|\hat\delta-\delta| < t$, then
   $\hat\delta > \delta_{\text{far}} - t = c \Rightarrow$ reject.
 
-Therefore, each error (completeness or soundness) occurs only if $|\hat\delta-\delta|\ge t$ (the bad event). To make this probability $\le \alpha$, it suffices that
+Therefore, each error (completeness or soundness) occurs only if $|\hat\delta-\delta|\geq t$ (the bad event). To make this probability $\leq \alpha$, it suffices that
 $$
 2e^{-2|S|t^2} \leq \alpha
 \quad\iff\quad
@@ -296,7 +316,7 @@ In other words, a sufficient condition for $|S|$ is:
 $$
 |S| ~\geq~ \frac{8\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha}.
 $$
-As before, only about half of the $N$ rounds are matching-basis. Taking $N = 4|S|$,
+As before, only about half of the $N$ rounds are matching-basis. Taking $N = 4|S|$ (by the same argument as in the single-copy case),
 $$
 N ~\geq~ \frac{32\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha} \qquad\left[= O\left(n^2\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right].
 $$
@@ -327,9 +347,9 @@ $$
 N ~\geq~ \frac{32\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha}
 \qquad\left[= O\left(n^2\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right]
 $$
-> rounds, and accept *if and only if* the observed error $\hat{\delta} \leq c$. Then with probability $\geq 1 - \alpha$:
-> - If $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq \varepsilon_1$, the test accepts.
-> - If $D(\rho^{\otimes n},\Phi^{\otimes n}) \geq \varepsilon_2$, the test rejects.
+> rounds, and accept *if and only if* the observed error $\hat{\delta} \leq c$. Then:
+> - If $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq \varepsilon_1$, the test accepts with probability $\geq 1 - \alpha$.
+> - If $D(\rho^{\otimes n},\Phi^{\otimes n}) \geq \varepsilon_2$, the test rejects with probability $\geq 1 - \alpha$.
 > - If $\varepsilon_1 < D(\rho^{\otimes n},\Phi^{\otimes n}) < \varepsilon_2$, no guarantee is provided; the test may accept or reject.
 
 That completes the "easy" i.i.d. case. Next, we'll remove the identical-copy assumption.
