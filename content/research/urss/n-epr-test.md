@@ -359,3 +359,4 @@ That completes the "easy" i.i.d. case. Next, we'll remove the identical-copy ass
 ## Medium case (independent, non-identical copies)
 `copy from obsidian`
 `todo: maybe now we can use the same sufficiency/necessity argument and we can finish off the closeness part of the medium case`
+`note. what we need is not an upper bound on the promise gap but the lower bound. can we do this with Cauchy Schwarz?`
