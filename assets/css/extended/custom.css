@@ -53,3 +53,9 @@ header .nav #menu li a:hover span::after {
     display: none;
   }
 }
+
+/* Make #### (h4) bigger (why did they make it so small...) */
+.post-content h4 {
+  font-size: 20px;
+  font-weight: bold;
+}

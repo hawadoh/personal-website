@@ -58,6 +58,8 @@ in all three cases?
 
 We begin with the i.i.d. case as it's both the simplest to analyse and a useful building block for the more challenging scenarios.
 
+---
+
 ## Easy case (i.i.d. copies)
 
 ### A naïve per-copy approach using trace distance
@@ -89,7 +91,9 @@ N_{\text{naïve}} ~=~ O\bigl(n^{5}(\varepsilon_2^2-\varepsilon_1^2)^{-2}\bigr),
 $$
 which is three full powers of $n$ ($n^{5}$ vs. $n^{2}$) worse than the collective $n$-copy analysis we develop below. The lesson is that testing each pair in isolation achieves a *stronger* (per-copy) guarantee than we need and pays a steep statistical price; exploiting the product structure directly using just one global test is markedly more efficient.
 
-### Global block test via fidelity
+---
+
+### Global block test using fidelity
 
 For a single copy $\rho$:
 $$
@@ -105,7 +109,7 @@ D_n ~:=~ D\bigl(\rho^{\otimes n},\,\Phi^{\otimes n}\bigr) ~\leq~ n\,D_1.
 $$
 This means we can express the $n$-copy closeness conditions entirely in terms of the single-copy fidelity $F_1$, thanks to the exact tensor-product rule $F(\rho^{\otimes n},\Phi^{\otimes n}) = F(\rho,\Phi)^n$ (or equivalently $F_n = F_1^n$). Working directly with fidelity avoids the looser trace-distance bound $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq n\,D(\rho,\Phi)$, which would give a much weaker bound than the tight scaling we get from fidelity.
 
----
+#### Translating hypotheses
 
 Our goal is to distinguish
 $$
@@ -132,6 +136,13 @@ $$
 &F_1 ~\leq~ (1 - \varepsilon_2^2)^{1/(2n)}
 \end{cases}\quad.
 $$
+
+You might be wondering why we need a <u>sufficient</u> condition for $\mathbf{H_0}$ and a <u>necessary</u> condition for $\mathbf{H_1}$. This is because our decision rule (defined later) is written in terms of the true error rate $\delta$. For the test outcome to be a reliable guarantee, our proof must rigorously connect the decision to the true state. This requires establishing two conditions:
+- **Acceptance (completeness).** Whenever we accept (by observing a small $\delta$), the state is indeed *close*, i.e. $D_n \leq \varepsilon_1$. That means we need a condition on fidelity that is strong enough to imply $D_n\le \varepsilon_1$. The only direction that does this is the right-hand Fuchs–van de Graaf inequality $D_n\le\sqrt{1-F_n^2}$, which yields the sufficient target $F_n \geq \sqrt{1 - \varepsilon_1^2}$ (and hence $F_1 \geq (1 - \varepsilon_1^2)^{1 / (2n)}$). Using the weaker implication $D_n \leq \varepsilon_1 \Rightarrow F_n \geq 1 - \varepsilon_1$ would not be enough: e.g. if $\varepsilon_1 = 0.1$, $F_n=0.9$ implies $\sqrt{1 - F_n^2} \approx 0.436$, so $D_n$ could still exceed $\varepsilon_1 = 0.1$. We'd risk false accepts.
+- **Rejection (soundness).** whenever the state is truly *far* ($D_n \geq \varepsilon_2$), our rule must reject. Here we want the *far* set to be contained in the rejection region. Thus we need a property that must hold for every far state i.e. a necessary consequence of $D_n \geq \varepsilon_2$. From Fuchs–van de Graaf we get $D_n \geq \varepsilon_2 \Rightarrow F_n \leq \sqrt{1 - \varepsilon_2^2}$, and combining with $\sqrt{1 - 2\delta} \leq F_1$ forces the necessary lower bound $\delta \geq \delta_{\text{far}} = \frac{1 - (1 - \varepsilon_2^2)^{1 / n}}{2}$. If we instead used a sufficient condition ("if $\delta$ is very large then the state is far"), some far states might not satisfy it and could slip through as false accepts.
+
+> **Remark.** You might notice that this explicit discussion of sufficient and necessary conditions was not needed for the single-copy test. This is because the single-copy proof is more direct - in that case, the Asymptotic EPR Identity Bound ($\delta \geq \varepsilon^2/2$) provides a single, powerful, and symmetric link between the trace distance $\varepsilon$ and the error rate $\delta$, without needing to use fidelity as an intermediary, so it implicitly contains both the necessary and sufficient logic needed to construct the test. In contrast, the multi-copy proof uses the asymmetric Fuchs-van de Graaf inequalities, forcing us to an explicitly analyse the logical direction for each guarantee.
+
 Let's quickly verify that $F_n^2 \geq 1 - \varepsilon_1^2$ is a sufficient condition for $D_n \leq \varepsilon_1$ ($\mathbf{H_0}$):
 $$
 F_n^2 \geq 1 - \varepsilon_1^2 \quad\iff\quad 1 - F_n^2 \leq \varepsilon_1^2
@@ -150,12 +161,7 @@ $$
 $$
 immediately shows that $[D_n \geq \varepsilon_2] \implies [F_n^2 \leq 1 - \varepsilon_2^2]$ as required.
 
-> **Remark.** You might be wondering why we need a <u>sufficient</u> condition for $\mathbf{H_0}$ and a <u>necessary</u> condition for $\mathbf{H_1}$. This is because our decision rule (defined later) is written in terms of the true error rate $\delta$. For the test outcome to be a reliable guarantee, our proof must rigorously connect the decision to the true state. This requires establishing two conditions:
-> 
-> - **Acceptance (completeness).** Whenever we accept (small $\delta$), the state is indeed *close*, i.e. the acceptance region lies inside $\{ 0 \leq D_n \leq \varepsilon_1 \}$. That means we need a condition on fidelity that is strong enough to imply $D_n\le \varepsilon_1$. The only direction that does this is the right-hand Fuchs–van de Graaf inequality $D_n\le\sqrt{1-F_n^2}$, which yields the sufficient target $F_n \geq \sqrt{1 - \varepsilon_1^2}$ (and hence $F_1 \geq (1 - \varepsilon_1^2)^{1 / (2n)}$). Using the weaker implication $D_n \leq \varepsilon_1 \Rightarrow F_n \geq 1 - \varepsilon_1$ would not be enough: e.g. if $\varepsilon_1 = 0.1$, $F_n=0.9$ implies $\sqrt{1 - F_n^2} \approx 0.436$, so $D_n$ could still exceed $\varepsilon_1 = 0.1$. We'd risk false accepts.
-> - **Rejection (soundness).** whenever the state is truly *far* ($D_n \geq \varepsilon_2$), our rule must reject. Here we want the *far* set to be contained in the rejection region. Thus we need a property that must hold for every far state i.e. a necessary consequence of $D_n \geq \varepsilon_2$. From Fuchs–van de Graaf we get $D_n \geq \varepsilon_2 \Rightarrow F_n \leq \sqrt{1 - \varepsilon_2^2}$, and combining with $\sqrt{1 - 2\delta} \leq F_1$ forces the necessary lower bound $\delta \geq \delta_{\text{far}} = \frac{1 - (1 - \varepsilon_2^2)^{1 / n}}{2}$. If we instead used a sufficient condition ("if $\delta$ is very large then the state is far"), some far states might not satisfy it and could slip through as false accepts.
-
----
+#### Defining the error rate thresholds
 
 The link between fidelity $F_1$ and true error rate $\delta$ from the single-copy asymptotic bound analysis is
 $$
@@ -180,10 +186,12 @@ $$
 so from above $D_n \leq \varepsilon_1$.
 
 * (**Far**) If $D_n \geq \varepsilon_2$, then $F_n \leq \sqrt{1 - \varepsilon_2^{2}}$, i.e. $F_1 \leq (1 - \varepsilon_2^{2})^{1/(2n)}$. Combining with $\sqrt{1 - 2\delta} \leq F_1$ forces
+$$
+1 - 2\delta \leq (1 - \varepsilon_2^{2})^{1/n} \quad\implies\quad \delta \geq \delta_{\text{far}}.
+$$
 
-$$
-1 - 2\delta \leq (1-\varepsilon_2^{2})^{1/n} \quad\implies\quad \delta \geq \delta_{\text{far}}.
-$$
+#### Bounding the promise gap
+
 The promise gap in $\delta$ is
 $$
 \Delta_{\delta} ~=~ \delta_{\text{far}} - \delta_{\text{close}} ~=~ f(\varepsilon_2) - f(\varepsilon_1).
@@ -229,7 +237,7 @@ $$
 $$
 > **Note.** At $\varepsilon=1$, the factor $(1 - \varepsilon^2)^{\frac{1}{n} - 1}$ diverges (for $n > 2$), which only strengthens $(1 - \varepsilon^2)^{\frac{1}{n} - 1} \geq 1$ and $f'(\varepsilon) \geq \varepsilon/n$. The integral is interpreted as a limit *from below* when the upper limit is $1$.
 
----
+#### Decision rule and sample complexity
 
 Define a margin 
 $$
@@ -294,30 +302,35 @@ N ~\geq~ \frac{32\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln
 $$
 So extending the test from a single copy to $n$ i.i.d. copies is **not** free: the price is a quadratic blow-up in $n$ coming from the much narrower promise gap. Put succinctly:
 
-**Theorem (Finite-sample tolerant EPR identity test, i.i.d. product version).**
-
-Let $n \geq 2$ be the number of i.i.d. copies of $\rho_{AB}$ held by Alice and Bob. For brevity, write
-$$
+> **Theorem (Finite-sample tolerant EPR identity test, i.i.d. product version).**
+> 
+> Let $n \geq 2$ be the number of i.i.d. copies of $\rho_{AB}$ held by Alice and Bob. For brevity, write
+> $$
 \rho = \rho_{AB},\qquad \Phi=\ket{\mathrm{EPR}}\bra{\mathrm{EPR}}_{AB}.
 $$
-Fix global trace-distance tolerances $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$ and confidence $1 - \alpha$. Define
+> Fix global trace-distance tolerances $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$ and confidence $1 - \alpha$. Define
+> $$
+\begin{aligned}
+&f(\varepsilon) = \frac{1}{2}\!\left[1 - (1 - \varepsilon^2)^{1/n}\right]&,&
+&\delta_{\text{close}} = f(\varepsilon_1),
+\\[10pt]&\delta_{\text{far}} = f(\varepsilon_2)&,&
+\qquad &c = \frac{\delta_{\text{close}} + \delta_{\text{far}}}{2}.
+\end{aligned}
 $$
-f(\varepsilon)=\frac12\left[1 - (1 - \varepsilon^2)^{1/n}\right],\quad
-\delta_{\text{close}} = f(\varepsilon_1),\quad
-\delta_{\text{far}} = f(\varepsilon_2),\quad
-c = \frac{\delta_{\text{close}} + \delta_{\text{far}}}{2}.
-$$
-Run the matching-outcomes protocol for
-$$
+> Run the matching-outcomes protocol for
+> $$
 N ~\geq~ \frac{32\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha}
-\qquad\left[= O\left(n^2\,\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right]
+\qquad\left[= O\left(n^2\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right]
 $$
-rounds, and accept *if and only if* the observed error $\hat{\delta} \leq c$. Then with probability $\geq 1 - \alpha$:
-- If $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq \varepsilon_1$, the test accepts.
-- If $D(\rho^{\otimes n},\Phi^{\otimes n}) \geq \varepsilon_2$, the test rejects.
-- If $\varepsilon_1 < D(\rho^{\otimes n},\Phi^{\otimes n}) < \varepsilon_2$, no guarantee is provided; the test may accept or reject.
+> rounds, and accept *if and only if* the observed error $\hat{\delta} \leq c$. Then with probability $\geq 1 - \alpha$:
+> - If $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq \varepsilon_1$, the test accepts.
+> - If $D(\rho^{\otimes n},\Phi^{\otimes n}) \geq \varepsilon_2$, the test rejects.
+> - If $\varepsilon_1 < D(\rho^{\otimes n},\Phi^{\otimes n}) < \varepsilon_2$, no guarantee is provided; the test may accept or reject.
 
 That completes the "easy" i.i.d. case. Next, we'll remove the identical-copy assumption.
 
+---
+
 ## Medium case (independent, non-identical copies)
 `copy from obsidian`
+`todo: maybe now we can use the same sufficiency/necessity argument and we can finish off the closeness part of the medium case`
