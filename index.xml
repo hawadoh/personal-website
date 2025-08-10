@@ -25,9 +25,5 @@ using only &lt;em>sequential*&lt;/em> (one qubit at a time), local measurements 
 &lt;hr>
 &lt;h2 id="matchingoutcomes-protocol">Matching‑outcomes protocol&lt;/h2>
 &lt;p>Alice and Bob share $N$ independent copies of an unknown state $\rho_{AB}$. For each copy $i = 1, \dots, N$, they do the following &lt;em>in sequence*&lt;/em>:&lt;/p></description></item><item><title>URSS introduction</title><link>https://teaegg.net/research/urss/intro/</link><pubDate>Tue, 24 Jun 2025 16:10:31 +0100</pubDate><guid>https://teaegg.net/research/urss/intro/</guid><description>&lt;p>Hello and welcome to my URSS blog! Over the coming weeks, I&amp;rsquo;ll be sharing my journey into the fascinating field of quantum cryptography. There are two parts to this: &amp;ldquo;quantum&amp;rdquo;, the strange and powerful world of quantum physics; and &amp;ldquo;cryptography&amp;rdquo;, the science of securing information via encryption and decryption.&lt;/p>
-&lt;p>Let&amp;rsquo;s start simple. Take this number:
-&lt;/p>
-$$
-1984909
-$$&lt;p>
-Looks random right? Here&amp;rsquo;s the challenge: can you figure out which two numbers, when multiplied together, give you this result?&lt;/p></description></item></channel></rss>
+&lt;p>Let&amp;rsquo;s start simple. Take this number: $1984909$.&lt;/p>
+&lt;p>Looks random right? Here&amp;rsquo;s the challenge: can you figure out which two numbers, when multiplied together, give you this result?&lt;/p></description></item></channel></rss>
