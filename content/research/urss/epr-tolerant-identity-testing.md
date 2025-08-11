@@ -8,15 +8,15 @@ TocOpen = true
 
 **Goal.** Certify that an unknown bipartite state $\rho_{AB}$ held by Alice and Bob is within trace‑distance $\varepsilon$ of
 $$
-\ket{\text{EPR}}_{AB} = \frac1{\sqrt2}\left(\ket{00}_{AB} + \ket{11}_{AB}\right),
+\ket{\text{EPR}}_{AB} = \frac{1}{\sqrt2}\left(\ket{00}_{AB} + \ket{11}_{AB}\right),
 $$
 using only *sequential\** (one qubit at a time), local measurements in the **standard** ($\{ \ket{0}, \ket{1} \}$) or **Hadamard** ($\{ \ket{+}, \ket{-} \}$) bases, and classical communication. Importantly, we never perform any joint or Bell‐basis measurement on $AB$.
 
 ---
 
-## Matching‑outcomes protocol
+## Single-pair matching‑outcomes protocol
 
-Alice and Bob share $N$ independent copies of an unknown state $\rho_{AB}$. For each copy $i = 1, \dots, N$, they do the following *in sequence\**:
+Suppose Alice and Bob share i.i.d. copies of an unknown state $\rho_{AB}$. For each pair $i = 1, \dots, N$, where $N$ is bounded by the analysis below, they do the following *in sequence\**:
 1. **Basis choice:**
    * Alice picks $\theta_i \in \{ 0, 1 \}$ uniformly at random.
    * Bob picks $\tilde{\theta}_i \in \{ 0, 1 \}$ uniformly at random.
@@ -38,7 +38,7 @@ Compute the **observed error rate**
 $$
   \hat{\delta} = \frac{1}{|S|}\,\left|\{\,i\in S : x_i \neq \tilde x_i\}\right|.
 $$
-which represents the non-matching fraction of the results.
+which represents the mismatch fraction conditioned on matching-basis rounds.
 
 ---
 
@@ -350,8 +350,8 @@ $$
 0 \leq \varepsilon_1 < \varepsilon_2 \leq 1,
 $$
 where
-- $\varepsilon_1$ is the acceptance tolerance ($D(\rho_{AB}, \ket{\text{EPR}}\bra{\text{EPR}})\leq \varepsilon_1$ implies "close"), and
-- $\varepsilon_2$ is the rejection threshold ($D(\rho_{AB}, \ket{\text{EPR}}\bra{\text{EPR}}) \geq \varepsilon_2$ implies "far").
+- $\varepsilon_1$ is the acceptance tolerance; $D(\rho_{AB}, \ket{\text{EPR}}\bra{\text{EPR}})\leq \varepsilon_1$ implies "close", and
+- $\varepsilon_2$ is the rejection threshold; $D(\rho_{AB}, \ket{\text{EPR}}\bra{\text{EPR}}) \geq \varepsilon_2$ implies "far".
 
 We translate these into *matching‐basis* thresholds by
 $$
@@ -498,7 +498,7 @@ Putting everything together, we arrive at our main result. All the hard work we'
 
 > **Theorem (Finite-Sample Tolerant EPR Identity Test).**
 >
-> Fix two trace-distance tolerances
+> Given i.i.d. copies of $\rho_{AB}$, fix two trace-distance tolerances
 > $$
 0 \leq \varepsilon_1 < \varepsilon_2 \leq 1,
 $$
@@ -519,7 +519,7 @@ $$
 \text{“far”},   & \hat{\delta} > c.
 \end{cases}
 $$
-> Then, the test, defined by the pair $(N, c)$, provides the following guarantees:
+> Then the test provides the following guarantees:
 > - If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the test **accepts** (outputs "close") with confidence at least $1 - \alpha$.
 > - If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \geq \varepsilon_2$, then the test **rejects** (outputs "far") with confidence at least $1 - \alpha$.
 > - If $\varepsilon_1 < D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) < \varepsilon_2$, no guarantee is made on the outcome; the test may go either way (accept or reject).
