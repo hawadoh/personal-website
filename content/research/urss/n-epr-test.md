@@ -7,11 +7,24 @@ TocOpen = true
 +++
 
 ## Change in notation
-With the [tolerant identity test](../epr-tolerant-identity-testing) for a single state $\rho_{AB}$ complete, we now turn to the problem of certifying multiple EPR pairs. Before analysing the multi-pair scenarios, it helps to reframe one round of the single-pair matching-outcomes protocol as a callable oracle $\mathbb{O}$ that consumes a fresh pair of $\rho_{AB}$ and outputs a classical bit when the bases match.
+With the [tolerant identity test](../epr-tolerant-identity-testing) for a single state $\rho_{AB}$ complete, we now turn to the problem of certifying multiple ($n$) EPR pairs at once. For brevity we write $\Phi = \ket{\text{EPR}}\bra{\text{EPR}}_{AB}$ throughout. The problem statement is as follows:
 
-Suppose Alice and Bob share a number of independent pairs of an unknown state $\rho_{AB}$. We package one measurement round into a callable **oracle** $\mathbb{O}(\rho_{AB})$ and then do simple classical post-processing. Combining $N$ oracle calls and doing the simple classical post-processing is equivalent to the $N$-round protocol!
+> **Problem.**
+>
+> Given two trace distance tolerances $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$, a failure probability $\alpha \in [0, 1]$, and $N$ i.i.d. copies of an unknown $2n$-qubit global state $\varrho$ on $A^n B^n$ i.e. the source produces $\varrho^{\otimes N}$, how large must $N$ at least be so that, using only local $Z$/$X$ measurements and classical postprocessing, we can decide with at least confidence $1 - \alpha$ whether
+> $$
+D\!\left[\,\varrho~,~ \Phi^{\otimes n}\,\right]
+$$
+> is small ($\leq \varepsilon_1$) or large ($\geq \varepsilon_2$)?
 
-### Oracle $\mathbb{O}(\rho_{AB})$
+> **Definition (block).**
+> A *block* is one i.i.d. copy of the $2n$-qubit global state $\varrho$, where we label the qubits as $(A_j, B_j)_{j=1}^n$ for convenience. We refer to each pair $(A_j, B_j)$ as a *coordinate* for convenience.
+
+Before analysing the multi-pair scenario, let's revisit the single-pair case first. It helps to reframe one round of the single-pair matching-outcomes protocol as a callable oracle $\mathbb{O}$ that consumes a fresh pair of $\rho_{AB}$ and outputs a classical bit when the bases match.
+
+Suppose Alice and Bob share $N$ i.i.d. copies of an unknown pair $\rho_{AB}$. We package one measurement round into a callable **oracle** $\mathbb{O}(\rho_{AB})$ and then do simple classical post-processing. Combining $N$ oracle calls and doing the simple classical post-processing is equivalent to the $N$-round protocol!
+
+### Single-pair oracle $\mathbb{O}(\rho_{AB})$
 
 **Input:** one fresh pair of the bipartite state $\rho_{AB}$.
 
@@ -29,13 +42,15 @@ $$
 
 (We relabel Bob's outcomes per basis so each per-basis mismatch rate is $\leq 1/2$; see the convention below.)
 
-This oracle encapsulates the entire procedure of basis selection, local measurement, and comparison. Each call to the oracle is statistically identical to one round of the original protocol. This formalism is particularly useful for the medium and hard cases below, as it allows us to reason about the statistical properties of the test without getting bogged down in the implementation details of each round.
+This oracle $\mathbb{O}$ encapsulates the entire procedure of basis selection, local measurement, and comparison for a single coordinate $(A_j, B_j)$ of a block. A block has $n$ coordinates, we call $\mathbb{O}$ once per coordinate so $n$ times in total (either sequentially or in parallel). We then keep only the calls where the bases matched and do simple classical post-processing (count mismatches). Over $N$ blocks, this amounts to $n \cdot N$ oracle calls in total.
 
-> **Remark.** "Sequential" vs "parallel" only affects implementation. Equivalently one can run many calls (measure many pairs) in parallel and reveal bases afterwards over a classical channel; the distribution of $(M, Y)$ is identical.
+> **Remark.** "Sequential" vs "parallel" only affects implementation. Equivalently one can run many calls (measure many coordinates) in parallel and reveal bases afterwards over a classical channel; the distribution of $(M, Y)$ is identical.
 
 ### Single-pair protocol (post-processing over $N$ oracle calls)
 
-1. Make $N$ independent calls to $\mathbb{O}(\rho_{AB})$, where $N \in \mathbb{N}$ will be bounded by the analysis below. From those $N$ calls we obtain $(M_1, Y_1), \ldots, (M_N, Y_N)$.
+In our single-pair case, the number of coordinates $n = 1$, so trivially we would call the oracle $N$ times as we're given $N$ blocks.
+
+1. Make $N$ independent calls to $\mathbb{O}(\rho_{AB})$. From those $N$ calls we obtain $(M_1, Y_1), \ldots, (M_N, Y_N)$.
 2. Define the set of matching-basis rounds
 $$
 S = \bigl\{i \in \{1, \dots, N\} : M_i = 1 \bigr\} \subseteq \bigl\{ 1, \dots, N \bigr\}.
@@ -49,11 +64,11 @@ which represents the mismatch fraction conditioned on matching-basis rounds.
 
 > **Note.** This is exactly equivalent to the usual BB84-style "announce bases and outcomes over a classical authenticated channel (CAC) and keep only the matching bases" description; we've just folded that bookkeeping into $(M_i, Y_i)$.
 
-With this, we can provide an alternative but mathematically equivalent tolerant identity test for one EPR state.
+With this, we can provide an alternative but mathematically equivalent tolerant identity test for one EPR state ($n = 1$).
 
 > **Theorem (Finite-sample classical tolerant identity test for the EPR state).**
 >
-> Given i.i.d. pairs of $\rho_{AB}$, fix two trace-distance tolerances
+> Given $N$ (i.i.d.) blocks of $\varrho = \rho_{AB}$, fix two trace-distance tolerances
 > $$
 0 \leq \varepsilon_1 < \varepsilon_2 \leq 1,
 $$
@@ -61,11 +76,7 @@ $$
 > $$
 c = \frac{\varepsilon_1^2 + \varepsilon_2^2}{4}.
 $$
-> Make
-> $$
-N \geq \frac{32\,\ln(2/\alpha)}{(\varepsilon_2^2 - \varepsilon_1^2)^2} \qquad\left( = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr) \right)
-$$
-> independent calls to $\mathbb{O}(\rho_{AB})$, and compute the observed error rate $\hat{\delta}$. Let the decision rule be to accept ***iff*** $\hat{\delta} \leq c$:
+> Consider the reformulated matching protocol above where we make $N$ independent calls to $\mathbb{O}(\varrho)$ (one per block), and compute the observed error rate $\hat{\delta}$. For the test, let the decision rule be to accept ***iff*** $\hat{\delta} \leq c$:
 > $$
 \text{Decision} =
 \begin{cases}
@@ -73,22 +84,24 @@ $$
 \text{“far”},   & \hat{\delta} > c.
 \end{cases}
 $$
-> Then the test, with sample cost $N$, provides the following guarantees:
-> - If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the test **accepts** (outputs "close") with confidence at least $1 - \alpha$.
-> - If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \geq \varepsilon_2$, then the test **rejects** (outputs "far") with confidence at least $1 - \alpha$.
-> - If $\varepsilon_1 < D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) < \varepsilon_2$, no guarantee is made on the outcome; the test may go either way (accept or reject).
+> Then if
+> $$
+N \geq \frac{32\,\ln(2/\alpha)}{(\varepsilon_2^2 - \varepsilon_1^2)^2} \qquad\left( = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr) \right),
+$$
+the following holds:
+> - **Completeness.** If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the test **accepts** (outputs "close") with confidence at least $1 - \alpha$.
+> - **Soundness** If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \geq \varepsilon_2$, then the test **rejects** (outputs "far") with confidence at least $1 - \alpha$.
+> - **Promise gap.** If $\varepsilon_1 < D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) < \varepsilon_2$, no guarantee is made on the outcome; the test may go either way (accept or reject).
+
+Note that we call the oracle $N$ times in this case only because $n = 1$. In general $n \geq 2$ so this is not true; the number of oracle calls is $n \cdot N$.
+
+With the notations established and the single-pair scenario ($n = 1$) as a reference, we now turn to analysing the number of blocks needed to certify multiple EPR pairs for $n \geq 2$ as per the problem statement.
 
 ---
 
 ## do-rE-MI ♫
 
-For brevity we write
-$$
-\rho = \rho_{AB},
-\qquad
-\Phi = \ket{\text{EPR}}\bra{\text{EPR}}_{AB}
-$$
-throughout. We introduce the global symbol $\varrho$ only when forming an $n$-pair tensor product. In particular, we will show how the same matching-outcomes protocol extends in three settings of increasing generality and difficulty:
+For brevity we write $\rho = \rho_{AB}$ throughout. In particular, we will show how the same matching-outcomes protocol extends in three settings of increasing generality and difficulty:
 
 1. **Easy (i.i.d. pairs).**
 
@@ -108,9 +121,11 @@ throughout. We introduce the global symbol $\varrho$ only when forming an $n$-pa
 
 3. **Hard (arbitrary adversary).**
 
-   The most general case allows an arbitrary $2n$-qubit state $\Sigma$, possibly entangled across pairs, against which we still wish to test closeness to $\Phi^{\otimes n}$.
+   The most general case allows an arbitrary $2n$-qubit state $\varrho$, possibly entangled across pairs, against which we still wish to test closeness to $\Phi^{\otimes n}$.
 
-We will analyse $N$, the number of oracle calls to $\mathbb{O}$ for the single-pair protocol run needed when testing an $n$-pair hypothesis. It's very important to keep in mind that $N$ counts the *pairs consumed* (oracle calls), not "blocks". We will only introduce "blocks" in the **medium** case, where they are actually needed.
+We will analyse $N$, the number of blocks (i.i.d. copies) of the $2n$-qubit state $\varrho$ required to decide closeness to $\Phi^{\otimes n}$. As we've seen, each block contains $n$ pairs and therefore induces $n$ calls to the single-pair oracle $\mathbb{O}$ (once per coordinate), so the total number of oracle calls is $n \cdot N$. We state all bounds in terms of the number blocks needed, $N$, as the primary resource, and convert to total oracle calls by multiplying by $n$ when helpful. (The measurement bases match with probability $1/2$ independently per coordinate.)
+
+Why do we count blocks? This is because the physical source hands us i.i.d. *blocks* - full $2n$-qubit copies of $\varrho$. Block complexity answers the operational question "how many copies of $\varrho$ must we request to decide 'close' vs 'far'?". Inside each block we make $n$ single‑pair measurements (one per coordinate), i.e. $n$ *oracle calls*, so the total number of calls is $T = n \cdot N$. While oracle‑call counts are useful for estimating raw measurement time or hardware throughput, **the fundamental resource is the number of i.i.d. copies of $\varrho$**, i.e. the number of blocks $N$.
 
 > **Note.** In the context of BB84, these three scenarios correspond directly to the class of attacks that an eavesdropper (Eve) might do:
 >
@@ -121,9 +136,9 @@ We will analyse $N$, the number of oracle calls to $\mathbb{O}$ for the single-p
 >   Eve still treats each qubit independently and measures immediately, but she may choose a different attack in each round. Her overall state is the product $\varrho = \rho_{1}\otimes\rho_{2}\otimes\dots\otimes\rho_{n}$.
 >
 > - **Hard (arbitrary adversary)**:
->   Eve may entangle her systems across rounds and defer all measurements until the end. There is no tensor-product structure, so her state is an arbitrary $2n$-qubit $\Sigma$.
+>   Eve may entangle her systems across rounds and defer all measurements until the end. There is no tensor-product structure, so her state is an arbitrary $2n$-qubit $\varrho$.
 >
-> By proving security in each model, starting with the easiest and working up to the fully coherent setting, we obtain a hierarchy of BB84 security guarantees that mirror the increasing power of potential attack by Eve. ~From the sample complexity, we will see that a fully coherent attack (hard case) isn't more difficult to detect than a simple i.i.d. tensor product state (easy case)!~ `<- not sure about this yet`
+> By proving security in each model, starting with the easiest and working up to the fully coherent setting, we obtain a hierarchy of BB84 security guarantees that mirror the increasing power of potential attack by Eve. ~From the sample complexity, we will see that a fully coherent attack (hard case) isn't too much more difficult to detect than a simple i.i.d. tensor product state (easy case)!~ `<- not sure about this yet`
 
 We begin with the i.i.d. case as it's both the simplest to analyse and a useful building block for the more challenging scenarios.
 
@@ -133,36 +148,36 @@ We begin with the i.i.d. case as it's both the simplest to analyse and a useful 
 
 ### A naïve per-pair approach using trace distance
 
-A first idea is to ignore the joint state altogether and simply run the **single-pair** tolerant test on each of the $n$ pairs **separately**, then accept only if every individual test passes. Equivalently, one could tally the per-pair mismatch indicators into a total error count and compare that sum against a scaled threshold (thanks to the i.i.d. assumption). At first glance this seems painless, but a closer look shows it is actually *worse* than the collective strategy developed below.
+A first idea is to ignore the joint state and run the **single-pair** tolerant test on each of the $n$ coordinates **separately**, then accept only if every coordinate passes. Equivalently, one could tally the per-pair/per-coordinate (which is the same under the independent assumption of i.i.d.) mismatch indicators into a total error count and compare that sum against a scaled threshold, thanks to the i.i.d. assumption.
 
-Recall for a single pair $\rho$:
+Let $D_1 = D(\rho, \Phi)$ and $D_n = D(\rho^{\otimes n}, \Phi^{\otimes n})$. By subadditivity,
 $$
-D_1 ~=~ D(\rho, \Phi),
+D_n \leq n\,D_1.
 $$
-and in the $n$-pair i.i.d. case we have the bound
-$$
-D_n ~:=~ D\bigl(\rho^{\otimes n},\,\Phi^{\otimes n}\bigr) ~\leq~ n\,D_1.
-$$
-* **A sufficient per-pair condition is to shrink the tolerance.**
-  To guarantee that the full product state $\varrho = \rho^{\otimes n}$ satisfies $D(\rho^{\otimes n}, \Phi^{\otimes n}) \leq \varepsilon_1$, the trace-distance of *each* pair must be at most $\varepsilon_1/n$; otherwise the sub-additivity bound $D_n\leq nD_1$ could exceed $\varepsilon_1$.
-* **Promise gap narrows by a factor $n$.**
-  Replacing $\varepsilon_j$ by $\varepsilon_j/n$ shrinks the gap $\varepsilon_2^2 - \varepsilon_1^2$ by $n^{2}$. For the single-pair test the sample size scales as the inverse square of that gap, so one pair now needs
-$$
-O\bigl(n^{4}(\varepsilon_2^2-\varepsilon_1^2)^{-2}\bigr)
-$$
-  samples, or equivalently oracle calls.
-* **Replicated testing scales linearly.**
-  Running $n$ such tests and combining them multiplies the sample cost by $n$.
 
-Hence by a very high-level analysis, we obtain a cost for the naïve strategy
+To guarantee $D_n \leq \varepsilon_1$, it suffices to enforce the **per-pair** condition $D_1 \leq \varepsilon_1/n$. Thus at the per-pair level the tolerances become $\varepsilon_1/n$ vs. $\varepsilon_2/n$. Since the single-pair sample complexity scales like $(\varepsilon_2^2 - \varepsilon_1^2)^{-2}$, replacing $\varepsilon_j \mapsto \varepsilon_j/n$ shrinks the squared gap by $n^2$, and the **per-coordinate** number of **blocks** needed inflates by $n^4$:
+
 $$
-N_{\text{naïve}} ~=~ O\bigl(n^{5}(\varepsilon_2^2-\varepsilon_1^2)^{-2}\bigr),
+N_{\text{per-coord}}
+~\gtrsim~
+\frac{32\,n^4}{(\varepsilon_2^2 - \varepsilon_1^2)^2}\,\ln\!\frac{2}{\alpha}.
 $$
-which is three full powers of $n$ ($n^{5}$ vs. $n^{2}$) worse than the collective $n$-pair analysis we develop below. The lesson is that testing each pair in isolation achieves a *stronger* (per-pair) guarantee than we need and pays a steep statistical price; exploiting the product structure directly using just one global test is markedly more efficient.
+
+We need **all $n$ coordinates** to pass simultaneously with total failure probability $\alpha$. A union bound replaces $\alpha$ by $\alpha/n$, contributing an extra $\log n$ factor:
+
+$$
+N_{\text{naïve (blocks)}}
+~\gtrsim~
+\frac{32\,n^4}{(\varepsilon_2^2 - \varepsilon_1^2)^2}\,\ln\!\frac{2n}{\alpha}.
+$$
+
+**Takeaway.** The naïve per-pair route costs $O(n^4\log n)$ blocks, whereas the collective (fidelity-based) test from the next section needs only $O(n)$ blocks (up to the same $(\varepsilon_2^2 - \varepsilon_1^2)^{-2}$ and $\log(1/\alpha)$ factors). The huge gap in our naïve method comes from shrinking tolerances by $1/n$ at the per-pair level (which explodes sample size by $n^4$); the union bound adds only the mild $\log n$. At first glance the naïve method seems reasonably efficient, but a closer look shows it is actually markedly worse than the collective strategy developed below.
+
+**Remark.** In the easy and medium cases, "per-coordinate" and "per-pair" are interchangeable because **within each block** the state *factorises across coordinates*: easy: $\varrho = \rho^{\otimes n}$; medium: $\varrho = \bigotimes_{i=1}^n \rho_i$. In particular, there is no cross-coordinate entanglement inside a block (pairs may be identical in the easy case and merely different in the medium case). In the hard case, $\varrho$ may be arbitrarily entangled across coordinates, so we use **per-coordinate** language exclusively there to be precise.
 
 ---
 
-### Global $n$-pair test using fidelity
+### Global block test using fidelity
 
 Given a global state $\varrho = \rho^{\otimes n}$, for a single pair $\rho$:
 $$
@@ -176,7 +191,7 @@ F_n ~:=~ F\bigl(\rho^{\otimes n},\,\Phi^{\otimes n}\bigr) ~=~ F_1^{n},
 \qquad
 D_n ~:=~ D\bigl(\rho^{\otimes n},\,\Phi^{\otimes n}\bigr) ~\leq~ n\,D_1.
 $$
-This means we can express the $n$-pair closeness conditions entirely in terms of the single-pair fidelity $F_1$, thanks to the exact tensor-product rule $F(\rho^{\otimes n},\Phi^{\otimes n}) = F(\rho,\Phi)^n$ (or equivalently $F_n = F_1^n$). Working directly with fidelity avoids the looser trace-distance bound $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq n\,D(\rho,\Phi)$, which would give a much weaker bound than the tight scaling we get from fidelity.
+This means we can express the $n$-pair (block) closeness conditions entirely in terms of the single-pair fidelity $F_1$, thanks to the exact tensor-product multiplicativity rule $F(\rho^{\otimes n},\Phi^{\otimes n}) = F(\rho,\Phi)^n$ (or equivalently $F_n = F_1^n$). Working directly with fidelity avoids the looser trace-distance bound $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq n\,D(\rho,\Phi)$, which would give a much weaker bound than the tight scaling we get from fidelity.
 
 #### Translating hypotheses
 
@@ -340,7 +355,10 @@ Pick a single cutoff inside the gap (the midpoint):
 $$
 \kappa := \frac{\delta_{\text{close}} + \delta_{\text{far}}}{2} = \frac{f(\varepsilon_1) + f(\varepsilon_2)}{2}.
 $$
-After running the protocol and computing the empirical mismatch rate $\hat\delta$ on the matching-basis rounds $S$, we define the decision rule as
+
+In the easy (i.i.d.) case the true mismatch rate is identical across coordinates, so we **pool** all matching‑basis trials across all coordinates and blocks; let $S$ denote the set of all matching‑basis indices among the total $T = n \cdot N$ calls.
+
+After running the protocol and computing the empirical mismatch rate $\hat\delta$ on the matching-basis rounds $S$, we define the decision rule ass
 > $$
 \textbf{Decision rule (easy case)} =
 \begin{cases}
@@ -390,7 +408,7 @@ In other words, a sufficient condition for $|S|$ is:
 $$
 |S| ~\geq~ \frac{8\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha}.
 $$
-As before, only about half of the $N$ rounds are matching-basis. Taking $N = 4|S|$ (by the same argument from the single-pair case),
+As before, only about half of the $N$ rounds in the original protocol are matching-basis. We can do something similar for the reformulated protocol with oracle calls and classical postprocessing. Let $T := nN$ be the total number of single‑pair measurements (oracle calls). Since a call has matching bases with probability $1/2$, a Chernoff bound shows that choosing $T = 4|S|$ (equivalently, $N = 4|S|/n$ blocks) makes the event of getting fewer than $|S|$ matches have probability at most $e^{-|S|/4}$, which is negligibly small for moderate $|S|$. Taking $N = 4|S|$,
 $$
 N ~\geq~ \frac{32\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha} \qquad\left[= O\left(n^2\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right].
 $$

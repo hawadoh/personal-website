@@ -6,7 +6,7 @@ ShowToc = true
 TocOpen = true
 +++
 
-**Goal.** Certify that an unknown bipartite state $\rho_{AB}$ held by Alice and Bob is within trace‑distance $\varepsilon$ of
+**Goal.** Given $N$ i.i.d. copies of an unknown bipartite state $\rho_{AB}$ held by Alice and Bob, certify that $\rho_{AB}$ held by Alice and Bob is within trace‑distance $\varepsilon$ of
 $$
 \ket{\text{EPR}}_{AB} = \frac{1}{\sqrt2}\left(\ket{00}_{AB} + \ket{11}_{AB}\right),
 $$
@@ -16,7 +16,7 @@ using only *sequential\** (one qubit at a time), local measurements in the **sta
 
 ## Single-pair matching‑outcomes protocol
 
-Suppose Alice and Bob share i.i.d. copies of an unknown state $\rho_{AB}$. For each pair $i = 1, \dots, N$, where $N$ is bounded by the analysis below, they do the following *in sequence\**:
+Suppose Alice and Bob share $N$ i.i.d. copies of an unknown state $\rho_{AB}$. For each pair $i = 1, \dots, N$, they do the following *in sequence\**:
 1. **Basis choice:**
    * Alice picks $\theta_i \in \{ 0, 1 \}$ uniformly at random.
    * Bob picks $\tilde{\theta}_i \in \{ 0, 1 \}$ uniformly at random.
@@ -26,13 +26,15 @@ Suppose Alice and Bob share i.i.d. copies of an unknown state $\rho_{AB}$. For e
    * Alice measures her qubit in basis $\theta_i$ to get outcome $x_i \in \{ 0, 1 \}$.
    * Bob measures his qubit in basis $\tilde\theta_i$, obtaining $\tilde x_i \in \{ 0, 1 \}$.
 
-> **Remark.** The sequential ordering is purely a hardware convenience and *not* a theoretical requirement: it guarantees that no quantum memory or parallel measurement modules are ever needed. If you already have $N$ measurement setups and don't mind operating them in parallel, you may instead prepare all bases at once, measure in parallel, and only then exchange classical data. Both versions give the same statistical bound.
+> **Note.** Apart from the one-off preparation/distribution of the shared state $\rho_{AB}$, there is no need for any further quantum channel or quantum memory; Alice and Bob simply perform immediate local measurements. In addition, since each measurement round consumes one i.i.d. copy of $\rho_{AB}$, the parameter $N$ can be viewed interchangeably as either the number of <u>rounds</u> or the number of <u>copies</u>, and I will use it in both senses throughout our single-pair analysis.
 
-> **Note.** Apart from the one-off preparation/distribution of the shared state $\rho_{AB}$, there is no need for any further quantum channel or quantum memory; Alice and Bob simply perform immediate local measurements.
+After all $N$ measurement rounds (one round for each i.i.d. copy of $\rho_{AB}$), Alice and Bob publicly reveal their basis strings $\theta = (\theta_1, \dots, \theta_N)$ and $\tilde{\theta} = (\tilde{\theta}_1, \dots, \tilde{\theta}_N)$, and their outcome strings $x = (x_1, \dots, x_N)$, $\tilde{x} = (\tilde{x}_1, \dots, \tilde{x}_N)$ over a classical authenticated channel (CAC).
 
-After all $N$ rounds, Alice and Bob publicly reveal their basis strings $\theta = (\theta_1, \dots, \theta_N)$ and $\tilde{\theta} = (\tilde{\theta}_1, \dots, \tilde{\theta}_N)$, and their outcome strings $x = (x_1, \dots, x_N)$, $\tilde{x} = (\tilde{x}_1, \dots, \tilde{x}_N)$ over a classical authenticated channel (CAC).
-
-Define the concordant set $$S = \{i : \theta_i = \tilde\theta_i\}.$$On each $i\in S$, Alice and Bob measured in the *same* basis. If by rare chance $S = \varnothing$ (no matching bases at all), simply rerun the whole protocol as the probability of $S = \varnothing$ is $2^{-N}$, which is negligible for modest $N$.
+Define the matching-basis index set 
+$$
+S = \{i : \theta_i = \tilde\theta_i\}.
+$$
+On each $i\in S$, Alice and Bob measured in the *same* basis. If by rare chance $S = \varnothing$ (no matching bases at all), simply rerun the whole protocol as the probability of $S = \varnothing$ is $2^{-N}$, which is negligible for modest $N$.
 
 Compute the **observed error rate**
 $$
@@ -40,14 +42,18 @@ $$
 $$
 which represents the mismatch fraction conditioned on matching-basis rounds.
 
+> **Remark.** The sequential ordering is purely a hardware convenience and *not* a theoretical requirement: it guarantees that no quantum memory or parallel measurement modules are ever needed. If you already have $N$ measurement setups and don't mind operating them in parallel, you may instead prepare all bases at once, measure in parallel, and only then exchange classical data. Both versions give the same statistical bound.
+
 ---
 
 ## Asymptotic bound
 
 **Motivating question.**
-Can we really conclude that, if the *classical* matching-outcomes test in the protocol above succeeds with high probability (i.e. a small observed error $\hat{\delta}$), then the *quantum* state $\rho_{AB}$ must be close to an ideal EPR pair, *without ever* performing a joint or Bell-basis measurement?
+Can we really conclude that, if the *classical* matching-outcomes test in the protocol above succeeds with high probability (i.e. a small observed error $\hat{\delta}$), then the *quantum* state $\rho_{AB}$ must be close to an ideal EPR pair, *without ever* performing a joint or Bell-basis measurement? 
 
-We'll first analyse the idealised, infinite-round limit $N\to\infty$ to see theoretically why a high success rate forces high fidelity to $\ket{\text{EPR}}$. After that, we'll return to the realistic, finite-sample setting to turn this into a practical protocol in the next section.
+In other words, when given $\rho_{AB}^{\otimes N}$, what is the smallest number $N$ of i.i.d. copies required to certify that $\rho_{AB}$ lies within trace distance $\varepsilon$ of the ideal EPR state?
+
+We'll first analyse the idealised, infinite-round/copy limit $N \to \infty$ to see theoretically why a high success rate forces high fidelity to $\ket{\text{EPR}}_{AB}$. After that, we'll return to the realistic, finite-sample setting to turn this into a practical protocol in the next section.
 
 > **Remark.** For very large $N$, the observed matching and mismatch rates concentrate so tightly around the true error parameter $\delta$ (by the law of large numbers) that we can replace all finite‐sample quantities ($\hat{\delta}$) with $\delta$ itself when deriving the asymptotic bound, making our theoretical analysis easier.
 
@@ -113,18 +119,18 @@ Hence $\Pr(\text{match}_Z) = \text{tr}(\Pi_1\,\rho_{AB})$ as required.
 
 Similarly, for the measurement of systems $A$ and $B$ is performed in the Hadamard basis, we can first perform a change in basis and simplify $\Pi_2$. Recall that
 $$
-\ket{0}=\frac1{\sqrt2}(\ket{+}+\ket{-}),\qquad
-\ket{1}=\frac1{\sqrt2}(\ket{+}-\ket{-}).
+\ket{0} = \frac1{\sqrt2}(\ket{+} + \ket{-}),\qquad
+\ket{1} = \frac1{\sqrt2}(\ket{+} - \ket{-}).
 $$
 
 Then
 $$
 \begin{aligned}
-\ket{\text{EPR}} &= \frac{1}{\sqrt2}(\ket{00}+\ket{11})
+\ket{\text{EPR}} &= \frac{1}{\sqrt2}(\ket{00} + \ket{11})
 \\&= \frac{1}{\sqrt2}\left(
-\frac{\ket{+}+\ket{-}}{\sqrt2}\otimes\frac{\ket{+}+\ket{-}}{\sqrt2} + \frac{\ket{+}-\ket{-}}{\sqrt2}\otimes\frac{\ket{+}-\ket{-}}{\sqrt2}
+\frac{\ket{+} + \ket{-}}{\sqrt2} \otimes \frac{\ket{+} + \ket{-}}{\sqrt2} + \frac{\ket{+} - \ket{-}}{\sqrt2} \otimes \frac{\ket{+} - \ket{-}}{\sqrt2}
 \right)
-\\&= \frac{1}{\sqrt2}\bigl(\ket{++}+\ket{--}\bigr).
+\\&= \frac{1}{\sqrt2}\bigl(\ket{++} + \ket{--}\bigr).
 \end{aligned}
 $$
 
@@ -155,7 +161,7 @@ $$
 \underbrace{\frac{1}{2}\,\text{tr}\bigl(\Pi_1\,\rho_{AB}\bigr)}_{\substack{\text{matching outcomes}\\\text{in standard (Z) basis}}}
 \;+\;
 \underbrace{\frac{1}{2}\,\text{tr}\bigl(\Pi_2\,\rho_{AB}\bigr)}_{\substack{\text{matching outcomes}\\\text{in Hadamard (X) basis}}}
-\;\geq\;
+\;=\;
 \underbrace{1 - \delta}_{\substack{\text{overall success}\\\text{probability}}} \qquad (*)
 $$
 for some $\delta \geq 0$.
@@ -236,15 +242,15 @@ $$
 Hence,
 $$
 \begin{aligned}
-\tfrac{1}{2}\,\text{tr}\bigl(\Pi_1\,\rho_{AB}\bigr) + \tfrac{1}{2}\,\text{tr}\bigl(\Pi_2\,\rho_{AB}\bigr) &\geq 1 - \delta &\text{from $(*)$ above}
-\\\tfrac{1}{2}(p_{00} + p_{01}) + \tfrac{1}{2}(p_{00} + p_{10}) &\geq 1 - \delta
-\\p_{00} + \tfrac{1}{2}(p_{01} + p_{10}) &\geq 1 - \delta
-\\p_{00} + \tfrac{1}{2}(1 - p_{00} - p_{11}) &\geq 1 - \delta &\text{by (norm)}
-\\\tfrac{1}{2}p_{00} - \tfrac{1}{2}p_{11} &\geq \tfrac{1}{2} - \delta
-\\p_{00} - p_{11} &\geq 1 - 2\delta.
+\tfrac{1}{2}\,\text{tr}\bigl(\Pi_1\,\rho_{AB}\bigr) + \tfrac{1}{2}\,\text{tr}\bigl(\Pi_2\,\rho_{AB}\bigr) &= 1 - \delta &\text{from $(*)$ above}
+\\[6pt]\tfrac{1}{2}(p_{00} + p_{01}) + \tfrac{1}{2}(p_{00} + p_{10}) &= 1 - \delta
+\\[6pt]p_{00} + \tfrac{1}{2}(p_{01} + p_{10}) &= 1 - \delta
+\\[6pt]p_{00} + \tfrac{1}{2}(1 - p_{00} - p_{11}) &= 1 - \delta &\text{by (norm)}
+\\[6pt]\tfrac{1}{2}p_{00} - \tfrac{1}{2}p_{11} &= \tfrac{1}{2} - \delta
+\\[6pt]p_{00} - p_{11} &= 1 - 2\delta.
 \end{aligned}
 $$
-Since $p_{11}$ is a probability, $p_{11} \geq 0$. Hence we can remove it without affecting the inequality and get
+We don't know the exact value for $p_{11}$, but since $p_{11}$ is a probability, $p_{11} \geq 0$. Hence we can remove it and get the inequality
 $$
 p_{00} \geq 1 - 2\delta.
 $$
@@ -274,7 +280,7 @@ Combining the two inequalities give $\varepsilon \leq \sqrt{2\delta}$, and equiv
 
 > **Theorem (Asymptotic EPR Identity Bound).**
 >
-> Under the i.i.d. assumption, in the asymptotic limit $N \to \infty$, let Alice and Bob share $N$ copies of an unknown state $\rho_{AB}$. Define the *true* matching-basis error rate $\delta = \Pr[x_i \neq \tilde{x}_i ~|~ \theta_i = \tilde{\theta}_i]$. Then, the trace distance $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) = \varepsilon \in [0, 1]$ between $\rho_{AB}$ and the ideal EPR pair satisfies
+> In the asymptotic limit $N \to \infty$, let Alice and Bob share $N$ i.i.d. copies of an unknown state $\rho_{AB}$. Define the *true* matching-basis error rate $\delta = \Pr[x_i \neq \tilde{x}_i ~|~ \theta_i = \tilde{\theta}_i]$. Then, the trace distance $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) = \varepsilon \in [0, 1]$ between $\rho_{AB}$ and the ideal EPR pair satisfies
 > $$
    \varepsilon \leq \sqrt{2\delta},
    \quad\iff\quad
@@ -291,7 +297,7 @@ Although
 $$
 \varepsilon \leq \sqrt{2\delta}
 $$
-holds exactly once we know the true mismatch rate $\delta$, in practice we only observe the empirical rate $\hat{\delta}$ from a finite number of rounds; in the finite-sample setting we cannot hope to pinpoint the true $\delta$ exactly. If we tried to draw a single "hard" cutoff line at
+holds exactly once we know the true mismatch rate $\delta$, in practice we only observe the empirical rate $\hat{\delta}$ from a finite number of rounds (as defined in the protocol); in the finite-sample setting we cannot hope to pinpoint the true $\delta$ exactly. If we tried to draw a single "hard" cutoff line at
 $$
 \delta_* = \frac{\varepsilon^2}{2},
 $$
@@ -456,11 +462,11 @@ O\!\left(\frac{1}{(\varepsilon_2^2 - \varepsilon_1^2)^2}\right).
 \end{aligned}
 $$
 
-Therefore, if we manage to collect $|S| = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr)$ concordant‐basis samples, then with probability $\geq 1 - \alpha = 2/3$ we have $|\hat{\delta} - \delta| < t$, which guarantees both completeness and soundness as shown above.
+Therefore, if we manage to collect $|S| = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr)$ matching‐basis samples, then with probability $\geq 1 - \alpha = 2/3$ we have $|\hat{\delta} - \delta| < t$, which guarantees both completeness and soundness as shown above.
 
 Finally, we need to determine a bound on $N$, the actual number of rounds we'll run the protocol for. Our overall success requires guarding against two distinct types of errors: estimation failure ($E_{\text{estimation}}$), for which we already know $\Pr(E_{\text{estimation}}) = \alpha \leq 1/3$, and sampling failure ($E_{\text{sample}}$), where we fail to collect enough data in the first place. The total failure probability is bounded by their sum using the *union bound*.
 
-Since the probability of the measurement bases matching in any given round is $1/2$, as it occurs uniformly at random, the expected number of concordant samples is $\mathbb{E}[|S|] = N/2$. To safeguard against statistical fluctuations, we should choose $N$ to be larger than the simple estimate of $2|S|$. A robust and standard choice is $N = 4|S|$. With this choice, the probability of obtaining fewer than $|S|$ concordant samples - the event $E_{\text{sample}}$ - can be shown via a standard Chernoff bound to be less than $e^{-|S|/4}$. Let the random variable for the number of concordant-basis rounds from a total of $N$ trials be $X$. Then
+Since the probability of the measurement bases matching in any given round is $1/2$, as it occurs uniformly at random, the expected number of matching-basis samples is $\mathbb{E}[|S|] = N/2$. To safeguard against statistical fluctuations, we should choose $N$ to be larger than the simple estimate of $2|S|$. A robust and standard choice is $N = 4|S|$. With this choice, the probability of obtaining fewer than $|S|$ matching-basis samples - the event $E_{\text{sample}}$ - can be shown via a standard Chernoff bound to be less than $e^{-|S|/4}$. Let the random variable for the number of matching-basis rounds from a total of $N$ trials be $X$. Then
 $$
 X \sim \text{Binomial}\!\left(N, \tfrac{1}{2}\right).
 $$
@@ -488,7 +494,7 @@ $$
 \Pr(\text{Total Failure}) = \Pr(E_{\text{sample}}) + \Pr(E_{\text{estimation}}) \leq e^{-|S|/4} + \frac{1}{3}.
 $$
 
-Since the $e^{-|S|/4}$ term is negligibly small for any reasonably large $|S|$ (comparing to $1/3$), our overall failure probability is still robustly bounded by approximately $1/3$. Therefore, the choice of $N = 4|S|$ is sufficient. The total number of rounds required for the protocol is:
+Since the $e^{-|S|/4}$ term is negligibly small for any reasonably large $|S|$ (comparing to $1/3$), our overall failure probability is still robustly bounded by approximately $1/3$. Therefore, the choice of $N = 4|S|$ is sufficient. The total number of rounds/i.i.d. copies required for the test protocol is:
 
 $$
 N = 4|S| = \frac{32 \ln(6)}{(\varepsilon_2^2 - \varepsilon_1^2)^2} = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr).
@@ -498,7 +504,7 @@ Putting everything together, we arrive at our main result. All the hard work we'
 
 > **Theorem (Finite-Sample Tolerant EPR Identity Test).**
 >
-> Given i.i.d. copies of $\rho_{AB}$, fix two trace-distance tolerances
+> Given $N$ i.i.d. copies of $\rho_{AB}$, fix two trace-distance tolerances
 > $$
 0 \leq \varepsilon_1 < \varepsilon_2 \leq 1,
 $$
@@ -511,7 +517,7 @@ $$
 > $$
 N \geq \frac{32\,\ln(2/\alpha)}{(\varepsilon_2^2 - \varepsilon_1^2)^2} \qquad\left( = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr) \right)
 $$
-> rounds. Let the decision rule be to accept if and only if the observed error rate, $\hat{\delta}$, is less than or equal to the cutoff, $c$:
+> rounds, consuming $N$ i.i.d. copies in total. Let the decision rule be to accept ***if and only if*** the observed error rate, $\hat{\delta}$, is less than or equal to the cutoff, $c$:
 > $$
 \text{Decision} =
 \begin{cases}
