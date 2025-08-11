@@ -1,29 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>𝗧𝗘𝗔•𝗘𝗚𝗚</title><link>https://teaegg.net/</link><description>Recent content on 𝗧𝗘𝗔•𝗘𝗚𝗚</description><generator>Hugo -- 0.148.0</generator><language>en-us</language><lastBuildDate>Fri, 08 Aug 2025 17:42:31 +0100</lastBuildDate><atom:link href="https://teaegg.net/index.xml" rel="self" type="application/rss+xml"/><item><title>Classical tolerant identity test for multiple EPR states</title><link>https://teaegg.net/research/urss/n-epr-test/</link><pubDate>Fri, 08 Aug 2025 17:42:31 +0100</pubDate><guid>https://teaegg.net/research/urss/n-epr-test/</guid><description>&lt;p>With the &lt;a href="../epr-tolerant-identity-testing">tolerant identity test&lt;/a> for a single state $\rho_{AB}$ complete, we now turn to the problem of certifying multiple EPR pairs. For brevity we write
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>𝗧𝗘𝗔•𝗘𝗚𝗚</title><link>https://teaegg.net/</link><description>Recent content on 𝗧𝗘𝗔•𝗘𝗚𝗚</description><generator>Hugo -- 0.148.0</generator><language>en-us</language><lastBuildDate>Fri, 08 Aug 2025 17:42:31 +0100</lastBuildDate><atom:link href="https://teaegg.net/index.xml" rel="self" type="application/rss+xml"/><item><title>Classical tolerant identity test for multiple EPR states</title><link>https://teaegg.net/research/urss/n-epr-test/</link><pubDate>Fri, 08 Aug 2025 17:42:31 +0100</pubDate><guid>https://teaegg.net/research/urss/n-epr-test/</guid><description>&lt;h2 id="change-in-notation">Change in notation&lt;/h2>
+&lt;p>With the &lt;a href="../epr-tolerant-identity-testing">tolerant identity test&lt;/a> for a single state $\rho_{AB}$ complete, we now turn to the problem of certifying multiple EPR pairs. Before analysing the multi-pair scenarios, it helps to reframe one round of the single-pair matching-outcomes protocol as a callable oracle $\mathbb{O}$ that consumes a fresh pair of $\rho_{AB}$ and outputs a classical bit when the bases match.&lt;/p>
+&lt;p>Suppose Alice and Bob share a number of independent pairs of an unknown state $\rho_{AB}$. We package one measurement round into a callable &lt;strong>oracle&lt;/strong> $\mathbb{O}(\rho_{AB})$ and then do simple classical post-processing. Combining $N$ oracle calls and doing the simple classical post-processing is equivalent to the $N$-round protocol!&lt;/p></description></item><item><title>Classical tolerant identity test for the EPR state</title><link>https://teaegg.net/research/urss/epr-tolerant-identity-testing/</link><pubDate>Sun, 03 Aug 2025 23:35:49 +0100</pubDate><guid>https://teaegg.net/research/urss/epr-tolerant-identity-testing/</guid><description>&lt;p>&lt;strong>Goal.&lt;/strong> Certify that an unknown bipartite state $\rho_{AB}$ held by Alice and Bob is within trace‑distance $\varepsilon$ of
 &lt;/p>
 $$
-\rho = \rho_{AB},
-\qquad
-\Phi = \ket{\text{EPR}}\bra{\text{EPR}}_{AB}.
-$$&lt;p>In particular, we will show how the same matching-outcomes protocol extends in three settings of increasing generality and difficulty:&lt;/p>
-&lt;ol>
-&lt;li>
-&lt;p>&lt;strong>Easy (i.i.d. copies).&lt;/strong>&lt;/p>
-&lt;p>All $n$ copies are identical:
-&lt;/p>
-$$
-\rho^{\otimes n}\quad\text{vs.}\quad\Phi^{\otimes n}.
-$$&lt;/li>
-&lt;li>
-&lt;p>&lt;strong>Medium (independent, non-identical copies).&lt;/strong>&lt;/p>
-&lt;p>Each copy may differ but remains uncorrelated:
-&lt;/p></description></item><item><title>Classical tolerant identity test for the EPR state</title><link>https://teaegg.net/research/urss/epr-tolerant-identity-testing/</link><pubDate>Sun, 03 Aug 2025 23:35:49 +0100</pubDate><guid>https://teaegg.net/research/urss/epr-tolerant-identity-testing/</guid><description>&lt;p>&lt;strong>Goal.&lt;/strong> Certify that an unknown bipartite state $\rho_{AB}$ held by Alice and Bob is within trace‑distance $\varepsilon$ of
-&lt;/p>
-$$
-\ket{\text{EPR}}_{AB} = \frac1{\sqrt2}\left(\ket{00}_{AB} + \ket{11}_{AB}\right),
+\ket{\text{EPR}}_{AB} = \frac{1}{\sqrt2}\left(\ket{00}_{AB} + \ket{11}_{AB}\right),
 $$&lt;p>
 using only &lt;em>sequential*&lt;/em> (one qubit at a time), local measurements in the &lt;strong>standard&lt;/strong> ($\{ \ket{0}, \ket{1} \}$) or &lt;strong>Hadamard&lt;/strong> ($\{ \ket{+}, \ket{-} \}$) bases, and classical communication. Importantly, we never perform any joint or Bell‐basis measurement on $AB$.&lt;/p>
 &lt;hr>
-&lt;h2 id="matchingoutcomes-protocol">Matching‑outcomes protocol&lt;/h2>
-&lt;p>Alice and Bob share $N$ independent copies of an unknown state $\rho_{AB}$. For each copy $i = 1, \dots, N$, they do the following &lt;em>in sequence*&lt;/em>:&lt;/p></description></item><item><title>URSS introduction</title><link>https://teaegg.net/research/urss/intro/</link><pubDate>Tue, 24 Jun 2025 16:10:31 +0100</pubDate><guid>https://teaegg.net/research/urss/intro/</guid><description>&lt;p>Hello and welcome to my URSS blog! Over the coming weeks, I&amp;rsquo;ll be sharing my journey into the fascinating field of quantum cryptography. There are two parts to this: &amp;ldquo;quantum&amp;rdquo;, the strange and powerful world of quantum physics; and &amp;ldquo;cryptography&amp;rdquo;, the science of securing information via encryption and decryption.&lt;/p>
+&lt;h2 id="single-pair-matchingoutcomes-protocol">Single-pair matching‑outcomes protocol&lt;/h2>
+&lt;p>Suppose Alice and Bob share i.i.d. copies of an unknown state $\rho_{AB}$. For each pair $i = 1, \dots, N$, where $N$ is bounded by the analysis below, they do the following &lt;em>in sequence*&lt;/em>:&lt;/p></description></item><item><title>URSS introduction</title><link>https://teaegg.net/research/urss/intro/</link><pubDate>Tue, 24 Jun 2025 16:10:31 +0100</pubDate><guid>https://teaegg.net/research/urss/intro/</guid><description>&lt;p>Hello and welcome to my URSS blog! Over the coming weeks, I&amp;rsquo;ll be sharing my journey into the fascinating field of quantum cryptography. There are two parts to this: &amp;ldquo;quantum&amp;rdquo;, the strange and powerful world of quantum physics; and &amp;ldquo;cryptography&amp;rdquo;, the science of securing information via encryption and decryption.&lt;/p>
 &lt;p>Let&amp;rsquo;s start simple. Take this number: $1984909$.&lt;/p>
 &lt;p>Looks random right? Here&amp;rsquo;s the challenge: can you figure out which two numbers, when multiplied together, give you this result?&lt;/p></description></item></channel></rss>
