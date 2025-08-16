@@ -159,9 +159,9 @@ so the proof is complete.
 Now suppose that $\rho_{AB}$ is any state such that
 $$
 \underbrace{\frac{1}{2}\,\text{tr}\bigl(\Pi_1\,\rho_{AB}\bigr)}_{\substack{\text{matching outcomes}\\\text{in standard (Z) basis}}}
-\;+\;
+~+~
 \underbrace{\frac{1}{2}\,\text{tr}\bigl(\Pi_2\,\rho_{AB}\bigr)}_{\substack{\text{matching outcomes}\\\text{in Hadamard (X) basis}}}
-\;=\;
+~=~
 \underbrace{1 - \delta}_{\substack{\text{overall success}\\\text{probability}}} \qquad (*)
 $$
 for some $\delta \geq 0$.
@@ -206,17 +206,17 @@ $$
 \begin{aligned}
 \ket{\Psi_{00}}\bra{\Psi_{00}}
 &= \tfrac{1}{2}\bigl(\ket{++}+\ket{--}\bigr)\bigl(\bra{++}+\bra{--}\bigr)
-\\&=\tfrac12\bigl(\ket{++}\bra{++} + \ket{++}\bra{--} + \ket{--}\bra{++} + \ket{--}\bra{--}\bigr),
+\\&=\tfrac{1}{2}\bigl(\ket{++}\bra{++} + \ket{++}\bra{--} + \ket{--}\bra{++} + \ket{--}\bra{--}\bigr),
 \\\ket{\Psi_{10}}\bra{\Psi_{10}}
 &= \tfrac{1}{2}\bigl(\ket{++}-\ket{--}\bigr)\bigl(\bra{++}-\bra{--}\bigr)\\
-&=\tfrac12\bigl(\ket{++}\bra{++} - \ket{++}\bra{--} - \ket{--}\bra{++} + \ket{--}\bra{--}\bigr).
+&=\tfrac{1}{2}\bigl(\ket{++}\bra{++} - \ket{++}\bra{--} - \ket{--}\bra{++} + \ket{--}\bra{--}\bigr).
 \end{aligned}
 $$
 
 Adding these two lines gives
 $$
 \begin{aligned}
-\ket{\Psi_{00}}\bra{\Psi_{00}} + \ket{\Psi_{10}}\bra{\Psi_{10}} &= \tfrac12\bigl(2\ket{++}\bra{++} + 2\ket{--}\bra{--}\bigr)\\
+\ket{\Psi_{00}}\bra{\Psi_{00}} + \ket{\Psi_{10}}\bra{\Psi_{10}} &= \tfrac{1}{2}\bigl(2\ket{++}\bra{++} + 2\ket{--}\bra{--}\bigr)\\
 &= \ket{++}\bra{++} + \ket{--}\bra{--}
 \\&= \Pi_2.
 \end{aligned}
@@ -297,7 +297,9 @@ Although
 $$
 \varepsilon \leq \sqrt{2\delta}
 $$
-holds exactly once we know the true mismatch rate $\delta$, in practice we only observe the empirical rate $\hat{\delta}$ from a finite number of rounds (as defined in the protocol); in the finite-sample setting we cannot hope to pinpoint the true $\delta$ exactly. If we tried to draw a single "hard" cutoff line at
+holds exactly once we know the true mismatch rate $\delta$, in practice we only observe the empirical rate $\hat{\delta}$ from a finite number of rounds (as defined in the protocol); in the finite-sample setting we cannot hope to pinpoint the true $\delta$ exactly.
+
+If we tried to draw a single "hard" cutoff line at
 $$
 \delta_* = \frac{\varepsilon^2}{2},
 $$
@@ -310,6 +312,60 @@ Instead of a single distance threshold $\varepsilon$, we define two: an acceptan
 This framework creates a small "promise gap" around $\delta_*$. By translating our trace distance tolerances ($\varepsilon_1$ and $\varepsilon_2$) into error rate thresholds, $\delta_{\text{close}}$ and $\delta_{\text{far}}$, which are functions of $\varepsilon_1$ and $\varepsilon_2$ respectively, we establish a "buffer zone" that can absorb those statistical fluctuations.
 
 By making this "promise gap" just large enough and then applying a *concentration bound* to $\hat{\delta}$, we can guarantee that, with probability at least $1 - \alpha$, the empirical error rate $\hat{\delta}$ stays on the correct side of its respective cutoff - so we will correctly declare "close" whenever $\hat{\delta} \leq \delta_{\text{close}}$ and "far" whenever $\hat{\delta} \geq \delta_{\text{far}}$, each with error at most $\alpha$.
+
+For simplicity, write $\rho := \rho_{AB}$ and $\Phi := \ket{\text{EPR}}\bra{\text{EPR}}$. We need to define the hypotheses $\mathbf{H_0}$ ($\varepsilon_1$-close) and $\mathbf{H_1}$ ($\varepsilon_2$-far) for our test:
+$$
+\begin{cases}
+~\mathbf{H_0}: &D(\rho, \Phi) \,\leq\,\varepsilon_1 \quad\iff\quad \rho \text{ is “close” to }\Phi,
+\\ ~\mathbf{H_1}: &D(\rho, \Phi) \,\geq\,\varepsilon_2 \quad\iff\quad \rho \text{ is “far” from }\Phi,
+\end{cases}
+$$
+
+Also, recall that the asymptotic inequality
+$$
+D(\rho, \Phi) \leq \sqrt{2\delta}
+$$
+was derived from the Fuchs–van de Graaf bound and the matching-outcomes success rate. This is the *soundness direction*: it tells us that if the true mismatch rate $\delta$ is small, then the state is also close in trace distance. It applies directly to the "far" case ($\mathbf{H_1}$), where $D(\rho, \Phi) \geq \varepsilon_2$ forces a lower bound $\delta \geq \varepsilon_2^2/2$ on the mismatch rate from the following inequality chain:
+$$
+\sqrt{2\delta} \,\geq\, D(\rho, \Phi) \,\geq\, \varepsilon_2 \quad\implies\quad \delta \,\geq\, \tfrac{\varepsilon_2^2}{2}.
+$$
+
+For the "close" case ($H_0$), we cannot run this implication backwards: $D(\rho, \Phi) \leq \sqrt{2\delta}$ does not give an *upper bound* on $\delta$ in terms of $D(\rho, \Phi)$. Instead, we use a standard variational/POVM bound: for any projector $\Pi$,
+$$
+\bigl| \text{tr}(\Pi\rho) - \text{tr}(\Pi\Phi) \bigr| = \bigl| \text{tr}[\Pi(\rho - \Phi)] \bigr| \,\leq\, D(\rho, \Phi).
+$$
+Choosing $\Pi$ as the mismatch projector for matching-basis rounds:
+$$
+\Pi_{\text{mis}}^{Z} = \ket{01}\bra{01} + \ket{10}\bra{10},\qquad
+\Pi_{\text{mis}}^{X} = \ket{+-}\bra{+-} + \ket{-+}\bra{-+},
+$$
+the overall mismatch rate is $\delta = \tfrac{1}{2}\bigl(\text{tr}[\Pi_{\text{mis}}^{Z}\rho] + \text{tr}[\Pi_{\text{mis}}^{X}\rho]\bigr)$, which occurs with probability zero for the ideal EPR state:
+$$
+\text{tr}[\Pi_{\text{mis}}^{Z}\Phi] = \text{tr}[\Pi_{\text{mis}}^{X}\Phi] = 0.
+$$
+Since each $\Pi_{\text{mis}}^{B}$ ($B \in \{Z, X\}$) is a positive projector and $\text{tr}[\Pi_{\text{mis}}^{B}\rho] \geq 0$, we have
+$$
+\bigl| \text{tr}[\Pi_{\text{mis}}^{B}(\rho - \Phi)] \bigr|
+= \bigl| \text{tr}[\Pi_{\text{mis}}^{B}\rho] - 0 \bigr|
+= \text{tr}[\Pi_{\text{mis}}^{B}\rho].
+$$
+
+Apply the variational bound $\bigl|\text{tr}[\Pi(\rho - \sigma)]\bigr| \leq D(\rho, \sigma)$ with $\Pi = \Pi_{\text{mis}}^{B}$ and $\sigma = \Phi$:
+$$
+\text{tr}[\Pi_{\text{mis}}^{B}\rho] \leq D(\rho, \Phi).
+$$
+
+Thus
+$$
+\delta_Z = \text{tr}[\Pi_{\text{mis}}^{Z}\rho] \leq D(\rho, \Phi),\qquad
+\delta_X = \text{tr}[\Pi_{\text{mis}}^{X}\rho] \leq D(\rho, \Phi).
+$$
+
+Averaging gives
+$$
+\delta = \tfrac{1}{2}(\delta_Z + \delta_X) \leq D(\rho, \Phi),
+$$
+so we have the bound $\delta \leq D(\rho, \Phi)$. Therefore, under $\mathbf{H_0}$ with $D(\rho, \Phi) \leq \varepsilon_1$, the mismatch rate satisfies $\delta \leq \varepsilon_1$.
 
 Let's make this intuition precise.
 
@@ -346,26 +402,26 @@ $$
 $$
 which will be useful soon.
 
-From the theorem above we know that the critical value of the true mismatch rate at which the state $\rho_{AB}$ sits exactly $\varepsilon$-close in trace distance to the perfect EPR state is
-$$
-\delta_* = \frac{\varepsilon^2}{2}.
-$$
-
 As we've discussed, in a tolerant test, instead of a single decision point $\varepsilon$, we have to fix two trace-distance tolerances
 $$
 0 \leq \varepsilon_1 < \varepsilon_2 \leq 1,
 $$
 where
-- $\varepsilon_1$ is the acceptance tolerance; $D(\rho_{AB}, \ket{\text{EPR}}\bra{\text{EPR}})\leq \varepsilon_1$ implies "close", and
-- $\varepsilon_2$ is the rejection threshold; $D(\rho_{AB}, \ket{\text{EPR}}\bra{\text{EPR}}) \geq \varepsilon_2$ implies "far".
+- $\varepsilon_1$ is the acceptance tolerance for $\mathbf{H_0}$; $D(\rho, \Phi) \leq \varepsilon_1$ implies "close", and
+- $\varepsilon_2$ is the rejection tolerance for $\mathbf{H_1}$; $D(\rho, \Phi) \geq \varepsilon_2$ implies "far".
 
-We translate these into *matching‐basis* thresholds by
+We translate these trace distance parameters into error rate thresholds by
 $$
-\delta_{\text{close}} := \frac{\varepsilon_1^2}{2},
+\delta_{\text{close}} := \varepsilon_1,
 \qquad
 \delta_{\text{far}} := \frac{\varepsilon_2^2}{2}.
 $$
-These thresholds naturally share the same mathematical form as the critical boundary $\delta_* = \frac{\varepsilon^2}{2}$ as they are all derived from the same underlying theorem relating trace distance to the error rate of the protocol, from the previous section!
+
+For the promise gap to be non-trivial, we need $\delta_{\text{far}} > \delta_{\text{close}}$, which translates to
+$$
+\varepsilon_1 < \frac{\varepsilon_2^2}{2}.
+$$
+This imposes an extra constraint beyond the generic condition $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$.
 
 Now let's look at a natural proposal for the decision rule...
 
@@ -391,8 +447,8 @@ $$
 we build in exactly enough "slack" so that even if the *true* rate sits at the lower promise boundary, $\delta = \delta_{\text{close}}$, then by the Chernoff-Hoeffding bound
 $$
 \Pr\bigl[\hat{\delta} \geq c\bigr]
-\;\leq\;\Pr\bigl[\hat{\delta} - \delta \geq t\bigr]
-\;\leq\;2e^{-2|S|t^2}\,,
+~\leq~\Pr\bigl[\hat{\delta} - \delta \geq t\bigr]
+~\leq~2e^{-2|S|t^2}\,,
 $$
 i.e. the completeness error is only the exponentially small Chernoff tail and not the horrible $50\%$ we were getting. By the same choice $c = \delta_{\text{far}} - t$ on the upper side, we get a *symmetric* buffer $(c, \delta_{\text{far}})$ that makes the soundness error equally tiny.
 
@@ -401,21 +457,22 @@ So... the correct, albeit counter-intuitive, solution is to use a single decisio
 A very natural way to pick the margin $t > 0$ is to split the gap between $\delta_{\text{close}}$ and $\delta_{\text{far}}$ in half:
 
 $$
-t = \frac{\delta_{\text{far}} - \delta_{\text{close}}}{2} = \frac{\varepsilon_2^2 - \varepsilon_1^2}{4}.
+t = \frac{\delta_{\text{far}} - \delta_{\text{close}}}{2} = \frac{\varepsilon_2^2}{4} - \frac{\varepsilon_1}{2} = \frac{\varepsilon_2^2 - 2\varepsilon_1}{4}.
 $$
-As $\varepsilon_2 > \varepsilon_1$ by definition, we have $\delta_{\text{far}} > \delta_{\text{close}}$, satisfying the requirement $t > 0$. Then
+As $\delta_{\text{far}} > \delta_{\text{close}}$ under our restriction $\varepsilon_1 < \varepsilon_2^2/2$, the requirement $t > 0$ is satisfied. Then
 $$
 c 
 = \frac{\delta_{\text{close}} + \delta_{\text{far}}}{2}
-= \frac{\varepsilon_1^2 + \varepsilon_2^2}{4}
+= \frac{\varepsilon_1}{2} + \frac{\varepsilon_2^2}{4}
+= \frac{2\varepsilon_1 + \varepsilon_2^2}{4}
 = \delta_{\text{close}} + t 
 = \delta_{\text{far}} - t
 $$
 would conveniently place our decision boundary exactly in the middle for perfect symmetry.
 
 > **Decision rule.** After measuring and computing $\hat{\delta}$,
-> - If $\hat{\delta} \leq c$, declare "close" i.e. accept that $\rho_{AB}$ is within trace distance $\varepsilon$ of the EPR pair.
-> - If $\hat{\delta} > c$, declare "far" i.e. reject.
+> - If $\hat{\delta} \leq c$, accept $\mathbf{H_0}$ ("close").
+> - If $\hat{\delta} > c$, accept $\mathbf{H_1}$ ("far").
 $$
 \text{Decision} =
 \begin{cases}
@@ -424,47 +481,50 @@ $$
 \end{cases}
 $$
 
+Let's quickly prove correctness under the *good event*
+$$
+\mathcal{G} = \left\{\, |\hat{\delta} - \delta| < t \,\right\}.
+$$
+Correctness includes completeness ($\mathbf{H_0}$: "close" $\Rightarrow$ "accept") and soundness ($\mathbf{H_1}$: "far" $\Rightarrow$ "reject").
+
 1. **Completeness** ("close" case).  
-   If the true $\delta \leq \delta_{\text{close}} = c - t$, then conditioned on the *good* event $|\hat{\delta} - \delta| < t$, we can unpack the inequality and get 
+   If the true $\delta \leq \delta_{\text{close}} = c - t$, then conditioned on $\mathcal{G}$ we have
    $$
    -t < \hat{\delta} - \delta < t.
    $$
-	Using the right half of the inequality ($\hat{\delta} - \delta < t$), we have
-   $$\hat{\delta} <\quad \delta + t 
-   ~~\leq~~ (c - t) + t 
-   \quad= c,
+   Using the right inequality ($\hat{\delta} - \delta < t$),
    $$
-   and hence $\hat{\delta} \leq c$, so we correctly declare "close".
+   \hat{\delta} < \delta + t ~\leq~ (c - t) + t ~=~ c,
+   $$
+   hence $\hat{\delta} \leq c$ and we accept "close".
 
 2. **Soundness** ("far" case).  
-   If the true $\delta \geq \delta_{\text{far}} = c + t$, then conditioned on the same good event, using the left half of the inequality ($-t < \hat{\delta} - \delta$), we have
+   If the true $\delta \geq \delta_{\text{far}} = c + t$, then conditioned on $\mathcal{G}$ the left inequality ($-t < \hat{\delta} - \delta$) gives
    $$
-   \hat{\delta} >\quad \delta - t
-   ~~\geq~~ (c + t) - t
-   \quad= c,
+   \hat{\delta} > \delta - t ~\geq~ (c + t) - t ~=~ c,
    $$
-   and hence $\hat{\delta} > c$, so we correctly declare "far".
+   hence $\hat{\delta} > c$ and we reject ("far").
 
-Both completeness ($\delta \leq \delta_{\text{close}}$) and soundness ($\delta \geq \delta_{\text{far}}$) can fail only if $|\hat{\delta} - \delta| \geq t$ (i.e., the *bad* event), which the concentration bound guarantees occurs with probability at most $\alpha$.
+Both completeness ($\delta \leq \delta_{\text{close}}$) and soundness ($\delta \geq \delta_{\text{far}}$) can fail only if $|\hat{\delta} - \delta| \geq t$ (the *bad* event), which the concentration bound guarantees occurs with probability at most $\alpha/2$. All that remains is to choose the sample size $|S|$ (and $N$) so that $\Pr[\mathcal{G}] \geq 1 - \alpha/2$.
 
-Now, fix the failure probability to a conventional choice $\frac{1}{3}$. Substituting the values $\alpha = \frac{1}{3}$ and $t = \frac{\varepsilon_2^2 - \varepsilon_1^2}{4}$ into the $|S|$ equation from earlier gives
+Fix a target failure probability $\alpha \in (0,1)$. Substituting $t = \frac{\varepsilon_2^2 - 2\varepsilon_1}{4}$ into the $|S|$ equation from earlier and allocating $\alpha/2$ to the estimation tail gives
 $$
 \begin{aligned}
 |S|
 ~&=~
-\frac{1}{2t^2}\,\ln\!\left(\frac{2}{\alpha}\right)
+\frac{1}{2t^2}\,\ln\!\left(\frac{4}{\alpha}\right)
 ~=~
-\frac{1}{2\bigl( \,(\varepsilon_2^2 - \varepsilon_1^2)/4\, \bigr)^2}\,\ln\!\left(\frac{2}{1/3}\right)
+\frac{1}{2\bigl( \,(\varepsilon_2^2 - 2\varepsilon_1)/4\, \bigr)^2}\,\ln\!\left(\frac{4}{\alpha}\right)
 \\\\~&=~
-\frac{8\,\ln(6)}{(\varepsilon_2^2 - \varepsilon_1^2)^2}
+\frac{8\,\ln(4/\alpha)}{(\varepsilon_2^2 - 2\varepsilon_1)^2}
 ~=~
-O\!\left(\frac{1}{(\varepsilon_2^2 - \varepsilon_1^2)^2}\right).
+O\!\left(\frac{1}{(\varepsilon_2^2 - 2\varepsilon_1)^2}\right).
 \end{aligned}
 $$
 
-Therefore, if we manage to collect $|S| = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr)$ matching‐basis samples, then with probability $\geq 1 - \alpha = 2/3$ we have $|\hat{\delta} - \delta| < t$, which guarantees both completeness and soundness as shown above.
+Therefore, if we manage to collect $|S| = O\Bigl((\varepsilon_2^2 - 2\varepsilon_1)^{-2}\Bigr)$ matching‐basis samples satisfying the display above, then with probability $\geq 1 - \alpha/2$ we have $|\hat{\delta} - \delta| < t$ (the good event $\mathcal{G}$), which guarantees both completeness and soundness as shown above.
 
-Finally, we need to determine a bound on $N$, the actual number of rounds we'll run the protocol for. Our overall success requires guarding against two distinct types of errors: estimation failure ($E_{\text{estimation}}$), for which we already know $\Pr(E_{\text{estimation}}) = \alpha \leq 1/3$, and sampling failure ($E_{\text{sample}}$), where we fail to collect enough data in the first place. The total failure probability is bounded by their sum using the *union bound*.
+Finally, we need to determine a bound on $N$, the actual number of rounds we'll run the protocol for. Our overall success requires guarding against two distinct types of errors: estimation failure ($E_{\text{estimation}}$), for which we now have $\Pr(E_{\text{estimation}}) \leq \alpha/2$, and sampling failure ($E_{\text{sample}}$), where we fail to collect enough data in the first place. The total failure probability is bounded by their sum ($\alpha$) using the *union bound*.
 
 Since the probability of the measurement bases matching in any given round is $1/2$, as it occurs uniformly at random, the expected number of matching-basis samples is $\mathbb{E}[|S|] = N/2$. To safeguard against statistical fluctuations, we should choose $N$ to be larger than the simple estimate of $2|S|$. A robust and standard choice is $N = 4|S|$. With this choice, the probability of obtaining fewer than $|S|$ matching-basis samples - the event $E_{\text{sample}}$ - can be shown via a standard Chernoff bound to be less than $e^{-|S|/4}$. Let the random variable for the number of matching-basis rounds from a total of $N$ trials be $X$. Then
 $$
@@ -477,30 +537,49 @@ $$
 The multiplicative Chernoff bound gives, for any $0 < \delta < 1$,
 $$
 \Pr\bigl[X < (1-\delta)\,\mathbb{E}[X]\bigr]
-\;\leq\;\exp\Bigl(-\tfrac{\delta^2}{2}\,\mathbb{E}[X]\Bigr).
+~\leq~\exp\Bigl(-\tfrac{\delta^2}{2}\,\mathbb{E}[X]\Bigr).
 $$
 
 Setting $\delta = \tfrac{1}{2}$ so that $(1 - \delta)\,\mathbb{E}[X]=|S|$ yields
 $$
 \Pr\bigl[X < |S|\bigr]
-\;\leq\;
+~\leq~
 \exp\Bigl(-\tfrac{(1/2)^2}{2}\cdot 2|S|\Bigr)
-\;=\;
+~=~
 e^{-|S|/4}.
+$$
+
+To make both failure modes at most $\alpha/2$, we require
+$$
+|S| \,\geq\, \frac{8\,\ln(4/\alpha)}{(\varepsilon_2^2 - 2\varepsilon_1)^2}
+\qquad\text{and}\qquad
+|S| \,\geq\, 4\,\ln\!\frac{2}{\alpha}.
+$$
+Equivalently, with $N=4|S|$,
+$$
+N \ \geq\ \max\!\left\{\,\frac{32\,\ln(4/\alpha)}{(\varepsilon_2^2 - 2\varepsilon_1)^2}\,,\ \ 16\,\ln\!\frac{2}{\alpha}\right\}.
+$$
+
+For admissible parameters ($0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$ with $\varepsilon_1 < \varepsilon_2^2/2$), we have $0 < \varepsilon_2^2 - 2\varepsilon_1 \leq 1$, hence $(\varepsilon_2^2 - 2\varepsilon_1)^{-2} \geq 1$. Therefore
+$$
+\frac{32\,\ln(4/\alpha)}{(\varepsilon_2^2 - 2\varepsilon_1)^2} \geq 32\,\ln\!\frac{4}{\alpha} > 16\,\ln\!\frac{2}{\alpha}
+$$
+because $32\ln(4/\alpha) - 16\ln(2/\alpha) = 16\bigl(2\ln(4/\alpha) - \ln(2/\alpha)\bigr) = 16\ln(8/\alpha) > 0$ for all $\alpha \in (0,1)$. Hence the first term dominates for all admissible values, and the bound simplifies to
+$$
+N \geq \frac{32 \ln(4/\alpha)}{(\varepsilon_2^2 - 2\varepsilon_1)^2}.
 $$
 
 With this, we can now use the union bound to find the total probability of failure:
 $$
-\Pr(\text{Total Failure}) = \Pr(E_{\text{sample}}) + \Pr(E_{\text{estimation}}) \leq e^{-|S|/4} + \frac{1}{3}.
+\Pr(\text{Total Failure}) = \Pr(E_{\text{sample}}) + \Pr(E_{\text{estimation}}) \leq \frac{\alpha}{2} + \frac{\alpha}{2} = \alpha.
 $$
 
-Since the $e^{-|S|/4}$ term is negligibly small for any reasonably large $|S|$ (comparing to $1/3$), our overall failure probability is still robustly bounded by approximately $1/3$. Therefore, the choice of $N = 4|S|$ is sufficient. The total number of rounds/i.i.d. copies required for the test protocol is:
-
+Therefore, the choice of $N = 4|S|$ together with the displayed $|S|$ bound is sufficient. The total number of rounds/i.i.d. copies required for the test protocol is:
 $$
-N = 4|S| = \frac{32 \ln(6)}{(\varepsilon_2^2 - \varepsilon_1^2)^2} = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr).
+N = 4|S| = \frac{32 \ln(4/\alpha)}{(\varepsilon_2^2 - 2\varepsilon_1)^2} = O\Bigl((\varepsilon_2^2 - 2\varepsilon_1)^{-2}\Bigr).
 $$
 
-Putting everything together, we arrive at our main result. All the hard work we've done in this finite-sample analysis provides a complete description for the number of rounds $N$ needed to achieve a desired confidence level ($1 - \alpha$). The key takeaway is that the required sample complexity scales as $N = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr)$, so the closer the gap between $\varepsilon_1$ and $\varepsilon_2$, the number of samples needed grows extremely rapidly. The formal statement is as follows:
+Putting everything together, we arrive at our main result. All the hard work we've done in this finite-sample analysis provides a complete description for the number of rounds $N$ needed to achieve a desired confidence level $1 - \alpha$. The key takeaway is that the required sample complexity scales as $N = O\bigl((\varepsilon_2^2 - 2\varepsilon_1)^{-2}\bigr)$, so the closer the gap between $\varepsilon_1$ and $\varepsilon_2$, the number of samples needed grows extremely rapidly. The formal statement is as follows:
 
 > **Theorem (Finite-Sample Tolerant EPR Identity Test).**
 >
@@ -508,16 +587,12 @@ Putting everything together, we arrive at our main result. All the hard work we'
 > $$
 0 \leq \varepsilon_1 < \varepsilon_2 \leq 1,
 $$
-> and the desired maximum failure probability $\alpha \in (0, 1)$.
+> where the constraint $\varepsilon_1 < \varepsilon_2^2/2$ holds. Fix the desired maximum failure probability $\alpha \in (0, 1)$.
 > Set the cutoff
 > $$
-c = \frac{\varepsilon_1^2 + \varepsilon_2^2}{4}.
+c = \frac{2\varepsilon_1 + \varepsilon_2^2}{4}.
 $$
-> Consider the matching-outcomes protocol executed for a total of
-> $$
-N \geq \frac{32\,\ln(2/\alpha)}{(\varepsilon_2^2 - \varepsilon_1^2)^2} \qquad\left( = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr) \right)
-$$
-> rounds, consuming $N$ i.i.d. copies in total. Let the decision rule be to accept ***if and only if*** the observed error rate, $\hat{\delta}$, is less than or equal to the cutoff, $c$:
+> Consider the matching-outcomes protocol executed for a total of $N$ rounds, consuming $N$ i.i.d. copies in total. Let the decision rule be to accept ***if and only if*** the observed error rate, $\hat{\delta}$, is less than or equal to the cutoff, $c$:
 > $$
 \text{Decision} =
 \begin{cases}
@@ -525,7 +600,45 @@ $$
 \text{“far”},   & \hat{\delta} > c.
 \end{cases}
 $$
-> Then the test provides the following guarantees:
+> Then if
+> $$
+N \geq \frac{32\,\ln(4/\alpha)}{(\varepsilon_2^2 - 2\varepsilon_1)^2} \qquad\left( = O\Bigl((\varepsilon_2^2 - 2\varepsilon_1)^{-2}\Bigr) \right),
+$$
+the test provides the following guarantees:
 > - If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \leq \varepsilon_1$, then the test **accepts** (outputs "close") with confidence at least $1 - \alpha$.
 > - If $D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) \geq \varepsilon_2$, then the test **rejects** (outputs "far") with confidence at least $1 - \alpha$.
-> - If $\varepsilon_1 < D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) < \varepsilon_2$, no guarantee is made on the outcome; the test may go either way (accept or reject).
+> - If $\varepsilon_1 < D(\rho_{AB}, \ket{\text{EPR}} \bra{\text{EPR}}_{AB}) < \varepsilon_2$, **no guarantee** is made on the outcome; the test may go either way (accept or reject).
+
+We can quickly give a corollary for the exact, non-tolerant identity test as well. Recall that we write $\rho = \rho_{AB}$ and $\Phi = \ket{\text{EPR}}\bra{\text{EPR}}_{AB}$.
+
+> **Corollary (Non-tolerant identity test for the EPR state).**
+>
+> Fix $\varepsilon \in (0,1]$ and failure probability $\alpha \in (0,1)$. Consider the hypotheses
+> $$
+\begin{cases}
+~\mathbf{H_0}:~ & \rho = \Phi \quad\text{(exact identity)},\\[4pt]
+~\mathbf{H_1}:~ & D(\rho,\Phi) \,\geq\, \varepsilon \quad\text{($\varepsilon$-far)}.
+\end{cases}
+$$
+> Run the matching-outcomes protocol for a total of $N$ rounds, with
+> $$
+N ~\geq~ \frac{4}{\varepsilon^2}\,\ln\!\frac{1}{\alpha}.
+$$
+> **Decision:** accept $\mathbf{H_0}$ ***iff*** no mismatches are observed on the matching-basis rounds (i.e. $\hat{\delta} = 0$).
+>
+> **Guarantee.** Completeness holds with probability $1$ and soundness holds with probability at least $1 - \alpha$:
+> - If $\rho = \Phi$, then $\delta = 0$ and hence $\hat{\delta} = 0$ [almost surely](https://en.wikipedia.org/wiki/Almost_surely), so the test accepts.
+> - If $D(\rho,\Phi) \geq \varepsilon$, then by the asymptotic identity bound $D \leq \sqrt{2\delta}$ we have $\delta \geq \varepsilon^2/2$. For each round $i \in [N]$, the probability of *no counted mismatch* is
+> $$
+1 - \left[\Pr(x_i \neq \tilde{x}_i \mid \theta_i = \tilde{\theta}_i) \cdot \Pr(\theta_i = \tilde{\theta}_i)\right] = 1 - \delta \cdot \tfrac{1}{2}
+$$
+> (either bases don't match, or they match and outcomes agree), so over $N$ rounds
+> $$
+\Pr[\hat{\delta}=0] ~=~ (1 - \delta/2)^{N}
+~\leq~ \bigl(1 - \tfrac{\varepsilon^2}{4}\bigr)^{N}
+~\leq~ e^{-N\,\frac{\varepsilon^2}{4}}
+~\leq~ \alpha,
+$$
+> so the test rejects with probability at least $1 - \alpha$.
+>
+> **Total rounds.** This gives a *direct* $N$-bound; no separate sampling condition on the number of matching-basis rounds is required, since unmatched rounds are already absorbed into the per-round factor $(1 - \delta/2)$.
