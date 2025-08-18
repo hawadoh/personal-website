@@ -839,3 +839,242 @@ $$
 > - **Promise gap.** If $\varepsilon_1 < D(\bigotimes_{i=1}^n \rho_i, \Phi^{\otimes n}) < \varepsilon_2$, no guarantee is made; the test may accept or reject.
 >
 > *Note.* In the medium case, the $\delta_i$ may differ across coordinates, so each $\hat{\delta}_i$ must be estimated separately. The union bound over all $n$ coordinates yields the $\log(n)$ factor in the sample complexity.
+
+## Hard case (arbitrary $2n$-qubit state)
+
+We first prove this lemma.
+
+**Lemma (n-pair all-match projector in $Z$ and $X$)**
+
+Let $\varrho$ be any $2n$-qubit state on $A^nB^n$ (no product/separability assumed).
+For each pair $i$ define the single-pair "match" effects
+$$
+\Pi_Z^{(i)}=\ket{00}\!\bra{00}_{A_iB_i}+\ket{11}\!\bra{11}_{A_iB_i},
+\qquad
+\Pi_X^{(i)}=\ket{++}\!\bra{++}_{A_iB_i}+\ket{--}\!\bra{--}_{A_iB_i}.
+$$
+Then the probability that **all $n$ pairs match** when **all** pairs are measured in the $Z$ (or $X$) basis is
+$$
+\Pr(\text{all match in }Z)=\operatorname{tr}\!\Big(\Pi_Z^{(n)}\,\varrho\Big),\quad
+\Pr(\text{all match in }X)=\operatorname{tr}\!\Big(\Pi_X^{(n)}\,\varrho\Big),
+$$
+where
+$$
+\Pi_Z^{(n)}:=\bigotimes_{i=1}^n \Pi_Z^{(i)},\qquad
+\Pi_X^{(n)}:=\bigotimes_{i=1}^n \Pi_X^{(i)}.
+$$
+**Proof.**
+
+Let's look at the standard basis ($Z$) first since the algebra for the Hadamard basis ($X$) will be analogous.
+
+We start by expanding the tensor product $\Pi_Z^{(n)}$:
+$$
+\Pi_Z^{(n)} \;=\; \bigotimes_{i=1}^n \Pi_Z^{(i)}
+\;=\; \bigotimes_{i=1}^n\!\big(\ket{00}\!\bra{00} + \ket{11}\!\bra{11}\big).
+$$
+When $n = 1$ (trivial):
+$$
+\Pi_Z^{(1)} = \ket{00}\!\bra{00} + \ket{11}\!\bra{11}.
+$$
+When $n = 2$ (write every multiplication out):
+$$
+\begin{aligned}
+\Pi_Z^{(2)}
+&= \big(\ket{00}\!\bra{00} + \ket{11}\!\bra{11}\big)
+   \otimes \big(\ket{00}\!\bra{00} + \ket{11}\!\bra{11}\big)\\[6pt]
+&= \ket{00}\!\bra{00}\otimes\ket{00}\!\bra{00}
+  +\ket{00}\!\bra{00}\otimes\ket{11}\!\bra{11}\\[4pt]
+&\quad+\ket{11}\!\bra{11}\otimes\ket{00}\!\bra{00}
+  +\ket{11}\!\bra{11}\otimes\ket{11}\!\bra{11}.
+\end{aligned}
+$$
+So for $n=2$ you have exactly the sum over the four strings
+$$
+\{ (00,00),(00,11),(11,00),(11,11) \} = \{ 00, 11 \}^2.
+$$
+Claim (inductive hypothesis):
+$$
+\bigotimes_{i=1}^n\!\big(\ket{00}\!\bra{00} + \ket{11}\!\bra{11}\big)
+= \sum_{(s_1,\dots,s_n)\in\{00, 11\}^n}
+\big(\ket{s_1}\!\bra{s_1}\big)\otimes\cdots\otimes\big(\ket{s_n}\!\bra{s_n}\big).
+$$
+Proof by induction on $n$.
+
+* Base $n=1$ holds (first line above).
+* Assume true for $n=k$:
+$$
+\bigotimes_{i=1}^k\!\big(\ket{00}\!\bra{00} + \ket{11}\!\bra{11}\big)
+= \sum_{(s_1,\dots,s_k)\in\{00,11\}^k}
+\bigotimes_{i=1}^k \ket{s_i}\!\bra{s_i}.
+$$
+* Multiply both sides by the $(k+1)$-st factor:
+$$
+\begin{aligned}
+&\left(\sum_{(s_1,\dots,s_k)\in\{00,11\}^k}
+\bigotimes_{i=1}^k \ket{s_i}\!\bra{s_i}\right)
+\otimes\left(\ket{00}\!\bra{00}+\ket{11}\!\bra{11}\right)\\[6pt]
+&\qquad= \sum_{(s_1,\dots,s_k)\in\{00,11\}^k}
+\left(\bigotimes_{i=1}^k \ket{s_i}\!\bra{s_i}\right)\otimes\ket{00}\!\bra{00}\\[4pt]
+&\qquad\qquad+\sum_{(s_1,\dots,s_k)\in\{00,11\}^k}
+\left(\bigotimes_{i=1}^k \ket{s_i}\!\bra{s_i}\right)\otimes\ket{11}\!\bra{11}.
+\end{aligned}
+$$
+Combine the two sums into a single sum over all $(s_1,\dots,s_k,s_{k+1})\in\{00,11\}^{k+1}$, which yields exactly
+$$
+\sum_{(s_1,\dots,s_{k+1})\in\{00,11\}^{k+1}}
+\bigotimes_{i=1}^{k+1}\ket{s_i}\!\bra{s_i}.
+$$
+This proves the statement for $n=k+1$. By induction the expansion holds for all $n$.
+
+So the full expansion is
+$$
+\Pi_Z^{(n)}
+=\sum_{(s_1,\dots,s_n)\in\{00,11\}^n}
+\big(\ket{s_1}\!\bra{s_1}\big)\otimes\cdots\otimes\big(\ket{s_n}\!\bra{s_n}\big).
+$$
+Each term
+$$
+\big(\ket{s_1}\!\bra{s_1}\big)\otimes\cdots\otimes\big(\ket{s_n}\!\bra{s_n}\big)
+$$
+is the projector onto the product basis vector $\ket{s_1}\otimes\cdots\otimes\ket{s_n}$. By the Born rule, its trace with $\varrho$ equals the probability that, when measuring all pairs in the $Z$-basis, the outcomes are exactly $s_1,\dots,s_n$. Therefore summing those traces gives the probability that every pair's outcome is either `00` or `11`, i.e. every pair matched (they're disjoint events). Hence
+$$
+\begin{aligned}
+\Pr(\text{all match in }Z)
+&= \sum_{(s_1,\dots,s_n)\in\{00,11\}^n}
+    \operatorname{tr}\!\Big(\big(\ket{s_1}\!\bra{s_1}\big)\otimes\cdots\otimes\big(\ket{s_n}\!\bra{s_n}\big)\,\varrho\Big)
+&&\text{[Born rule]}\\[4pt]
+&= \operatorname{tr}\!\Bigg(\Bigg[\sum_{(s_1,\dots,s_n)\in\{00,11\}^n}
+    \big(\ket{s_1}\!\bra{s_1}\big)\otimes\cdots\otimes\big(\ket{s_n}\!\bra{s_n}\big)\Bigg]\;\varrho\Bigg)
+&&\text{[linearity of trace]}\\[6pt]
+&= \operatorname{tr}\!\Bigg(\Bigg[\bigotimes_{i=1}^n\big(\ket{00}\!\bra{00}+\ket{11}\!\bra{11}\big)\Bigg]\;\varrho\Bigg)
+&&\text{[tensor distributes over finite sums]}\\[6pt]
+&= \operatorname{tr}\!\Big(\Pi_Z^{(n)}\,\varrho\Big)
+.
+&&\text{[definition of }\Pi_Z^{(n)}\text{]}
+\end{aligned}
+$$
+
+The $X$ case is identical with $\ket0,\ket1$ replaced by $\ket+,\ket-$:
+$$
+\begin{aligned}
+\Pr(\text{all match in }X)
+&= \sum_{(t_1,\dots,t_n)\in\{++,--\}^n}
+    \operatorname{tr}\!\Big(\big(\ket{t_1}\!\bra{t_1}\big)\otimes\cdots\otimes\big(\ket{t_n}\!\bra{t_n}\big)\,\varrho\Big)\\[4pt]
+&= \operatorname{tr}\!\Bigg(\Bigg[\sum_{(t_1,\dots,t_n)\in\{++,--\}^n}
+    \big(\ket{t_1}\!\bra{t_1}\big)\otimes\cdots\otimes\big(\ket{t_n}\!\bra{t_n}\big)\Bigg]\;\varrho\Bigg)\\[6pt]
+&= \operatorname{tr}\!\Bigg(\Bigg[\bigotimes_{i=1}^n\big(\ket{++}\!\bra{++}+\ket{--}\!\bra{--}\big)\Bigg]\;\varrho\Bigg)\\[6pt]
+&= \operatorname{tr}\!\Big(\Pi_X^{(n)}\,\varrho\Big).
+\end{aligned}
+$$
+The proof is complete. $\quad\square$
+
+Using this lemma, let the *global all-match test* pick $Z$ or $X$ for **all** pairs (each with prob. $1/2$) and accept ***iff*** all $n$ pairs match. Then
+$$
+1 - \delta_\star ~=~ \frac{1}{2}\,\operatorname{tr}\!\left[\left(\bigotimes_{i=1}^{n}\Pi_Z^{(i)}\right)\varrho\right] + \frac{1}{2}\,\operatorname{tr}\!\left[\left(\bigotimes_{i=1}^n\Pi_X^{(i)}\right)\varrho\right],
+$$
+where $\delta_\star$ is the *true* error rate across the entire $\varrho$. Recall the single-pair identities
+$$
+\Pi_Z^{(i)}=\ket{\Psi_{00}}\!\bra{\Psi_{00}}+\ket{\Psi_{01}}\!\bra{\Psi_{01}},\qquad
+\Pi_X^{(i)}=\ket{\Psi_{00}}\!\bra{\Psi_{00}}+\ket{\Psi_{10}}\!\bra{\Psi_{10}}.
+$$
+Take tensor products and expand, using the fact that tensor product distributes over finite sums:
+$$
+\Pi_Z^{(n)}=\sum_{j_1,\dots,j_n\in\{00,01\}}
+\bigotimes_{i=1}^n \ket{\Psi_{j_i}}\!\bra{\Psi_{j_i}},
+\qquad
+\Pi_X^{(n)}=\sum_{j_1,\dots,j_n\in\{00,10\}}
+\bigotimes_{i=1}^n \ket{\Psi_{j_i}}\!\bra{\Psi_{j_i}}.
+$$
+For each Bell string $(j_1,\dots,j_n)$,
+$$
+\ket{\Psi_{j_1\cdots j_n}}\!\bra{\Psi_{j_1\cdots j_n}} = \bigotimes_{i=1}^n \ket{\Psi_{j_i}}\!\bra{\Psi_{j_i}},
+$$
+the product Bell state with the $i$-th pair in Bell state $\ket{\Psi_{j_i}}$. By the Born rule, the corresponding probability weight is
+$$
+p_{j_1\cdots j_n} := \bra{\Psi_{j_1\cdots j_n}}\,\varrho\,\ket{\Psi_{j_1\cdots j_n}},
+$$
+i.e. the probability of obtaining the Bell outcome $(j_1,\dots,j_n)$ if the block were measured in the Bell basis. Using the expansions above,
+$$
+\Pi_Z^{(n)}=\sum_{j_1,\dots,j_n\in\{00,01\}}
+\ket{\Psi_{j_1\cdots j_n}}\!\bra{\Psi_{j_1\cdots j_n}}.
+$$
+Then
+$$
+\begin{aligned}
+\operatorname{tr}\!\big(\Pi_Z^{(n)}\varrho\big)
+&=\operatorname{tr}\!\Bigg(\sum_{j_1,\dots,j_n\in\{00,01\}}
+\ket{\Psi_{j_1\cdots j_n}}\!\bra{\Psi_{j_1\cdots j_n}}\;\varrho\Bigg)\\[6pt]
+&=\sum_{j_1,\dots,j_n\in\{00,01\}}
+\operatorname{tr}\!\big(\ket{\Psi_{j_1\cdots j_n}}\!\bra{\Psi_{j_1\cdots j_n}}\;\varrho\big)&&\text{[linearity of trace]}\\[6pt]
+&=\sum_{j_1,\dots,j_n\in\{00,01\}}
+\operatorname{tr}\!\big(\varrho\,\ket{\Psi_{j_1\cdots j_n}}\!\bra{\Psi_{j_1\cdots j_n}}\big)\\[6pt]
+&=\sum_{j_1,\dots,j_n\in\{00,01\}}
+\bra{\Psi_{j_1\cdots j_n}}\,\varrho\,\ket{\Psi_{j_1\cdots j_n}}
+&&\text{[cyclicity of trace]}\\[6pt]
+&=\sum_{j_1,\dots,j_n\in\{00,01\}} p_{j_1\cdots j_n}. &&\text{[Born rule]}
+\end{aligned}
+$$
+The same steps with $\{00,10\}^n$ give
+$$
+\operatorname{tr}\!\big(\Pi_X^{(n)}\varrho\big)=\sum_{j_1,\dots,j_n\in\{00,10\}} p_{j_1\cdots j_n}.
+$$
+So we have
+$$
+\operatorname{tr}\!\big(\Pi_Z^{(n)}\varrho\big)=\sum_{j_1,\dots,j_n\in\{00,01\}} p_{j_1\cdots j_n},
+\qquad
+\operatorname{tr}\!\big(\Pi_X^{(n)}\varrho\big)=\sum_{j_1,\dots,j_n\in\{00,10\}} p_{j_1\cdots j_n}.
+$$
+Plug into
+$$
+1 - \delta_\star=\frac12\,\operatorname{tr}\!\big(\Pi_Z^{(n)}\varrho\big)+\frac12\,\operatorname{tr}\!\big(\Pi_X^{(n)}\varrho\big),
+$$
+we get
+$$
+1-\delta_\star
+=\frac12\sum_{j_1,\dots,j_n\in\{00,01\}} p_{j_1\cdots j_n}
++\frac12\sum_{j_1,\dots,j_n\in\{00,10\}} p_{j_1\cdots j_n}.
+$$
+One key observation is that the two index sets intersect only at the single string $\mathbf{0} := (00,\dots,00)$ where there are $n$ copies of `00`s; in other words, at each coordinate $i \in [n]$, the only allowed choice is $j_i=00$. Set
+$$
+U:=\{00,01,10,11\}^n,\qquad
+S_Z:=\{00,01\}^n,\qquad
+S_X:=\{00,10\}^n.
+$$
+Note that $S_Z \cap S_X = \{\mathbf{0}\}$ because $\{00,01\}\cap\{00,10\}=\{00\}$ coordinate-wise. Let
+$$
+R:=\sum_{\mathbf j\in\,U\setminus(S_Z \cup S_X)} p_{\mathbf{j}} \quad(\geq 0)
+$$
+be the total probability mass on the Bell strings outside $S_Z \cup S_X$.  Since $\sum_{\mathbf{j} \in U}p_{\mathbf{j}} = 1$, we have
+$$
+\sum_{\mathbf{j} \in S_Z \cup S_X} p_{\mathbf{j}} = 1 - R.
+$$
+By the [inclusion–exclusion principle](https://en.wikipedia.org/wiki/Inclusion%E2%80%93exclusion_principle),
+$$
+\sum_{\mathbf j\in S_Z} p_{\mathbf j}+\sum_{\mathbf j\in S_X} p_{\mathbf j}
+=\sum_{\mathbf j\in S_Z \cup S_X} p_{\mathbf j}+\sum_{\mathbf j\in S_Z\cap S_X} p_{\mathbf j}
+=(1-R)+p_{\mathbf 0}.
+$$
+Therefore
+$$
+1-\delta_\star=\tfrac12\sum_{\mathbf j\in S_Z} p_{\mathbf j}+\tfrac12\sum_{\mathbf j\in S_X} p_{\mathbf j}
+=\tfrac12\big((1-R)+p_{\mathbf0}\big)
+=\tfrac12+\tfrac12 p_{\mathbf0}-\tfrac12 R.
+$$
+Rearranging gives
+$$
+p_{\mathbf{0}} - R = 1 - 2\delta_\star.
+$$
+Since $R$ is a sum of probabilities, $R \geq 0$. Hence we can drop it to obtain the bound
+$$
+p_{\mathbf{0}} \geq 1 - 2\delta_\star.
+$$
+Recalling $p_{\mathbf{0}} = p_{00\cdots0} = \bra{\Psi_{00}}^{\otimes n}\,\varrho\,\ket{\Psi_{00}}^{\otimes n} = F^2(\varrho,\text{EPR}^{\otimes n})$, this yields
+$$
+F(\varrho,\text{EPR}^{\otimes n})\ge\sqrt{1-2\delta_\star}.
+$$
+For trace distance $D(\varrho,\text{EPR}^{\otimes n})$, Fuchs–van de Graaf gives
+$$
+D(\varrho,\text{EPR}^{\otimes n})\le\sqrt{2\delta_\star}.
+$$
+As there are no product/separability/independence assumption inside the block, this result will be useful for the hard-case!
+

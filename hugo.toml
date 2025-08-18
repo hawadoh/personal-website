@@ -23,6 +23,7 @@ theme = "PaperMod"
   ShowPostNavLinks = true
   ShowBreadCrumbs = true
   math = true
+  mainSections = ["journal", "research"]
 
   [params.homeInfoParams]
     Title = "<span id='greeting'>Hi there! 👋</span>"

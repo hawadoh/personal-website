@@ -1,3 +1,7 @@
+/* ================================
+   Very minor change
+   ================================ */
+
 /* desktop-only portion of footer: hide on screens ≤768px */
 .only-desktop {
   display: inline;
@@ -39,23 +43,101 @@ header .nav #menu li a:hover span::after {
   white-space: nowrap; 
 }
 
-@media (max-width: 768px) {
-  .katex-display {
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
-    -ms-overflow-style: none;  /* IE/Edge */
-    scrollbar-width: none;     /* Firefox */
-  }
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+  -ms-overflow-style: none;  /* IE/Edge */
+  scrollbar-width: none;     /* Firefox */
+}
 
-  .katex-display::-webkit-scrollbar {
-    display: none;
-  }
+.katex-display::-webkit-scrollbar {
+  display: none;
 }
 
 /* Make #### (h4) bigger (why did they make it so small...) */
 .post-content h4 {
   font-size: 20px;
   font-weight: bold;
+}
+
+/* ================================
+   SANDSTORM THEME OVERRIDES
+   (light + dark palettes)
+   ================================ */
+
+/* LIGHT MODE (default) */
+:root,
+.theme-light {
+  --home-bg: #000000;
+  /* page + cards */
+  --theme: #FAF5E8;        /* very light sand */
+  --entry: #f6efde;        /* soft sand card */
+
+  /* text + accents */
+  --primary: #57441b;      /* warm sand accent / links */
+  --secondary: #74684f;    /* muted text */
+  --tertiary: #E5D9C6;     /* subtle lines */
+  --content: #2B251B;      /* main text (warm near-black) */
+
+  /* code */
+  --code-block-bg: #1F1C17; /* dark sand for fenced blocks */
+  --code-bg: #eee7db;       /* inline code background */
+
+  /* borders */
+  --border: #E9DEC9;
+}
+
+/* DARK MODE */
+.dark,
+.theme-dark {
+  /* page + cards */
+  --theme: #201b13;        /* desert night */
+  --entry: #1f1a11;        /* card on dark sand */
+
+  /* text + accents */
+  --primary: #ead49e;      /* sand gold accent / links */
+  --secondary: #d4bb85;    /* muted text */
+  --tertiary: #3B3325;     /* subtle separators */
+  --content: #F3E9D2;      /* warm light text */
+
+  /* code */
+  --code-block-bg: #0F0D0A; /* deep sand for fenced blocks */
+  --code-bg: #231E16;       /* inline code background */
+
+  /* borders */
+  --border: #2A241A;
+}
+
+/* Optional: let links inherit your accent cleanly */
+a { color: var(--primary); }
+
+/* ===== Charter on macOS (fallbacks elsewhere) ===== */
+:root {
+  --font-serif: "Charter";
+}
+
+/* apply to everything except code/math */
+html, body {
+  font-family: var(--font-serif);
+}
+h1,h2,h3,h4,h5,h6,
+.home .profile, .home .home-info,
+.post-title, header, nav, footer {
+  font-family: var(--font-serif);
+}
+
+/* keep code blocks monospace */
+code, pre, kbd, samp {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+               "Liberation Mono", "Courier New", monospace !important;
+}
+
+body {
+  zoom: 1.015;                   /* Chrome / Edge */
+  -moz-transform: scale(1.015);  /* Firefox */
+  -moz-transform-origin: top left;
+  transform: scale(1.015);       /* Standard */
+  transform-origin: top left;  /* Standard */
 }
