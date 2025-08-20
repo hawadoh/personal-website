@@ -134,6 +134,7 @@ code, pre, kbd, samp {
                "Liberation Mono", "Courier New", monospace !important;
 }
 
+/*
 body {
   zoom: 1.015;                   /* Chrome / Edge */
   -moz-transform: scale(1.015);  /* Firefox */
@@ -141,3 +142,4 @@ body {
   transform: scale(1.015);       /* Standard */
   transform-origin: top left;  /* Standard */
 }
+*/
