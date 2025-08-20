@@ -133,13 +133,3 @@ code, pre, kbd, samp {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
                "Liberation Mono", "Courier New", monospace !important;
 }
-
-/*
-body {
-  zoom: 1.015;                   /* Chrome / Edge */
-  -moz-transform: scale(1.015);  /* Firefox */
-  -moz-transform-origin: top left;
-  transform: scale(1.015);       /* Standard */
-  transform-origin: top left;  /* Standard */
-}
-*/

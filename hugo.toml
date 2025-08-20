@@ -27,7 +27,7 @@ theme = "PaperMod"
 
   [params.homeInfoParams]
     Title = "<span id='greeting'>Hi there! 👋</span>"
-    Content = "I'm Howard, a CS student passionate about quantum computing, AI, and the ideas that move humanity forward. I enjoy deep conversations on breakthrough tech, philosophy, and bold visions for the future."
+    Content = "I'm Howard, a CS student passionate about quantum computing, AI, and the ideas that move humanity forward. I enjoy deep conversations on breakthrough tech, philosophy, gym, investments, and bold visions for the future."
 
   [[params.socialIcons]]
     name = "instagram"
