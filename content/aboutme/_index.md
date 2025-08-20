@@ -36,6 +36,8 @@ For me, The Chariot is about discipline, pursuit, and momentum: the reminder tha
 
 **Shows:** *The Blacklist*, *Breaking Bad*, *Better Call Saul*, *Altered Carbon*, *Cowboy Bebop*. Honestly, I've watched too many shows and films to count so this list will keep growing as they come to mind.
 
+**Games:** *Minecraft*, *Red Dead Redemption 2*, *Cyberpunk 2077*, *League of Legends*, *Sifu*, *SOMA*, *Darkwood*, *The Longing*, *Scorn*. Anything cerebral/fun.
+
 **Music:**
 - **Jay Chou:** fan for 10+ years, but still haven’t been to a concert (someone put me on please). Sing anything by him and I’ll know the song and album instantly like Shazam.
 - **The Weeknd:** Dawn FM on repeat (spacey, melancholic, perfect for late nights) and My Dear Melancholy for when the vocals need to hit hard.
