@@ -32,16 +32,17 @@ For me, The Chariot is about discipline, pursuit, and momentum: the reminder tha
 
 **Tea:** I'm not a coffee guy. Grew up around tea drinkers, and now I nerd out over oolong and high-mountain teas.
 
-**Anime:** *JoJo’s Bizarre Adventure* (season 2 in particular!) & *Cyberpunk: Edgerunners*.
+**Anime:** *JoJo's Bizarre Adventure* (season 2 in particular!) & *Cyberpunk: Edgerunners*.
 
 **Shows:** *The Blacklist*, *Breaking Bad*, *Better Call Saul*, *Altered Carbon*, *Cowboy Bebop*. Honestly, I've watched too many shows and films to count so this list will keep growing as they come to mind.
 
-**Games:** *Minecraft*, *Red Dead Redemption 2*, *Cyberpunk 2077*, *League of Legends*, *Sifu*, *SOMA*, *Darkwood*, *The Longing*, *Scorn*. Anything cerebral/fun.
+**Games:** *Minecraft*, *Red Dead Redemption 2*, *Cyberpunk 2077*, *League of Legends*, *Sifu*, *SOMA*, *Darkwood*, *The Longing*, *Scorn*. Anything fun/cerebral.
 
 **Music:**
-- **Jay Chou:** fan for 10+ years, but still haven’t been to a concert (someone put me on please). Sing anything by him and I’ll know the song and album instantly like Shazam.
-- **The Weeknd:** Dawn FM on repeat (spacey, melancholic, perfect for late nights) and My Dear Melancholy for when the vocals need to hit hard.
+- **Jay Chou:** fan for 10+ years, but still haven't been to a concert (someone put me on please). Sing anything by him and I'll know the song and album instantly like Shazam.
+- **The Weeknd:** *Dawn FM* on repeat (spacey, melancholic, perfect for late nights) and *My Dear Melancholy,* for when the vocals need to hit hard.
 - **SKAI ISYOURGOD:** recent discovery, on heavy rotation. Got a [playlist](https://tidal.com/playlist/355f86c1-ed69-45cf-a7e4-63fbf359149b) on TIDAL, repping Canton.
+- **Tame Impala:** *The Slow Rush* and *Currents*.
 - …and way too many others to list (about 50 from NCS alone).
 
 ---
@@ -57,3 +58,43 @@ I can play the violin! Though I haven't picked it up in ages. I was a child prod
 I've had severe myopia (-5.50) and astigmatism from a young age, which makes Everest plans… interesting.
 
 My personal board of directors: [Charlie Munger](https://www.stripe.press/poor-charlies-almanack) and [Dan Koe](https://thedankoe.com/).
+
+---
+
+### 🌌 My Answers to the Big Questions
+
+#### 🎯 Purpose
+**"What is your purpose?"**
+
+[Response goes here.]
+
+---
+
+#### 🏆 Success
+**"What is your definition of success?"**
+
+> Success is when your work outlives your name.
+
+<details>
+<summary>Read my full answer</summary>
+
+---
+
+Success is not easy to define directly, but to me, its opposite is simple - failure is leaving regrets on the table, knowing you could have done better. By inversion, success is when you have pushed as far as you could, leaving nothing undone. It is when you have played the cards you were dealt to the best of your ability.
+
+To me, true success is when your work outlives your name. Most of us live around eighty years, and here is a sobering thought: do you know your great-grandparent's name? Most people cannot. In a hundred years, it is likely no one will remember who you were. That is why your work, your ideas, your values, and your stories matter infinitely more than your DNA.
+
+The true extension of life is not biological but intellectual. DNA halves every generation - your child carries half, your grandchild one quarter, then one eighth, approaching zero with frightening speed. But ideas can live forever. Confucius is the perfect example. His bloodline has diluted to dust, yet his ideas still shape civilisations.
+
+The same is true in science. You probably do not know who Fritz Haber was, but his process for turning atmospheric nitrogen into ammonia feeds billions today. Half the nitrogen atoms in your body come from his invention. His name has faded, but his work literally lives inside you.
+
+That is success: to create something so real, so lasting, that even when you are forgotten, your work continues transforming lives, feeding people, shaping minds, and living on in the world itself.
+</details>
+
+---
+
+#### 💰 Wealth
+**"What is your definition of wealth?"**
+
+[Response goes here.]
+
