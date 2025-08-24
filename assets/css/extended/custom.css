@@ -133,3 +133,40 @@ code, pre, kbd, samp {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
                "Liberation Mono", "Courier New", monospace !important;
 }
+
+/* ================================
+   TEXT SELECTION (HIGHLIGHT) COLOURS
+   ================================ */
+
+/* Light mode selection: soft golden sand */
+body:not(.dark) ::selection {
+  background: #231E16; /* dark sand */
+  color: #F3E9D2;      /* warm light text */
+}
+body:not(.dark) ::-moz-selection {
+  background: #231E16;
+  color: #F3E9D2;
+}
+
+/* Dark mode selection: muted sand gold */
+body.dark ::selection {
+  background: #d4bb85;
+  color: #201b13; /* near your dark background for legibility */
+}
+body.dark ::-moz-selection {
+  background: #d4bb85;
+  color: #201b13;
+}
+
+.post-content details > summary {
+  cursor: pointer;
+}
+
+/* Ensure selection is readable inside code blocks too */
+pre ::selection,
+code ::selection,
+pre ::-moz-selection,
+code ::-moz-selection {
+  background: inherit;           /* keep same theme highlight */
+  color: currentColor;           /* preserve code syntax colour */
+}

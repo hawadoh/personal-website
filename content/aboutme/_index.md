@@ -11,16 +11,23 @@ ShowBreadCrumbs: false
 
 📐 **MBTI:** [INTJ-A](https://www.16personalities.com/intj-personality) (Architect).
 
-🔮 **[The Chariot (VII)](https://en.wikipedia.org/wiki/The_Chariot_(tarot_card)):** My first ever tarot draw from the Major Arcana. I don't see tarot as fortune-telling, but as a mirror - a reflection of where you are, not where you'll end up. The Chariot shows a lone warrior leaving the safety of the city, guided by black and white sphinxes, opposing forces without reins. Control here isn't about force; it's about inner discipline, about steering chaos through willpower alone.
+🔮 **[The Chariot (VII)](https://en.wikipedia.org/wiki/The_Chariot_(tarot_card)):** My first ever tarot draw from the Major Arcana. I don't see tarot as fortune-telling, but as a mirror - a reflection of where you are, not where you'll end up.
 
-For me, The Chariot is about discipline, pursuit, and momentum: the reminder that to stop is to regress, and there's no real ending to the journey. The Chariot always moves forward.
+The Chariot shows a lone warrior leaving the safety of the city, guided by black and white sphinxes. He *steers* these opposing forces without any reins - not controlling them completely, but redirecting their energy toward a chosen destination.
+
+Control here isn't about force. It is the ability to hold your centre while riding the chaos.
+
+For me, The Chariot is about discipline, pursuit, and momentum: the reminder that to stop is to regress, and there's no real ending to the journey.
+
+The Chariot always moves forward, because motion itself is what keeps opposing forces in harmony: ambition and doubt, order and chaos, fear and courage. This balance is what keeps your inner war from consuming you.
 
 ---
+
 ### 🎒 Stories
 
 **Kindergarten (age 4):** Once led a group of unsupervised kids back to the tutoring centre in Macau after the tutor vanished. They all snitched on me, but my parents were proud! My first taste of leadership and betrayal.
 
-**Minecraft:** Used to be ranked #3 in Hypixel Ranked Skywars when I was 13. Minecraft PvP taught me more about pressure and strategy than school ever did.
+**Minecraft:** Used to be #3 on the Hypixel Ranked Skywars leaderboard when I was 13. Minecraft PvP taught me more about pressure and strategy than school ever did.
 
 **League of Legends:** Playing it for 8 years built my emotional calluses. After enough crushing defeats, I learned that tilting only digs the hole deeper. It ended up making me emotionally steadier, almost stoic, both in-game and in life.
 
@@ -43,6 +50,7 @@ For me, The Chariot is about discipline, pursuit, and momentum: the reminder tha
 - **The Weeknd:** *Dawn FM* on repeat (spacey, melancholic, perfect for late nights) and *My Dear Melancholy,* for when the vocals need to hit hard.
 - **SKAI ISYOURGOD:** recent discovery, on heavy rotation. Got a [playlist](https://tidal.com/playlist/355f86c1-ed69-45cf-a7e4-63fbf359149b) on TIDAL, repping Canton.
 - **Tame Impala:** *The Slow Rush* and *Currents*.
+- **Deftones.**
 - …and way too many others to list (about 50 from NCS alone).
 
 ---
@@ -61,14 +69,7 @@ My personal board of directors: [Charlie Munger](https://www.stripe.press/poor-c
 
 ---
 
-### 🌌 My Answers to the Big Questions
-
-#### 🎯 Purpose
-**"What is your purpose?"**
-
-[Response goes here.]
-
----
+### 🌌 My answers to the big questions
 
 #### 🏆 Success
 **"What is your definition of success?"**
@@ -78,7 +79,7 @@ My personal board of directors: [Charlie Munger](https://www.stripe.press/poor-c
 <details>
 <summary>Read my full answer</summary>
 
----
+<br>
 
 Success is not easy to define directly, but to me, its opposite is simple - failure is leaving regrets on the table, knowing you could have done better. By inversion, success is when you have pushed as far as you could, leaving nothing undone. It is when you have played the cards you were dealt to the best of your ability.
 
@@ -96,5 +97,43 @@ That is success: to create something so real, so lasting, that even when you are
 #### 💰 Wealth
 **"What is your definition of wealth?"**
 
-[Response goes here.]
+> Wealth is the freedom of choice.
 
+<details>
+<summary>Read my full answer</summary>
+
+<br>
+
+Wealth is control of time, comfort, and attention without bending your values. The opposite of wealth is compulsion: when bills, status games, or fear dictate your day. Money is a tool, not an identity; it should widen your options and strengthen your integrity.
+
+Wealth has many factors, but material-wise, the test is simple. If more money would not change how you spend today, you are already operating from wealth. If it would, then you are still buying back control.
+
+Wealth is not being paper-rich with no time for family or those you care about. And it is not endless time with the people you love but no resources to create the life you want. Nor is it having money but lacking the health, energy, or company to enjoy it.
+
+Real wealth is the balance that gives you the time, the means, and the vitality to choose freely. It makes your life resilient to shocks, lets you walk away from bad deals, and funds work that matters while protecting the people you love.  
+
+Wealth is quiet control, not loud consumption. It is having many doors open, and the clarity to walk through the ones that align with your values.
+
+</details>
+
+---
+
+#### 🎯 Purpose
+**"What is your purpose?"**
+
+> My purpose is to take on hard problems that matter. `im still thinking about this`
+
+<details>
+<summary>Read my full answer</summary>
+
+<br>
+
+Purpose is not comfort. To me, it is the pursuit of challenges that demand everything from you and, in return, shape who you become. If success is about leaving nothing undone and work that endures the test of time, and wealth is about the freedom to choose as I please, then purpose is the compass that makes those choices meaningful.
+
+I see myself first as a problem-solver. Whether in research, technology, or life, my instinct is to wrestle with the impossible until it bends. But solving problems for its own sake is not enough. Purpose also means contribution: providing for my family, protecting those I love, and leaving behind ideas, stories, and work that last longer than my own lifetime.
+
+The Chariot taught me something important: to stop is to regress. Purpose is pursuit. It is momentum. It is control over direction even when the path is uncertain. That is why I am drawn to mountains - both the ones of rock and ice, and the metaphorical ones. They remind me that life's meaning comes from stepping forward into difficulty, not away from it.
+
+My purpose is to build, to solve, and to leave something behind that endures. If I can push against limits, take care of my people, and create work that still speaks when I am gone, then I have lived with purpose.
+
+</details>
