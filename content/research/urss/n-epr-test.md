@@ -1221,19 +1221,20 @@ p_{\mathbf 0} \;\ge\; 1 - 2\delta_\star + r
 $$
 Let's put everything together succinctly.
 
-**Theorem (Per-coordinate all-match test).**
-Let $\varrho$ be any $2n$-qubit state on $A^nB^n$ (no product/separability/i.i.d. assumption). For each pair $i$ define the single-pair match projectors
-$$
+> **Theorem (Per-coordinate all-match test).**
+>
+> Let $\varrho$ be any $2n$-qubit state on $A^nB^n$ (no product/separability/i.i.d. assumption). For each pair $i$ define the single-pair match projectors
+> $$
 \Pi_Z^{(i)}=\ket{00}\!\bra{00}_{A_iB_i}+\ket{11}\!\bra{11}_{A_iB_i},\qquad
 \Pi_X^{(i)}=\ket{++}\!\bra{++}_{A_iB_i}+\ket{--}\!\bra{--}_{A_iB_i}.
 $$
-Consider the test that chooses a basis string $b = (b_1, \dots, b_n) \in \{ Z, X \}^n$ uniformly at random, measures pair $i$ in basis $b_i$, and accepts *iff* all $n$ pairs match in their respective bases. Let
-$$
+> Consider the test that chooses a basis string $b = (b_1, \dots, b_n) \in \{ Z, X \}^n$ uniformly at random, measures pair $i$ in basis $b_i$, and accepts *iff* all $n$ pairs match in their respective bases. Let
+> $$
 \Pi_b=\bigotimes_{i=1}^n \Pi_{b_i}^{(i)},\qquad
-1-\delta_\star = \frac{1}{2^n}\sum_{b\in\{Z,X\}^n}\operatorname{tr}(\Pi_b\varrho).
+1-\delta_\star = \frac{1}{2^n}\sum_{b\in\{Z,X\}^n}\operatorname{tr}(\Pi_b\,\varrho).
 $$
-Then, writing $p_{\mathbf j}=\bra{\Psi_{\mathbf j}}\,\varrho\,\ket{\Psi_{\mathbf j}}$ for the Bell basis probabilities, the acceptance probability can be expressed as
-$$
+> Then, writing $p_{\mathbf j}=\bra{\Psi_{\mathbf j}}\,\varrho\,\ket{\Psi_{\mathbf j}}$ for the Bell basis probabilities, the acceptance probability can be expressed as
+> $$
 1-\delta_\star=\sum_{\mathbf j\in\{00,01,10,11\}^n} c_{\mathbf j}\,p_{\mathbf j},\qquad
 c_{\mathbf j}=
 \begin{cases}
@@ -1241,13 +1242,18 @@ c_{\mathbf j}=
 0, & \text{otherwise.}
 \end{cases}
 $$
-In particular,
-$$
+> In particular,
+> $$
 p_{\mathbf 0} \;\geq\; 1-2\delta_\star,
 $$
-
-where $\mathbf 0=(00,\dots,00)$. Equivalently,
+> where $\mathbf{0} = (00, \dots, 00)$. The Bell string $\mathbf{0}$ corresponds to the state $\ket{\Psi_{\mathbf 0}} = \ket{\Psi_{00}}^{\otimes n} = \ket{\text{EPR}}^{\otimes n}$, so the probability weight $p_{\mathbf 0}$ is
+> $$
+p_{\mathbf 0} = \bra{\Psi_{\mathbf 0}}\,\varrho\,\ket{\Psi_{\mathbf 0}}
+= \bra{\text{EPR}^{\otimes n}}\,\varrho\,\ket{\text{EPR}^{\otimes n}}
+= F(\varrho,\text{EPR}^{\otimes n})^2.
 $$
+> Therefore, by Fuchs-van de Graaf,
+> $$
 F(\varrho,\text{EPR}^{\otimes n}) \;\geq\; \sqrt{1-2\delta_\star},\qquad
 D(\varrho,\text{EPR}^{\otimes n}) \;\leq\; \sqrt{2\delta_\star}.
 $$
