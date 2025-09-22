@@ -900,14 +900,14 @@ $$
 $$
 Proof by induction on $n$.
 
-* Base $n=1$ holds (first line above).
-* Assume true for $n=k$:
+* Base $n = 1$ holds (first line above).
+* Assume true for $n = k$:
 $$
 \bigotimes_{i=1}^k\!\big(\ket{00}\!\bra{00} + \ket{11}\!\bra{11}\big)
 = \sum_{(s_1,\dots,s_k)\in\{00,11\}^k}
 \bigotimes_{i=1}^k \ket{s_i}\!\bra{s_i}.
 $$
-* Multiply both sides by the $(k+1)$-st factor:
+* Multiply both sides by the $(k + 1)$-th factor:
 $$
 \begin{aligned}
 &\left(\sum_{(s_1,\dots,s_k)\in\{00,11\}^k}
@@ -919,12 +919,12 @@ $$
 \left(\bigotimes_{i=1}^k \ket{s_i}\!\bra{s_i}\right)\otimes\ket{11}\!\bra{11}.
 \end{aligned}
 $$
-Combine the two sums into a single sum over all $(s_1,\dots,s_k,s_{k+1})\in\{00,11\}^{k+1}$, which yields exactly
+- Combine the two sums into a single sum over all $(s_1,\dots,s_k,s_{k+1})\in\{00,11\}^{k+1}$, which yields exactly
 $$
 \sum_{(s_1,\dots,s_{k+1})\in\{00,11\}^{k+1}}
 \bigotimes_{i=1}^{k+1}\ket{s_i}\!\bra{s_i}.
 $$
-This proves the statement for $n=k+1$. By induction the expansion holds for all $n$.
+- This proves the statement for $n = k + 1$. By induction the expansion holds for all $n$; tensor product distributes over finite sums.
 
 So the full expansion is
 $$
@@ -972,7 +972,7 @@ Using this lemma, let the *global all-match test* pick $Z$ or $X$ for **all** pa
 $$
 1 - \delta_\star ~=~ \frac{1}{2}\,\operatorname{tr}\!\left[\left(\bigotimes_{i=1}^{n}\Pi_Z^{(i)}\right)\varrho\right] + \frac{1}{2}\,\operatorname{tr}\!\left[\left(\bigotimes_{i=1}^n\Pi_X^{(i)}\right)\varrho\right],
 $$
-where $\delta_\star$ is the *true* error rate across the entire $\varrho$. Recall the single-pair identities
+where $\delta_\star$ is the *true* error rate across the entire $2n$-qubit block $\varrho$. Recall the single-pair identities
 $$
 \Pi_Z^{(i)}=\ket{\Psi_{00}}\!\bra{\Psi_{00}}+\ket{\Psi_{01}}\!\bra{\Psi_{01}},\qquad
 \Pi_X^{(i)}=\ket{\Psi_{00}}\!\bra{\Psi_{00}}+\ket{\Psi_{10}}\!\bra{\Psi_{10}}.
@@ -1005,12 +1005,13 @@ $$
 &=\operatorname{tr}\!\Bigg(\sum_{j_1,\dots,j_n\in\{00,01\}}
 \ket{\Psi_{j_1\cdots j_n}}\!\bra{\Psi_{j_1\cdots j_n}}\;\varrho\Bigg)\\[6pt]
 &=\sum_{j_1,\dots,j_n\in\{00,01\}}
-\operatorname{tr}\!\big(\ket{\Psi_{j_1\cdots j_n}}\!\bra{\Psi_{j_1\cdots j_n}}\;\varrho\big)&&\text{[linearity of trace]}\\[6pt]
+\operatorname{tr}\!\big(\ket{\Psi_{j_1\cdots j_n}}\!\bra{\Psi_{j_1\cdots j_n}}\;\varrho\,\big)&&\text{[linearity of trace]}\\[6pt]
 &=\sum_{j_1,\dots,j_n\in\{00,01\}}
-\operatorname{tr}\!\big(\varrho\,\ket{\Psi_{j_1\cdots j_n}}\!\bra{\Psi_{j_1\cdots j_n}}\big)\\[6pt]
+\operatorname{tr}\!\big(\bra{\Psi_{j_1\cdots j_n}}\,\varrho\,\ket{\Psi_{j_1\cdots j_n}}\big)
+&&\text{[cyclicity of trace]}\\[6pt]
 &=\sum_{j_1,\dots,j_n\in\{00,01\}}
 \bra{\Psi_{j_1\cdots j_n}}\,\varrho\,\ket{\Psi_{j_1\cdots j_n}}
-&&\text{[cyclicity of trace]}\\[6pt]
+&&\text{[trace of scalar = itself]}\\[6pt]
 &=\sum_{j_1,\dots,j_n\in\{00,01\}} p_{j_1\cdots j_n}. &&\text{[Born rule]}
 \end{aligned}
 $$
@@ -1076,5 +1077,177 @@ For trace distance $D(\varrho,\text{EPR}^{\otimes n})$, Fuchs–van de Graaf giv
 $$
 D(\varrho,\text{EPR}^{\otimes n})\le\sqrt{2\delta_\star}.
 $$
-As there are no product/separability/independence assumption inside the block, this result will be useful for the hard-case!
+This argument already works without assuming any product structure, separability, or i.i.d. property inside the block. It therefore provides a valid bound in the fully general hard case. However, the analysis above relied on using the same basis for all coordinates. Can we do better?
 
+A natural next step is to consider a more general test where the basis choice is made independently per coordinate. Precisely we choose a basis string $b = (b_1, \dots, b_n)$ uniformly at random such that $b_i \in \{Z, X\}$. For each coordinate $i \in [n]$, measure in $b_i$. Accept *iff* **every pair matches its own basis $b_i$**. Define $\Pi_b = \bigotimes_{i=1}^n \Pi_{b_i}^{(i)}$. Then the acceptance probability:
+$$
+1 - \delta_\star = \frac{1}{2^n}\sum_{b \in \{Z, X\}^n} \text{tr}(\Pi_b\,\varrho), \qquad(1)
+$$
+where $\delta_\star$ is the *true* error rate across the entire $2n$-qubit block $\varrho$. Let $\mathbf{j} = (j_1, \dots, j_n) \in \{00, 01, 10, 11\}^n$ denote a Bell string and the probability
+$$
+p_\mathbf{j} = \bra{\Psi_\mathbf{j}} \varrho \ket{\Psi_\mathbf{j}} \qquad \text{and}\qquad \sum_{\mathbf{j} \in \{ 00, 01, 10, 11 \}^n} p_\mathbf{j} = 1,
+$$
+similar to what we've done in the simpler case earlier. As a reminder, for one coordinate,
+$$
+\Pi_Z = \ket{\Psi_{00}}\!\bra{\Psi_{00}} + \ket{\Psi_{01}}\!\bra{\Psi_{01}}, \quad \Pi_X = \ket{\Psi_{00}}\!\bra{\Psi_{00}} + \ket{\Psi_{10}}\!\bra{\Psi_{10}}.
+$$
+For a basis pattern $b \in \{Z, X\}^n$, a Bell string $\mathbf{j} = (j_1, \dots, j_n)$ is accepted *iff* for every $i$,
+$$
+j_i \in \begin{cases}
+S_Z = \{00, 01\},~ b_i = Z,\\
+S_X = \{00, 10\},~ b_i = X.
+\end{cases}
+$$
+In words, each coordinate is accepted in its chosen basis. Note that $j_i = 11$ is never accepted in neither basis.
+
+Define the set of Bell strings accepted by $b$:
+$$
+B_b := \left\{~ \mathbf{j} \in \{ 00, 01, 10, 11 \}^n \mid j_i \in S_{b_i} ~\forall i \in [n] ~\right\} = \{~ \mathbf{j} : \mathbf{j} \text{ passes under } b ~\}.
+$$
+Then
+$$
+\text{tr}(\Pi_b \,\varrho) = \sum_{\mathbf{j} \in B_b} p_\mathbf{j}.
+$$
+Plugging into $(1)$, we get
+$$
+1 - \delta_\star = \frac{1}{2^n} \sum_{b \in \{Z, X\}^n}\ \sum_{\mathbf{j} \in B_b} p_\mathbf{j}. \qquad(\text{A})
+$$
+To analyse this expression, we want to know, for each Bell string $\mathbf j$, how much it contributes to the acceptance probability. Right now, that contribution is hidden inside the sets $B_b$, which vary with the basis pattern $b$. To expose it, we first rewrite the inner sum over a fixed universal set $U$ using an indicator function. This lets us safely interchange the two sums (since both are finite), and after doing so the coefficient of each $\mathbf j$ (the fraction of basis patterns $b$ that accept it) appears explicitly.
+
+Precisely, let
+$$
+U:=\{00,01,10,11\}^n,\qquad \mathbf 1_{\{\mathbf j\in B_b\}}=
+\begin{cases}
+1,&\mathbf j\in B_b,\\
+0,&\text{otherwise.}
+\end{cases}
+$$
+Then for each $b$,
+$$
+\sum_{\mathbf j\in B_b} p_{\mathbf j}
+=\sum_{\mathbf j\in U}\mathbf 1_{\{\mathbf j\in B_b\}}\,p_{\mathbf j}.
+\qquad(\text{B})
+$$
+(We’ve just replaced “sum over a moving set $B_b$” by “sum over a fixed set $U$ with a 0/1 mask”.)
+
+Substitute $(\text{B})$ into $(\text{A})$:
+
+$$
+1-\delta_\star
+=\frac{1}{2^n}\sum_{b\in\{Z,X\}^n}\ \sum_{\mathbf j\in U}\mathbf 1_{\{\mathbf j\in B_b\}}\,p_{\mathbf j}.
+$$
+Now both sums are **finite**, so we can swap them (this is just re-indexing a finite double sum):
+$$
+1-\delta_\star
+=\sum_{\mathbf j\in U}\left(\frac{1}{2^n}\sum_{b\in\{Z,X\}^n}\mathbf 1_{\{\mathbf j\in B_b\}}\right)p_{\mathbf j}.
+\qquad(\text{C})
+$$
+The term in parentheses is the **coefficient** of $\mathbf j$: the fraction of basis patterns that accept it. Denote this coefficient by $c_{\mathbf j}$; define
+$$
+\begin{aligned}
+c_{\mathbf j} :=~ &\frac{1}{2^n}\,\big|\{\,b\in\{Z,X\}^n:\mathbf j\in B_b\,\}\big|\\
+=~ &\frac{1}{2^n}\sum_{b\in\{Z,X\}^n}\mathbf 1_{\{\mathbf j\in B_b\}}.
+\end{aligned}
+$$
+Then $(\text{C})$ becomes
+$$
+1-\delta_\star = \sum_{\mathbf j\in U} c_{\mathbf j}\,p_{\mathbf j}
+\qquad(2)
+$$
+We now determine the coefficients $c_\mathbf{j}$ by a direct counting argument. For a fixed $\mathbf{j} = (j_1, \dots, j_n)$,
+- If $j_i = 00$: both $Z$ and $X$ accept $\Rightarrow$ two basis choices for $b_i$,
+- If $j_i = 01$ or $10$: exactly one choice,
+- If $j_i = 11$: zero choices.
+Multiplying across coordinates $[n]$ gives
+$$
+\big|\{b:\mathbf j\in B_b\}\big| = 2^{\#00(\mathbf j)} \cdot 1^{\#01(\mathbf j) + \#10(\mathbf j)} \cdot 0^{\#11(\mathbf j)}.
+$$
+Hence
+$$
+c_\mathbf{j} = 
+\begin{cases}
+2^{\#00(\mathbf j) - n}&, &\text{if no } j_i = 11,\\
+0&, &\text{otherwise}.
+\end{cases}
+$$
+So
+$$
+1 - \delta_\star = \sum_{\mathbf{j} \in \{ 00, 01, 10 \}^n} 2^{\#00(\mathbf j) - n} \;p_\mathbf{j}.
+$$
+We now isolate the $p_\mathbf{0}$ term by splitting out the $\mathbf 0 = (00, \ldots, 00)$ term (note that $c_{\mathbf 0} = 2^{n-n} = 1$; the all-$00$ string is accepted by every $b \in \{ Z, X \}^n$):
+$$
+1-\delta_\star
+~=~ p_{\mathbf 0} + \sum_{\mathbf j\neq \mathbf 0} c_{\mathbf j}\,p_{\mathbf j},
+\qquad\implies\qquad
+p_{\mathbf 0}
+~=~ (1-\delta_\star) - \sum_{\mathbf j\neq \mathbf 0} c_{\mathbf j}\,p_{\mathbf j}.
+\qquad(3)
+$$
+
+Bounding the tail: For any $\mathbf j\neq\mathbf 0$ with *no* $11$, we have $\#00(\mathbf j) \leq n-1$, hence
+$$
+c_{\mathbf j} = 2^{\#00(\mathbf j)-n} \leq 2^{(n-1)-n} = \tfrac{1}{2}.
+$$
+If $\mathbf j$ contains a $11$, then $c_{\mathbf j}=0$ by definition. Therefore
+$$
+\sum_{\mathbf j\neq \mathbf 0} c_{\mathbf j}\,p_{\mathbf j} \;=\; \sum_{\substack{\mathbf j\neq \mathbf 0\\ \text{no }11}} c_{\mathbf j}\,p_{\mathbf j}
+\;\leq\; \sum_{\substack{\mathbf j\neq \mathbf 0\\ \text{no }11}} \tfrac{1}{2}\,p_{\mathbf j} \;=\; \tfrac{1}{2} \sum_{\substack{\mathbf j\neq \mathbf 0\\ \text{no }11}} p_{\mathbf j}.
+\qquad(4)
+$$
+Let
+$$
+r \;:=\; \sum_{\mathbf j:\,\exists i\ j_i=11} p_{\mathbf j}\ \ (\geq 0)
+$$
+denote the total probability mass on Bell strings containing at least one $11$. These strings never contribute to acceptance since $c_\mathbf{j} = 0$ in that case by definition. Since probabilities sum to $1$,
+$$
+\sum_{\substack{\mathbf j\neq \mathbf 0\\ \text{no }11}} p_{\mathbf j}
+= 1 - p_{\mathbf 0} - r.
+\qquad(5)
+$$
+Plug $(5)$ into $(4)$:
+$$
+\sum_{\mathbf j\neq \mathbf 0} c_{\mathbf j}\,p_{\mathbf j}
+\;\leq\; \tfrac{1}{2} (1 - p_{\mathbf 0} - r).
+\qquad(6)
+$$
+To conclude a bound, we insert $(6)$ into $(3)$ and rearrange:
+
+$$
+p_{\mathbf 0} \;\ge\; (1-\delta_\star) - \tfrac{1}{2}(1 - p_{\mathbf 0} - r)
+\;\implies\;
+p_{\mathbf 0} \;\ge\; 1 - 2\delta_\star + r
+\;\ge\; 1 - 2\delta_\star.
+\qquad(7)
+$$
+Let's put everything together succinctly.
+
+**Theorem (Per-coordinate all-match test).**
+Let $\varrho$ be any $2n$-qubit state on $A^nB^n$ (no product/separability/i.i.d. assumption). For each pair $i$ define the single-pair match projectors
+$$
+\Pi_Z^{(i)}=\ket{00}\!\bra{00}_{A_iB_i}+\ket{11}\!\bra{11}_{A_iB_i},\qquad
+\Pi_X^{(i)}=\ket{++}\!\bra{++}_{A_iB_i}+\ket{--}\!\bra{--}_{A_iB_i}.
+$$
+Consider the test that chooses a basis string $b = (b_1, \dots, b_n) \in \{ Z, X \}^n$ uniformly at random, measures pair $i$ in basis $b_i$, and accepts *iff* all $n$ pairs match in their respective bases. Let
+$$
+\Pi_b=\bigotimes_{i=1}^n \Pi_{b_i}^{(i)},\qquad
+1-\delta_\star = \frac{1}{2^n}\sum_{b\in\{Z,X\}^n}\operatorname{tr}(\Pi_b\varrho).
+$$
+Then, writing $p_{\mathbf j}=\bra{\Psi_{\mathbf j}}\,\varrho\,\ket{\Psi_{\mathbf j}}$ for the Bell basis probabilities, the acceptance probability can be expressed as
+$$
+1-\delta_\star=\sum_{\mathbf j\in\{00,01,10,11\}^n} c_{\mathbf j}\,p_{\mathbf j},\qquad
+c_{\mathbf j}=
+\begin{cases}
+2^{\,\#00(\mathbf j)-n}, & \text{if $\mathbf j$ contains no $11$,}\\
+0, & \text{otherwise.}
+\end{cases}
+$$
+In particular,
+$$
+p_{\mathbf 0} \;\geq\; 1-2\delta_\star,
+$$
+
+where $\mathbf 0=(00,\dots,00)$. Equivalently,
+$$
+F(\varrho,\text{EPR}^{\otimes n}) \;\geq\; \sqrt{1-2\delta_\star},\qquad
+D(\varrho,\text{EPR}^{\otimes n}) \;\leq\; \sqrt{2\delta_\star}.
+$$

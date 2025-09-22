@@ -1,10 +1,10 @@
 +++
 date = '2025-08-18T19:39:11+01:00'
 draft = false
-title = 'Buy the fear. Sell the hype. £24k tax-freeeeee.'
+title = 'Buy the fear, sell the hype.'
 +++
 
-I closed a four-month trade with a +124.5% gain, banking £24k tax-free.
+I closed a four-month trade with a +124.5% gain, banking ~£24k tax-free.
 
 #### Fake crisis, real opportunity
 

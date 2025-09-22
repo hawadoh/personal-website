@@ -26,7 +26,7 @@ Then for each pair $i \in \{1, \dots, N\} = [N]$, they measure locally *in seque
 
 After all $N$ measurement rounds (one round for each i.i.d. copy of $\rho_{AB}$), Alice and Bob publicly reveal their outcome strings $x = (x_1, \dots, x_N)$, $\tilde{x} = (\tilde{x}_1, \dots, \tilde{x}_N)$ over the CAC.
 
-Unlike BB84, we **force the bases to match** every round, so every measurement contributes to the statistic. Therefore, for each $i \in [N]$, Alice and Bob measure in the same basis and we define the observed mismatch (error) rate
+Unlike BB84, in this context we're not interested in secrecy. We **force the bases to match** every round, so every measurement contributes to the statistic. Therefore, for each $i \in [N]$, Alice and Bob measure in the same basis and we define the observed mismatch (error) rate
 $$
 \hat{\delta}
 ~=~\frac{1}{N}\,\Big|\{\,i\in[N]: x_i \neq \tilde{x}_i\,\}\Big|,
@@ -58,7 +58,7 @@ $$
 D(\rho,\sigma) := \frac{1}{2}\|\rho - \sigma\|_1.
 $$
 
-**Lemma.** Let $\rho_{AB}$ be a bipartite state where $A$ and $B$ are each systems of a single qubit. The probability of Alice and Bob getting matching outcomes (`00` or `11`) when they both measure in the standard basis ($Z$) is given by $\text{tr}(\Pi_Z\,\rho_{AB})$, where 
+**Lemma.** Let $\rho_{AB}$ be a bipartite state where $A$ and $B$ are each systems of a single qubit, that is, $\rho_{AB}$ is a $4 \times 4$ density matrix acting on $\mathbb{C}^2 \times \mathbb{C}^2$. The probability of Alice and Bob getting matching outcomes (`00` or `11`) when they both measure in the standard basis ($Z$) is given by $\text{tr}(\Pi_Z\,\rho_{AB})$, where 
 $$
 \ket{\text{EPR}} = \ket{\Psi_{00}} = \frac{1}{\sqrt{2}}(\ket{00} + \ket{11}), \qquad \ket{\Psi_{01}} = \frac{1}{\sqrt{2}}(\ket{00} - \ket{11}),
 $$
@@ -80,7 +80,7 @@ The probability of matching outcomes,
 $$
 \begin{aligned}
 \Pr(\text{match}_{Z}) &= \Pr(00) + \Pr(11)
-\\&= \text{tr}(M_{00} + M_{11}) &\text{by Born rule}
+\\&= \text{tr}(M_{00}\,\rho_{AB}) + \text{tr}(M_{11}\,\rho_{AB}) &\text{by Born rule}
 \\&= \text{tr}(\ket{00}\!\bra{00}\,\rho_{AB}) + \text{tr}(\ket{11}\!\bra{11}\,\rho_{AB}) &\text{by def. of POVM operator}
 \\&= \text{tr}(\bra{00}\,\rho_{AB}\,\ket{00}) + \text{tr}(\bra{11}\,\rho_{AB}\,\ket{11}) &\text{by cyclicity of trace}
 \\&= \bra{00}\,\rho_{AB}\,\ket{00} + \bra{11}\,\rho_{AB}\,\ket{11} &\text{as trace of scalar = itself.}
@@ -125,7 +125,7 @@ $$
 \end{aligned}
 $$
 
-Similarly one can easily verify
+Using the same algebra, one can easily verify
 $$
 \ket{\Psi_{10}}
 = \frac{1}{\sqrt2}(\ket{01} + \ket{10})
@@ -236,7 +236,7 @@ $$
 \tfrac{1}{2}\,\text{tr}\bigl(\Pi_Z\,\rho_{AB}\bigr) + \tfrac{1}{2}\,\text{tr}\bigl(\Pi_X\,\rho_{AB}\bigr) &= 1 - \delta &\text{from $(*)$ above}
 \\[6pt]\tfrac{1}{2}(p_{00} + p_{01}) + \tfrac{1}{2}(p_{00} + p_{10}) &= 1 - \delta
 \\[6pt]p_{00} + \tfrac{1}{2}(p_{01} + p_{10}) &= 1 - \delta
-\\[6pt]p_{00} + \tfrac{1}{2}(1 - p_{00} - p_{11}) &= 1 - \delta &\text{by (norm)}
+\\[6pt]p_{00} + \tfrac{1}{2}(1 - p_{00} - p_{11}) &= 1 - \delta &\text{by (Norm)}
 \\[6pt]\tfrac{1}{2}p_{00} - \tfrac{1}{2}p_{11} &= \tfrac{1}{2} - \delta
 \\[6pt]p_{00} - p_{11} &= 1 - 2\delta.
 \end{aligned}
@@ -410,7 +410,7 @@ For the promise gap to be non-trivial, we need $\delta_{\text{far}} > \delta_{\t
 $$
 \varepsilon_1 < \frac{\varepsilon_2^2}{2}.
 $$
-This unfortunately imposes an extra constraint beyond the generic condition $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$.
+Unfortunately, this introduces an extra constraint beyond the generic condition $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$.
 
 Now let's look at a natural proposal for the decision rule...
 
@@ -441,7 +441,7 @@ $$
 $$
 i.e. the completeness error is only the exponentially small Chernoff tail and not the horrible $50\%$ we were getting. By the same choice $c = \delta_{\text{far}} - t$ on the upper side, we get a *symmetric* buffer $(c, \delta_{\text{far}})$ that makes the soundness error equally tiny.
 
-So... the correct, albeit counter-intuitive, solution is to use a single decision cutoff $c$ placed strategically inside the promise gap $(\delta_{\text{close}}, \delta_{\text{far}})$. We've come full circle!
+So the correct solution, counter-intuitive as it may seem, is to place one decision cutoff $c$ inside the promise gap $(\delta_{\text{close}}, \delta_{\text{far}})$. We've come full circle!
 
 A very natural way to pick the margin $t > 0$ is to split the gap between $\delta_{\text{close}}$ and $\delta_{\text{far}}$ in half:
 $$
@@ -484,14 +484,14 @@ Correctness includes completeness ($\mathbf{H_0}$: "close" $\Rightarrow$ "accept
    $$
    \hat{\delta} < \delta + t ~\leq~ (c - t) + t ~=~ c,
    $$
-   hence $\hat{\delta} \leq c$ and we accept "close".
+   hence $\hat{\delta} \leq c$ and we accept as expected ("close").
 
 2. **Soundness** ("far" case).  
    If the true $\delta \geq \delta_{\text{far}} = c + t$, then conditioned on $\mathcal{G}$ the left inequality ($-t < \hat{\delta} - \delta$) gives
    $$
    \hat{\delta} > \delta - t ~\geq~ (c + t) - t ~=~ c,
    $$
-   hence $\hat{\delta} > c$ and we reject ("far").
+   hence $\hat{\delta} > c$ and we reject as expected ("far").
 
 Both completeness ($\delta \leq \delta_{\text{close}}$) and soundness ($\delta \geq \delta_{\text{far}}$) can fail only if $|\hat{\delta} - \delta| \geq t$ (the *bad* event), which the concentration bound guarantees occurs with probability at most $\alpha/2$. All that remains is to choose the sample size $N$ so that $\Pr[\mathcal{G}] \geq 1 - \alpha$.
 
