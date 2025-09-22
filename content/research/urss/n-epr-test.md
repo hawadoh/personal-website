@@ -1158,6 +1158,7 @@ We now determine the coefficients $c_\mathbf{j}$ by a direct counting argument. 
 - If $j_i = 00$: both $Z$ and $X$ accept $\Rightarrow$ two basis choices for $b_i$,
 - If $j_i = 01$ or $10$: exactly one choice,
 - If $j_i = 11$: zero choices.
+
 Multiplying across coordinates $[n]$ gives
 $$
 \big|\{b:\mathbf j\in B_b\}\big| = 2^{\#00(\mathbf j)} \cdot 1^{\#01(\mathbf j) + \#10(\mathbf j)} \cdot 0^{\#11(\mathbf j)}.
