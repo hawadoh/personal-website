@@ -1077,9 +1077,9 @@ For trace distance $D(\varrho,\text{EPR}^{\otimes n})$, Fuchs–van de Graaf giv
 $$
 D(\varrho,\text{EPR}^{\otimes n})\le\sqrt{2\delta_\star}.
 $$
-This argument already works without assuming any product structure, separability, or i.i.d. property inside the block. It therefore provides a valid bound in the fully general hard case. However, the analysis above relied on using the same basis for all coordinates. Can we do better?
+This argument already works without assuming any product structure, separability, or i.i.d. property inside the block. It therefore provides a valid bound in the fully general hard case. However, the analysis above relied on using the same basis for all coordinates. Can we do better? A natural next step is to consider a more general test where the basis choice is made independently per coordinate. 
 
-A natural next step is to consider a more general test where the basis choice is made independently per coordinate. Precisely we choose a basis string $b = (b_1, \dots, b_n)$ uniformly at random such that $b_i \in \{Z, X\}$. For each coordinate $i \in [n]$, measure in $b_i$. Accept *iff* **every pair matches its own basis $b_i$**. Define $\Pi_b = \bigotimes_{i=1}^n \Pi_{b_i}^{(i)}$. Then the acceptance probability:
+Precisely, we choose a basis string $b = (b_1, \dots, b_n)$ uniformly at random such that $b_i \in \{Z, X\}$. For each coordinate $i \in [n]$, measure in $b_i$. Accept *iff* **every pair matches its own basis $b_i$**. Define $\Pi_b = \bigotimes_{i=1}^n \Pi_{b_i}^{(i)}$. Then the acceptance probability:
 $$
 1 - \delta_\star = \frac{1}{2^n}\sum_{b \in \{Z, X\}^n} \text{tr}(\Pi_b\,\varrho), \qquad(1)
 $$
@@ -1199,7 +1199,7 @@ Let
 $$
 r \;:=\; \sum_{\mathbf j:\,\exists i\ j_i=11} p_{\mathbf j}\ \ (\geq 0)
 $$
-denote the total probability mass on Bell strings containing at least one $11$. These strings never contribute to acceptance since $c_\mathbf{j} = 0$ in that case by definition. Since probabilities sum to $1$,
+denote the total probability mass on Bell strings containing at least one $11$. As we've seen just now, these strings never contribute to acceptance since $c_\mathbf{j} = 0$ in that case. Since probabilities sum to $1$,
 $$
 \sum_{\substack{\mathbf j\neq \mathbf 0\\ \text{no }11}} p_{\mathbf j}
 = 1 - p_{\mathbf 0} - r.
@@ -1217,10 +1217,10 @@ $$
 p_{\mathbf 0} \;\ge\; (1-\delta_\star) - \tfrac{1}{2}(1 - p_{\mathbf 0} - r)
 \;\implies\;
 p_{\mathbf 0} \;\ge\; 1 - 2\delta_\star + r
-\;\ge\; 1 - 2\delta_\star.
+\;\ge\; 1 - 2\delta_\star,
 \qquad(7)
 $$
-Let's put everything together succinctly.
+since $r \geq 0$. Let's put everything together succinctly.
 
 > **Theorem (Per-coordinate all-match test).**
 >
@@ -1258,3 +1258,151 @@ $$
 F(\varrho,\text{EPR}^{\otimes n}) \;\geq\; \sqrt{1-2\delta_\star},\qquad
 D(\varrho,\text{EPR}^{\otimes n}) \;\leq\; \sqrt{2\delta_\star}.
 $$
+
+### Block oracle $\mathbb{O}_\star(\varrho)$ (per‑coordinate all‑match)
+
+**Input:** one fresh block $\varrho$ on $A^nB^n$.
+
+**Procedure (single block):**
+
+1. Pick a basis string $b=(b_1,\dots,b_n)\in\{Z,X\}^n$ uniformly at random.
+2. For each coordinate $i$, measure $(A_i,B_i)$ in basis $b_i$.
+3. Output the **failure bit**
+   $$
+   Y_\star = \mathbf{1}[\text{not all \(n\) pairs match their own basis}],
+   $$
+   i.e. $Y_\star=0$ *iff* every pair matched.
+
+**Distribution:** $Y_\star\sim\text{Bernoulli}(\delta_\star)$, where
+$$
+1-\delta_\star=\frac{1}{2^n}\sum_{b\in\{Z,X\}^n}\operatorname{tr}(\Pi_b\,\varrho)
+\quad\text{with}\quad
+\Pi_b=\bigotimes_{i=1}^n\Pi_{b_i}^{(i)}.
+$$
+We will call $\mathbb{O}_\star$ once per block. Over $N$ i.i.d. blocks we get i.i.d. bits $Y_{\star,1},\dots,Y_{\star,N}$ with mean $\delta_\star$, and we estimate
+$$
+\hat\delta_\star=\frac{1}{N}\sum_{j=1}^N Y_{\star,j}.
+$$
+### Translate global promises $\bigl(D(\varrho,\Phi^{\otimes n})\bigr)$ into a gap on $\delta_\star$
+
+We want to distinguish
+$$
+\mathbf H_0:\ D(\varrho,\Phi^{\otimes n}) \leq \varepsilon_1
+\qquad\text{vs.}\qquad
+\mathbf H_1:\ D(\varrho,\Phi^{\otimes n}) \geq \varepsilon_2,
+$$
+using only the block oracle above.
+
+Two directions:
+* **Soundness direction (far $\Rightarrow$ large $\delta_\star$).**
+  From $D(\varrho,\Phi^{\otimes n})\le\sqrt{2\delta_\star}$ we get
+  $$
+  D(\varrho,\Phi^{\otimes n})\ge \varepsilon_2\ \Longrightarrow\ \delta_\star\ \ge\ \underbrace{\varepsilon_2^2/2}_{:=\ \delta^\text{far}_\star}. \quad\text{(necessary)}
+  $$
+* **Completeness direction (close $\Rightarrow$ small $\delta_\star$).**
+  The acceptance POVM element for a block is $\overline\Pi := 2^{-n}\sum_b\Pi_b$, and $\operatorname{tr}(\overline\Pi\,\Phi^{\otimes n})=1$ (EPR matches in either basis at every coordinate). The variational/POVM inequality gives
+  $$
+  \bigl|\,\operatorname{tr}(\overline\Pi\,\varrho)-1\,\bigr| \le D(\varrho,\Phi^{\otimes n})
+  \quad\Rightarrow\quad
+  \delta_\star = 1-\operatorname{tr}(\overline\Pi\,\varrho)\ \le\ D(\varrho,\Phi^{\otimes n}).
+  $$
+  Hence
+  $$
+  D(\varrho,\Phi^{\otimes n})\le \varepsilon_1\ \Longrightarrow\ \delta_\star\ \le\ \underbrace{\varepsilon_1}_{:=\ \delta^\text{close}_\star}. \quad\text{(sufficient)}
+  $$
+  (Same logic we used in the single‑pair finite‑sample proof; here we just plug the block acceptance operator. )
+
+So the promise gap is
+$$
+\Delta_\star := \delta^\text{far}_\star-\delta^\text{close}_\star
+= \frac{\varepsilon_2^2}{2}-\varepsilon_1,
+$$
+and we require the condition
+$$
+\varepsilon_1 < \varepsilon_2^2/2 \quad(\text{or there's no gap to separate}).
+$$
+### Decision rule
+
+Set
+$$
+t := \frac{\Delta_\star}{2}=\frac{\varepsilon_2^2-2\varepsilon_1}{4},
+\qquad
+c_\star := \frac{\delta^\text{close}_\star+\delta^\text{far}_\star}{2}
+= \frac{2\varepsilon_1+\varepsilon_2^2}{4}.
+$$
+
+> **Rule.** After $N$ blocks, compute $\hat\delta_\star$.
+> Accept “**close**” iff $\hat\delta_\star \leq c_\star$; otherwise say “**far**”.
+
+This mirrors our cutoff $c = \frac{2\varepsilon_1+\varepsilon_2^2}{4}$ in the single-pair case.
+
+### Correctness (conditioned on the good event)
+
+By Hoeffding, for any $t>0$,
+$$
+\Pr\!\left(\,|\hat\delta_\star-\delta_\star|\geq t\,\right)\leq 2e^{-2Nt^2}.
+$$
+On the good event $\mathcal{G} = \left\{ |\hat\delta_\star - \delta_\star| < t \right\}$:
+
+* If $D\le \varepsilon_1$ then $\delta_\star\le\delta^\text{close}_\star=c_\star-t$, hence $\hat\delta_\star \leq c_\star$ $\Rightarrow$ **accept**.
+* If $D\ge \varepsilon_2$ then $\delta_\star\ge\delta^\text{far}_\star=c_\star+t$, hence $\hat\delta_\star > c_\star$ $\Rightarrow$ **reject**.
+
+Thus each error happens only if the good event fails.
+
+Pick $t=(\varepsilon_2^2-2\varepsilon_1)/4$ and demand the tail $\le\alpha$:
+
+$$
+2e^{-2Nt^2}\le \alpha
+\quad\Longleftrightarrow\quad
+\boxed{\ N\ \ge\ \frac{8}{(\varepsilon_2^2-2\varepsilon_1)^2}\,\ln\!\frac{2}{\alpha}\ }.
+$$
+
+As a reminder, this result is fully adversarial within each block (the realistic lab setting), but assumes the source provides i.i.d. blocks across runs, so that we can estimate the block-level error rate from many independent samples. Let's package everything together cleanly.
+
+> **Theorem.**
+> 
+> Let $n \geq 1$ and let $\varrho$ be any $2n$-qubit state on $A^nB^n$ (arbitrary correlations across coordinates). Fix tolerances $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$ and failure probability $\alpha \in (0,1)$ with $\varepsilon_1 < \varepsilon_2^2/2$.
+> 
+> Run the per‑coordinate all‑match block oracle $\mathbb{O}_\star$ on $N$ i.i.d. blocks, yielding $\hat\delta_\star$. With cutoff
+> $$
+c_\star = \frac{2\varepsilon_1 + \varepsilon_2^2}{4},
+$$
+> accept “close” iff $\hat\delta_\star \leq c_\star$.
+> 
+> If
+> $$
+N\ \geq\ \frac{8}{(\varepsilon_2^2-2\varepsilon_1)^2}\,\ln\!\frac{2}{\alpha} \qquad\Bigl(=O\bigl((\varepsilon_2^2-2\varepsilon_1)^{-2}\bigr)\Bigr),
+$$
+> then:
+> * **Completeness.** If $D(\varrho, \Phi^{\otimes n}) \leq \varepsilon_1$, the test accepts with probability $\geq 1 - \alpha$.
+> * **Soundness.** If $D(\varrho, \Phi^{\otimes n}) \geq \varepsilon_2$, the test rejects with probability $\geq 1 - \alpha$.
+> * **Promise gap.** If $\varepsilon_1 < D(\varrho, \Phi^{\otimes n}) < \varepsilon_2$, no guarantee is made on the outcome; the test may go either way (accept or reject).
+
+---
+
+> **Corollary (hard case, non‑tolerant)**
+> 
+> For hypotheses $\mathbf H_0:\varrho=\Phi^{\otimes n}$ vs. $\mathbf H_1:D(\varrho,\Phi^{\otimes n}) \geq \varepsilon$, accept iff **no** block fails (i.e. $\hat\delta_\star=0$). If
+> $$
+N\ \geq\ \frac{2}{\varepsilon^2}\,\ln\!\frac{1}{\alpha},
+$$
+> then completeness is trivial and soundness holds since $\delta_\star \geq \varepsilon^2/2\Rightarrow \Pr[\text{no fail}]\leq e^{-N\varepsilon^2/2} \leq \alpha$. (Same algebra as the single‑pair corollary; we just swap in $\delta_\star$.)
+
+---
+
+**Extension (non-i.i.d. blocks).**
+
+So far we assumed $N$ independent blocks of the $2n$-qubit state $\varrho$. In reality, an adversary (or a noisy source with memory) could prepare one **arbitrary joint state** across all blocks. Fortunately, our test is *non-adaptive* and *incoherent* (local $Z/X$ measurements chosen up-front), so we can apply the general reduction of Fawzi–Kueng–Markham–Oufkir (Theorem 2.3, arXiv:2401.16922). Their result upgrades any such i.i.d. analysis to the fully non-i.i.d. setting with only a **polynomial/polylog overhead** in sample complexity. Concretely, this means our clean block-level theorem remains valid even when the $N$ blocks come from a single adversarial global state, so the protocol certifies $\Phi^{\otimes n}$ under the strongest model of cross-block correlations, not just in the i.i.d. case.
+
+> **Note.**
+> * **Adaptive vs. non-adaptive** is about *when you choose the measurement*.
+>
+>   *Adaptive*: you let early outcomes influence later measurement choices.
+>
+>   *Non-adaptive*: you fix the measurement pattern up front.
+> 
+> * **Coherent vs. incoherent** is about *how you measure across copies*.
+>
+>   *Coherent*: you could apply a joint entangled measurement across several copies of the state at once (like a collective Bell measurement).
+>
+>   *Incoherent*: you restrict yourself to local, single-copy measurements, run independently on each copy, and then do all the combining in *classical postprocessing*.
