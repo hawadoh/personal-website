@@ -1347,7 +1347,7 @@ On the good event $\mathcal{G} = \left\{ |\hat\delta_\star - \delta_\star| < t \
 * If $D\le \varepsilon_1$ then $\delta_\star\le\delta^\text{close}_\star=c_\star-t$, hence $\hat\delta_\star \leq c_\star$ $\Rightarrow$ **accept**.
 * If $D\ge \varepsilon_2$ then $\delta_\star\ge\delta^\text{far}_\star=c_\star+t$, hence $\hat\delta_\star > c_\star$ $\Rightarrow$ **reject**.
 
-Thus each error happens only if the good event fails.
+Thus each error happens only if the good event $\mathcal{G}$ fails.
 
 Pick $t=(\varepsilon_2^2-2\varepsilon_1)/4$ and demand the tail $\le\alpha$:
 
@@ -1392,7 +1392,7 @@ $$
 
 **Extension (non-i.i.d. blocks).**
 
-So far we assumed $N$ independent blocks of the $2n$-qubit state $\varrho$. In reality, an adversary (or a noisy source with memory) could prepare one **arbitrary joint state** across all blocks. Fortunately, our test is *non-adaptive* and *incoherent* (local $Z/X$ measurements chosen up-front), so we can apply the general reduction of Fawzi–Kueng–Markham–Oufkir (Theorem 2.3, arXiv:2401.16922). Their result upgrades any such i.i.d. analysis to the fully non-i.i.d. setting with only a **polynomial/polylog overhead** in sample complexity. Concretely, this means our clean block-level theorem remains valid even when the $N$ blocks come from a single adversarial global state, so the protocol certifies $\Phi^{\otimes n}$ under the strongest model of cross-block correlations, not just in the i.i.d. case.
+So far we assumed $N$ independent blocks of the $2n$-qubit state $\varrho$. In reality, an adversary (or a noisy source with memory) could prepare one **arbitrary joint state** across all blocks. Fortunately, our test is *non-adaptive* and *incoherent* (local $Z/X$ measurements chosen up-front), so we can apply the general reduction of Fawzi–Kueng–Markham–Oufkir (FKMO) (Theorem 2.3, arXiv:2401.16922). Their result upgrades any such i.i.d. analysis to the fully non-i.i.d. setting with only a **polylogarithmic** overhead in sample complexity. This means our clean block-level theorem remains valid even when the $N$ blocks come from a single adversarial global state, so the protocol certifies $\Phi^{\otimes n}$ under the strongest model of cross-block correlations, not just in the i.i.d. case.
 
 > **Note.**
 > * **Adaptive vs. non-adaptive** is about *when you choose the measurement*.
@@ -1406,3 +1406,24 @@ So far we assumed $N$ independent blocks of the $2n$-qubit state $\varrho$. In r
 >   *Coherent*: you could apply a joint entangled measurement across several copies of the state at once (like a collective Bell measurement).
 >
 >   *Incoherent*: you restrict yourself to local, single-copy measurements, run independently on each copy, and then do all the combining in *classical postprocessing*.
+
+Concretely, we appeal to FKMO Theorem 2.3, which shows that the additional overhead for dealing with across-block correlations scales only in $\log d$, where $d$ is the Hilbert space dimension of a single block. Since one block contains $2n$ qubits we have $d = 2^{2n}$ and therefore $\log d = 2n$. FKMO also give a more general reduction that works for arbitrary measurement strategies, but in that case the cost can scale polynomially in $d$. For us this would translate into a cost scaling like $2^{2n}$, which is far too large. Because our procedure is non-adaptive and incoherent, we are in the special case where the dependence collapses to $\log d$ (the overhead is only polylogarithmic in the block dimension), giving only a linear factor in $n$ rather than exponential as a result.
+
+Let
+$$
+k_A \;=\; \left\lceil\, \frac{8}{(\varepsilon_2^2 - 2\varepsilon_1)^2}\,\ln \frac{12}{\alpha} \,\right\rceil
+$$
+denote the block complexity of our i.i.d. test (Theorem above). Note that instead of $2/\alpha$ we have $12/\alpha$; the extra factor of $6$ comes from FKMO Remark 4.10.
+
+The reduction of FKMO (Theorem 2.3 together with the explicit constants of Remark 4.10) then guarantees that, in the fully non-i.i.d. setting, it suffices to take
+$$
+N \;\geq\; \frac{18^2\,\log d}{\alpha^2\,\varepsilon^2}\;k_A^2\;\log^2\left(\frac{6k_A}{\alpha}\right),
+\qquad d=2^{2n},
+$$
+
+for any $\varepsilon$ chosen inside the trace-distance gap $\Delta = \varepsilon_2^2 - 2\varepsilon_1$ (e.g. $\varepsilon = \Delta/2$). Substituting $\log d = 2n$ and simplifying gives
+$$
+N = O\!\left[\, \frac{n}{\alpha^2\,\Delta^6}\,\Bigl(\ln\frac{1}{\alpha}\Bigr)^2\,\log^2\Bigl(\frac{1}{\alpha\,\Delta^2}\ln\frac{1}{\alpha}\Bigr) \,\right].
+$$
+
+Therefore, our tolerant identity test remains sound even against a single adversarial global source, with only a linear dependence on the block size $n$ and polylogarithmic factors in $1/\alpha$ and $1/\Delta$. The i.i.d. guarantees lift cleanly to the strongest non-i.i.d. model.
