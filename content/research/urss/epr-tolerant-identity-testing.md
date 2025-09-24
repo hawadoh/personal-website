@@ -12,12 +12,12 @@ $$
 $$
 using only *sequential\** (one qubit at a time), local measurements in the **standard** ($\{ \ket{0}, \ket{1} \}$) or **Hadamard** ($\{ \ket{+}, \ket{-} \}$) bases, and classical communication/postprocessing. Importantly, we never perform any joint or Bell‐basis measurement on $AB$.
 
-**Remark (why we work with the EPR state).**  
-We choose the canonical EPR pair ($\Phi := \ket{\text{EPR}}\!\bra{\text{EPR}}$) because every two-qubit maximally entangled pure state can be written as
-$$
+> **Remark (why we work with the EPR state).**  
+> We choose the canonical EPR pair ($\Phi := \ket{\text{EPR}}\!\bra{\text{EPR}}$) because every two-qubit maximally entangled pure state can be written as
+> $$
 \Phi_U = (\mathbb{I} \otimes U)\,\Phi\,(\mathbb{I} \otimes U)^\dagger
 $$
-for some single-qubit unitary $U$ acting on Bob's side. Testing closeness to any fixed $\Phi_U$ is therefore equivalent to testing $\Phi$ after Bob applies $U^\dagger$ to his qubit. Trace distance and fidelity are invariant under local unitaries, and the $Z/X$ match projectors and the statistic $\hat{\delta}$ are unchanged by this pre-rotation, so all statements and bounds below written for $\Phi$ carry over verbatim to $\Phi_U$.
+> for some single-qubit unitary $U$ acting on Bob's side. Testing closeness to any fixed $\Phi_U$ is therefore equivalent to testing $\Phi$ after Bob applies $U^\dagger$ to his qubit. Trace distance and fidelity are invariant under local unitaries, and the $Z/X$ match projectors and the statistic $\hat{\delta}$ are unchanged by this pre-rotation, so all statements and bounds below written for $\Phi$ carry over verbatim to $\Phi_U$.
 
 ---
 
