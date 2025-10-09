@@ -1297,20 +1297,20 @@ Two directions:
 * **Soundness direction (far $\Rightarrow$ large $\delta_\star$).**
   From $D(\varrho,\Phi^{\otimes n})\le\sqrt{2\delta_\star}$ we get
   $$
-  D(\varrho,\Phi^{\otimes n})\ge \varepsilon_2\ \Longrightarrow\ \delta_\star\ \ge\ \underbrace{\varepsilon_2^2/2}_{:=\ \delta^\text{far}_\star}. \quad\text{(necessary)}
+  D(\varrho,\Phi^{\otimes n})\ge \varepsilon_2\ \quad\implies\quad \delta_\star\ \ge\ \underbrace{\varepsilon_2^2/2}_{=:\ \delta^\text{far}_\star}. \quad\text{(necessary)}
   $$
 * **Completeness direction (close $\Rightarrow$ small $\delta_\star$).**
   The acceptance POVM element for a block is $\overline\Pi := 2^{-n}\sum_b\Pi_b$, and $\operatorname{tr}(\overline\Pi\,\Phi^{\otimes n})=1$ (EPR matches in either basis at every coordinate). The variational/POVM inequality gives
   $$
   \bigl|\,\operatorname{tr}(\overline\Pi\,\varrho)-1\,\bigr| \le D(\varrho,\Phi^{\otimes n})
-  \quad\Rightarrow\quad
+  \quad\implies\quad
   \delta_\star = 1-\operatorname{tr}(\overline\Pi\,\varrho)\ \le\ D(\varrho,\Phi^{\otimes n}).
   $$
   Hence
   $$
-  D(\varrho,\Phi^{\otimes n})\le \varepsilon_1\ \Longrightarrow\ \delta_\star\ \le\ \underbrace{\varepsilon_1}_{:=\ \delta^\text{close}_\star}. \quad\text{(sufficient)}
+  D(\varrho,\Phi^{\otimes n})\le \varepsilon_1\ \quad\implies\quad \delta_\star\ \le\ \underbrace{\varepsilon_1}_{=:\ \delta^\text{close}_\star}. \quad\text{(sufficient)}
   $$
-  (Same logic we used in the single‑pair finite‑sample proof; here we just plug the block acceptance operator. )
+  (Same logic we used in the single‑pair finite‑sample proof; here we just plug the block acceptance operator.)
 
 So the promise gap is
 $$
@@ -1332,7 +1332,7 @@ c_\star := \frac{\delta^\text{close}_\star+\delta^\text{far}_\star}{2}
 $$
 
 > **Rule.** After $N$ blocks, compute $\hat\delta_\star$.
-> Accept “**close**” iff $\hat\delta_\star \leq c_\star$; otherwise say “**far**”.
+> Accept “**close**” ***iff*** $\hat\delta_\star \leq c_\star$; otherwise say “**far**”.
 
 This mirrors our cutoff $c = \frac{2\varepsilon_1+\varepsilon_2^2}{4}$ in the single-pair case.
 
@@ -1367,7 +1367,7 @@ As a reminder, this result is fully adversarial within each block (the realistic
 > $$
 c_\star = \frac{2\varepsilon_1 + \varepsilon_2^2}{4},
 $$
-> accept “close” iff $\hat\delta_\star \leq c_\star$.
+> accept “close” ***iff*** $\hat\delta_\star \leq c_\star$.
 > 
 > If
 > $$
@@ -1390,9 +1390,11 @@ $$
 
 ---
 
-**Extension (non-i.i.d. blocks).**
+## Extensions/implications
 
-So far we assumed $N$ independent blocks of the $2n$-qubit state $\varrho$. In reality, an adversary (or a noisy source with memory) could prepare one **arbitrary joint state** across all blocks. Fortunately, our test is *non-adaptive* and *incoherent* (local $Z/X$ measurements chosen up-front), so we can apply the general reduction of Fawzi–Kueng–Markham–Oufkir (FKMO) (Theorem 2.3, arXiv:2401.16922). Their result upgrades any such i.i.d. analysis to the fully non-i.i.d. setting with only a **polylogarithmic** overhead in sample complexity. This means our clean block-level theorem remains valid even when the $N$ blocks come from a single adversarial global state, so the protocol certifies $\Phi^{\otimes n}$ under the strongest model of cross-block correlations, not just in the i.i.d. case.
+### Non-i.i.d. blocks
+
+So far we assumed $N$ independent blocks of the $2n$-qubit state $\varrho$. In reality, an adversary (or a noisy source with memory) could prepare one **arbitrary joint state** across all blocks. Fortunately, our test is *non-adaptive* and *incoherent* (local $Z/X$ measurements chosen up-front), so we can apply the general reduction of [Fawzi–Kueng–Markham–Oufkir (2024)](https://arxiv.org/pdf/2401.16922) (FKMO) (Theorem 2.3). Their result upgrades any such i.i.d. analysis to the fully non-i.i.d. setting with only a **polylogarithmic** overhead in sample complexity. This means our clean block-level theorem remains valid even when the $N$ blocks come from a single adversarial global state, so the protocol certifies $\Phi^{\otimes n}$ under the strongest model of cross-block correlations, not just in the i.i.d. case.
 
 > **Note.**
 > * **Adaptive vs. non-adaptive** is about *when you choose the measurement*.
@@ -1427,3 +1429,156 @@ N = O\!\left[\, \frac{n}{\alpha^2\,\Delta^6}\,\Bigl(\ln\frac{1}{\alpha}\Bigr)^2\
 $$
 
 Therefore, our tolerant identity test remains sound even against a single adversarial global source, with only a linear dependence on the block size $n$ and polylogarithmic factors in $1/\alpha$ and $1/\Delta$. The i.i.d. guarantees lift cleanly to the strongest non-i.i.d. model.
+
+### Connecting to Natarajan–Vidick (sequential witness test)
+
+We now look at extensions beyond our baseline (i.i.d. arbitrary $2n$-qubit blocks) test and connect our work to the robust self-testing framework of [Natarajan and Vidick (2016)](https://arxiv.org/pdf/1610.03574). Their paper develops a nonlocal game that certifies the presence of many EPR pairs and corresponding Pauli measurements. At the core of their construction lies an operator $O_n$ whose expectation value acts as a **dimension witness**: it is maximised only by $\ket{\text{EPR}}^{\otimes n}$.
+
+Formally, they define
+$$
+O_n \;:=\; \Bigl(\tfrac12(\sigma_X\!\otimes\!\sigma_X + \sigma_Z\!\otimes\!\sigma_Z)\Bigr)^{\!\otimes n}
+\;=\; 2^{-n}\!\!\sum_{P\in\{X,Z\}^n}\!\!(\sigma_P\!\otimes\!\sigma_P),
+$$
+where
+$$
+P = (P_1, \dots, P_n) \quad\text{and}\quad \sigma_P:=\bigotimes_{i=1}^n \sigma_{P_i}.
+$$
+For every bipartite state $\rho$, they established the fact that $\mathrm{Tr}(O_n\,\rho) \leq 1$, with equality ***iff*** $\rho = \ket{\mathrm{EPR}}^{\otimes n}$ (up to local isometries).
+
+In our sequential, local-measurement picture, Alice and Bob already perform exactly the operations that realise $\mathrm{Tr}(O_n\,\rho)$:
+
+- On each of the $n$ qubit pairs, they jointly choose a random basis $W\in\{Z,X\}$ and measure $W \otimes W$.
+- For every trial they compute the **parity product**
+  $$
+  S \;=\; \prod_{i=1}^n (-1)^{x_i\oplus \tilde x_i}\in\{\pm1\},
+  $$
+  where $x_i,\tilde x_i$ are their binary measurement outcomes. Let's unpack this expression.
+    - Each factor $(-1)^{x_i\oplus \tilde x_i}$ encodes whether Alice and Bob’s results on the $i$-th pair agree or differ: the XOR ($\oplus$) equals $0$ when the bits match and $1$ when they differ, so this term is $+1$ for agreement and $-1$ for disagreement.
+    - Taking the product over all $n$ pairs compresses all correlations into a single value $S\in\{\pm1\}$, which is $+1$ if an even number of outcomes differ and $-1$ if an odd number do.
+    - Thus $S$ records the **overall parity** of Alice and Bob’s results (a single number summarising their total correlation pattern).
+- Averaging $S$ over $N$ repeated trials gives an **empirical score**
+  $$
+  \hat s \;=\; \frac{1}{N}\sum_{i=1}^N S_i.
+  $$
+- Each $S_i \in \{\pm 1\}$ is the measured outcome of the observable
+  $$
+  \bigotimes_{i=1}^n (\sigma_{W_i}\!\otimes\!\sigma_{W_i})
+  $$
+  corresponding to that trial’s random choice of bases $W_1, \dots, W_n$.
+  Since every measurement setting $P\in\{X,Z\}^n$ is chosen uniformly at random, the expected value of a single-trial outcome is
+  $$
+  \mathbb{E}[S] \;=\; 2^{-n}\!\!\sum_{P\in\{X,Z\}^n} \langle\sigma_P\!\otimes\!\sigma_P\rangle_\rho \;=\; 2^{-n}\!\!\sum_{P\in\{X,Z\}^n}\!\mathrm{Tr}\big[(\sigma_P\!\otimes\!\sigma_P)\,\rho\big]
+  \;=\; \mathrm{Tr}(O_n\,\rho),
+  $$
+  where the last equality follows directly from the definition $O_n = 2^{-n}\sum_{P\in\{X,Z\}^n}(\sigma_P\!\otimes\!\sigma_P)$.
+  
+- Hence, our test statistic $\hat s$ is an *unbiased estimator* of the NV witness value, meaning that its expected value equals the true theoretical quantity $\mathrm{Tr}(O_n\,\rho)$. In other words, if Alice and Bob repeat the procedure many times, their average empirical score converges to the exact expectation of $O_n$ on $\rho$. Showing that our statistic is *unbiased* is the heart of the argument: it verifies that the average outcome of our sequential test equals the theoretical expectation of $O_n$.
+
+Operationally, this shows that our “test” and their “game” implement the **same measurement**, just interpreted differently: ours is a *sequential local test* using classical post-processing of outcomes, and theirs as a *two-prover non-local game* described by the operator $O_n$.
+
+Therefore, we can simply claim two key statements from Natarajan–Vidick and restate them in our language:
+
+1. **Dimension witness.**
+   If $\mathrm{Tr}(O_n\,\rho) \geq 1-\varepsilon$, then
+   $$
+   F(\rho, \ket{\mathrm{EPR}}^{\otimes n})\;\geq\; 1-\varepsilon.
+   $$
+   *Interpretation:* high score implies the state has high fidelity with $\ket{\mathrm{EPR}}^{\otimes n}$.
+
+2. **Robust self-test - needs verifying.**
+   If the test (or our score) achieves success $1-\varepsilon$, then there exist local isometries $\Phi_A, \Phi_B$ such that
+   $$
+   \big\|\,(\Phi_A\otimes\Phi_B)(\rho) - \ket{\mathrm{EPR}}^{\otimes n}\!\bra{\mathrm{EPR}}^{\otimes n}\,\big\|_1
+   \;=\; \mathrm{poly}(\varepsilon).
+   $$
+   *Interpretation:* near-optimal performance forces the shared state to be polynomially close to $n$ ideal EPR pairs, up to local *embedding*. You can think of "embedding" as hiding the ideal state inside a bigger space that might contain irrelevant junk - maybe Alice's and Bob's devices have extra qubits, but you can locally project out the right subspace that contains exactly the ideal $n$ EPR pairs.
+
+This means our sequential local test is **exactly evaluating** the same operator $O_n$. Therefore, we can directly import NV’s guarantees:
+
+* **Completeness:** ideal EPR pairs yield score $1$.
+* **Soundness:** any state scoring $\geq 1-\varepsilon$ must be $\mathrm{poly}(\varepsilon)$-close to $\ket{\mathrm{EPR}}^{\otimes n}$.
+  Hence, $O_n$ provides a rigorous bridge between our *empirical test statistic* and a formal self-testing statement from the literature - no new algebraic work needed beyond verifying the unbiasedness above.
+
+---
+
+ok the only thing is the caveat that we haven't used the Pauli-braiding thingy so we can't just claim $\mathrm{poly}(\varepsilon)$. is this factually correct? and also check everything here and double check which part of the paper we are actually referncing because the numbers are (i believe) not correct.
+
+Next, we analyse whether our test is noise-tolerant.
+
+### Noise tolerance
+
+In realistic experiments, the shared state between Alice and Bob will never be perfectly maximally entangled. Each EPR pair may suffer small local imperfections due to imperfect gates, decoherence, or misaligned measurements. Intuitively, we say the source is *noisy* when every pair is slightly "off" from the ideal EPR state by a small, fixed amount.
+
+Formally, we can model this by assuming that each pair is described by a mixed state
+$$
+\rho = (1-\nu)\,\Phi + \nu\,\tau,
+$$
+where $\Phi = \ket{\text{EPR}}\!\bra{\text{EPR}}$ is the ideal state, $\tau$ is an arbitrary bipartite noise state, and $\nu\in[0,1]$ quantifies the *noise rate*.
+
+A source producing $n$ such pairs therefore prepares
+$$
+\rho^{\otimes n} = ((1-\nu)\,\Phi + \nu\,\tau)^{\otimes n},
+$$
+representing an *independent*, constant per-copy noise rate.
+
+A sound and noise-tolerant test should meet two conditions:
+
+1. (**Soundness**) Passing the test should imply that the underlying shared state contains *non-trivial entanglement* - for example, that the total entanglement scales linearly with $n$, or that each pair is on average close to $\Phi$.
+2. (**Noise tolerance**) The test should still accept imperfect sources that are consistent and *locally noisy* (with fixed $\nu > 0$), rather than rejecting them exponentially fast as the number of pairs $n$ increases.
+
+In other words, noise tolerance means that the test shouldn't become useless just because every supposedly-EPR pair in $\rho^{\otimes n}$ is 99% good instead of 100%. The acceptance probability should remain high under such constant local imperfections, instead of dropping off exponentially with system size.
+
+In this 2018 [paper](https://drops.dagstuhl.de/storage/00lipics/lipics-vol107-icalp2018/LIPIcs.ICALP.2018.11/LIPIcs.ICALP.2018.11.pdf) by Rotem Arnon-Friedman and Henry Yuen, they pointed out that many robust self-tests guarantee soundness but fail the second property (they are not noise-tolerant). This is because traditional self-testing results express closeness in fidelity, and fidelity is multiplicative under tensor products:
+$$
+F(\rho^{\otimes n}, \Phi^{\otimes n}) = F(\rho, \Phi)^n,
+$$
+meaning that if each pair has fidelity $F(\rho, \Phi) = 1 - \nu$, then
+$$
+F(\rho^{\otimes n}, \Phi^{\otimes n}) = (1 - \nu)^n \approx e^{-\nu n}.
+$$
+Even for a modest $\nu = 0.01$ (only a 1% noise per pair), the total fidelity drops below $0.05$ when $n \approx 300$.
+This exponential decay means that self-tests based on global fidelity will reject any state with constant local noise, no matter how large $n$ is. In other words, for a test, **robustness in fidelity does not imply noise-tolerance**.
+
+Arnon-Friedman and Yuen proposed a solution in the paper by shifting from fidelity to **threshold acceptance**; instead of requiring global fidelity close to one, they design tests that accept if the average win rate exceeds a fixed threshold.
+
+Formally, for **any** two-player game $G$ with a classical-quantum value gap $\Delta > 0$ (the advantage in winning probability that quantum strategies achieve over all classical ones, i.e. $\Delta = \text{qval}(G) - \text{cval}(G)$), the verifier plays $n$ independent copies and accepts if the observed win fraction is at least
+$$
+\text{qval}(G) - \nu,
+$$
+for some noise parameter $0 \leq \nu < \Delta$. A key result presented was Theorem 1, where they showed:
+
+* (**Noise tolerance**) If the provers' per-copy success probability is $\text{qval}(G) - \eta$ (for $\eta < \nu)$, then they pass the threshold test with probability $1 - \exp(-\Omega((\nu - \eta)^2 n))$. Constant per-copy noise only reduces the acceptance probability by an exponentially small amount.
+* (**Soundness**) Any strategy passing with non-negligible probability must share a state whose *entanglement of formation* (a measure of entanglement) scales as $\Omega(n)$ (linear in $n$).
+
+This shows that a classical test **can** be both sound and noise-tolerant, provided acceptance is defined in terms of an *additive* threshold rather than a global multiplicative metric.
+
+This additive viewpoint aligns naturally with our tolerant identity test, which is expressed in trace distance. As a reminder, it is *subadditive* under tensor products:
+$$
+\bigl\|\rho^{\otimes n} - \Phi^{\otimes n}\bigr\|_1 ~\leq~ n\,\bigl\|\rho - \Phi\bigr\|_1,
+$$
+meaning that small, constant per-copy imperfections accumulate linearly rather than exponentially. However, AFY's theorem is stated for games with a classical-quantum gap $\Delta = \mathrm{qval}(G) - \mathrm{cval}(G) > 0$. In our setting we are running a classical sequential test (no entangled provers/game), so there is no such gap parameter to even define! (Effectively $\Delta = 0$ for us.)
+
+**Question:** Can we still show that our test is noise-tolerant ("acceptance does not collapse exponentially under constant per-pair noise")?
+
+**Answer:** Yes. Recall that $\Pr[\text{accept}] = 1 - \delta_\star \geq 1 - \varepsilon_1$; this alone shows that our test is noise-tolerant because the per-block acceptance probability is uniformly bounded below by $1 - \varepsilon_1$, with no dependence on $n$. Hence there is no "exponential collapse" with system size; our test is noise-tolerant.
+
+
+because our acceptance rule is *additive* (an average), and our analysis is in trace distance, which is subadditive, and so we obtain an $O(\nu)$ shift of the mean and concentration around it. (In contrast, parity-product witnesses like $O_n$ we saw earlier are multiplicative and so suffer exponential decay under constant local noise; we therefore do not use $O_n$ to argue tolerance.) Let's make this precise.
+
+---
+
+I think the bits above are ok now. however the math below need "fixing" - just make sure we're using trace distance (the original block test before the main theorem result in the hard case) instead of anything from NV section.
+
+On each of the $N$ tested blocks we obtain a score $s_i\in[-1,1]$ from our local $Z/X$ rule, and set
+$$
+\hat s = \frac{1}{N}\sum_{i=1}^N s_i.
+$$
+For the ideal input $\Phi^{\otimes n}$ we have $\mathbb{E}[\hat s] = 1$. Under the local noise model $\rho = (1 - \nu) \Phi + \nu\tau$ (per pair, so a block is $\rho^{\otimes n}$),
+$$
+\mathbb{E}[\hat s] = (1 - \nu) \cdot 1 + \nu \cdot \theta
+$$
+for some $\theta \in [-1, 1]$, hence
+$$
+\bigl\|\mathbb{E}[\hat s] - 1\bigr\| \leq 2\nu.
+$$
+So constant per-pair noise causes only an **additive** $O(\nu)$ shift in the mean! Our test is noise-tolerant.
