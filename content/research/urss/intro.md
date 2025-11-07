@@ -71,3 +71,5 @@ These posts will be based on Chapters 1 to 8 (excluding Chapter 3: Quantum Money
 After that, if time allows, I'll also explore how these quantum cryptographic protocols could be applied in real-world systems, using blockchain platforms like Bitcoin and Ethereum as a case study.
 
 Let's build trust from the laws of the universe.
+
+> Edit: I have 117 pages of handwritten notes. When I find the time, I'll type them up and upload them here.

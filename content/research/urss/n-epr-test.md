@@ -834,4 +834,4 @@ However, one might ask the more general question: *How close is $\varrho$ to bei
 $$
 \min_{U \in U(2)} \left[\,D(\varrho, \Phi_U^{\otimes n})\,\right]
 $$
-where $U$ is not known? To test this tolerantly against thresholds $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$, one approach would use an $\epsilon$-covering net $\mathcal{U} \subseteq U(2)$ and run our protocol for each $U \in \mathcal{U}$. However, whether this can be done efficiently, i.e., in parallel (and while preserving noise-tolerance), requires more work.
+where $U$ is not known? To test this tolerantly against thresholds $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$, one approach would use an $\epsilon$-covering net $\mathcal{U} \subseteq U(2)$ and run our protocol for each $U \in \mathcal{U}$. However, whether this can be done efficiently, i.e., in parallel (and while preserving noise-tolerance), requires more work. :)
