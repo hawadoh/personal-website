@@ -1,6 +1,6 @@
 +++
 date = '2025-08-18T19:39:11+01:00'
-draft = false
+draft = true
 title = 'Buy the fear, sell the hype.'
 +++
 

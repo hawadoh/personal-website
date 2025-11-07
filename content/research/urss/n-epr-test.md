@@ -7,7 +7,7 @@ TocOpen = true
 +++
 
 ## Change in notation
-With the [tolerant identity test](../epr-tolerant-identity-testing) for a single state $\rho_{AB}$ complete, we now turn to the problem of certifying multiple ($n$) EPR pairs at once. For brevity we write $\Phi = \ket{\text{EPR}}\bra{\text{EPR}}_{AB}$ throughout. The problem statement is as follows:
+With the [tolerant identity test](../epr-tolerant-identity-testing) for a single state $\rho_{AB}$ complete, we now turn to the problem of certifying multiple ($n$) EPR pairs at once. For brevity we write $\Phi = \ket{\text{EPR}}\bra{\text{EPR}}_{AB}$ throughout, where $\ket{\text{EPR}} = \tfrac{1}{\sqrt{2}}(\ket{00} + \ket{11})$. The problem statement is as follows:
 
 > **Problem.**
 >
@@ -40,7 +40,7 @@ $$
 \mathbb{E}[\,Y \mid M = 1\,] = \delta \in[0, \tfrac{1}{2}] \quad\text{(after the standard relabelling per basis)}.
 $$
 
-(We relabel Bob's outcomes per basis so each per-basis mismatch rate is $\leq 1/2$; see the convention below.)
+> **Convention.** For each basis, we relabel Bob's outcomes if needed so the mismatch rate is $\leq 1/2$ (i.e. replace $\delta_b$ by $\min \{\delta_b, 1 - \delta_b\}$). With this standard symmetrisation, the aggregated $\delta \in [0, 1/2]$ and the fidelity bound $F \geq \sqrt{1 - 2\delta}$ is always meaningful. For instance, if $\delta_Z = 0.3$ and $\delta_X = 0.7$, we relabel Bob's $X$ outcomes so $\delta_X \to 0.3$.
 
 This oracle $\mathbb{O}$ encapsulates the entire procedure of basis selection, local measurement, and comparison for a single coordinate $(A_j, B_j)$ of a block. A block has $n$ coordinates, we call $\mathbb{O}$ once per coordinate so $n$ times in total (either sequentially or in parallel). We then keep only the calls where the bases matched and do simple classical post-processing (count mismatches). Over $N$ blocks, this amounts to $n \cdot N$ oracle calls in total.
 
@@ -72,9 +72,9 @@ With this, we can provide an alternative but mathematically equivalent tolerant 
 > $$
 0 \leq \varepsilon_1 < \varepsilon_2 \leq 1,
 $$
-> and the desired maximum failure probability $\alpha \in (0, 1)$. Set the cutoff
+> where the constraint $\varepsilon_1 < \varepsilon_2^2 / 2$ holds. Fix the desired maximum failure probability $\alpha \in (0, 1)$. Set the cutoff
 > $$
-c = \frac{\varepsilon_1^2 + \varepsilon_2^2}{4}.
+c = \frac{2\varepsilon_1 + \varepsilon_2^2}{4}.
 $$
 > Consider the reformulated matching protocol above where we make $N$ independent calls to $\mathbb{O}(\varrho)$ (one per block), and compute the observed error rate $\hat{\delta}$. For the test, let the decision rule be to accept ***iff*** $\hat{\delta} \leq c$:
 > $$
@@ -86,7 +86,7 @@ $$
 $$
 > Then if
 > $$
-N \geq \frac{32\,\ln(2/\alpha)}{(\varepsilon_2^2 - \varepsilon_1^2)^2} \qquad\left( = O\Bigl((\varepsilon_2^2 - \varepsilon_1^2)^{-2}\Bigr) \right),
+N \geq \frac{8\,\ln(2/\alpha)}{(\varepsilon_2^2 - 2\varepsilon_1)^2} \qquad\left( = O\Bigl((\varepsilon_2^2 - 2\varepsilon_1)^{-2}\Bigr) \right),
 $$
 after running the test, the following holds:
 > - **Completeness.** If $D(\varrho, \Phi) \leq \varepsilon_1$, then the test **accepts** (outputs "close") with confidence at least $1 - \alpha$.
@@ -101,7 +101,7 @@ With the notations established and the single-pair scenario ($n = 1$) as a refer
 
 ## do-rE-MI ♫
 
-For brevity we write $\rho = \rho_{AB}$ throughout. In particular, we will show how the same matching-outcomes protocol extends in three settings of increasing generality and difficulty:
+For brevity we write $\rho = \rho_{AB}$ throughout. When extending the single-pair protocol to $n$ pairs, it is helpful to think about the problem in terms of increasing generality:
 
 1. **Easy (i.i.d. pairs).**
 
@@ -118,14 +118,13 @@ For brevity we write $\rho = \rho_{AB}$ throughout. In particular, we will show 
      \quad\text{vs.}\quad
      \Phi^{\otimes n}.
    $$
+   In general, $\rho_j \neq \rho_k ~\forall (j, k) \in [n]^2$ where $j < k$.
 
 3. **Hard (arbitrary adversary).**
 
    The most general case allows an arbitrary $2n$-qubit state $\varrho$, possibly entangled across pairs, against which we still wish to test closeness to $\Phi^{\otimes n}$.
 
-We will analyse $N$, the number of blocks (i.i.d. copies) of the $2n$-qubit state $\varrho$ required to decide closeness to $\Phi^{\otimes n}$. As we've seen, each block contains $n$ pairs and therefore induces $n$ calls to the single-pair oracle $\mathbb{O}$ (once per coordinate), so the total number of oracle calls is $n \cdot N$. We state all bounds in terms of the number blocks needed, $N$, as the primary resource, and convert to total oracle calls by multiplying by $n$ when helpful. (The measurement bases match with probability $1/2$ independently per coordinate.)
-
-Why do we count blocks? This is because the physical source hands us i.i.d. *blocks* - full $2n$-qubit copies of $\varrho$. Block complexity answers the operational question "how many copies of $\varrho$ must we request to decide 'close' vs 'far'?". Inside each block we make $n$ single‑pair measurements (one per coordinate), i.e. $n$ *oracle calls*, so the total number of calls is $T = n \cdot N$. While oracle‑call counts are useful for estimating raw measurement time or hardware throughput, **the fundamental resource is the number of i.i.d. copies of $\varrho$**, i.e. the number of blocks $N$.
+We will analyse $N$, the number of blocks required to decide closeness to $\Phi^{\otimes n}$, where each block is one i.i.d. copy of the $2n$-qubit state $\varrho$ that the physical source produces.
 
 > **Note.** In the context of BB84, these three scenarios correspond directly to the class of attacks that an eavesdropper (Eve) might do:
 >
@@ -140,705 +139,9 @@ Why do we count blocks? This is because the physical source hands us i.i.d. *blo
 >
 > By proving security in each model, starting with the easiest and working up to the fully coherent setting, we obtain a hierarchy of BB84 security guarantees that mirror the increasing power of potential attack by Eve.
 
-We begin with the i.i.d. case as it's both the simplest to analyse and a useful building block for the more challenging scenarios.
+Our goal is to solve the hard case: testing an arbitrary $2n$-qubit state $\varrho$ that may be entangled across all pairs. A natural starting point is to begin with the easy case (where all $n$ pairs are i.i.d.), as it's both the simplest to analyse and may serve as a useful building block for more general scenarios. However, after exploring potential approaches for the easy and medium cases for a few weeks, it became clear that the most direct solution is to tackle the general (hard) case from the start. The key insight is to extend the single-pair matching projector approach to work with $n$ pairs simultaneously. This handles arbitrary adversarial entanglement without requiring product structure assumptions. We present only this general case below.
 
 ---
-
-## Easy case (i.i.d. pairs)
-
-### A naïve per-pair approach using trace distance
-
-A first idea is to ignore the joint state and run the **single-pair** tolerant test on each of the $n$ coordinates **separately**, then accept only if every coordinate passes. Equivalently, one could tally the per-pair/per-coordinate (which is the same under the independent assumption of i.i.d.) mismatch indicators into a total error count and compare that sum against a scaled threshold, thanks to the i.i.d. assumption.
-
-Let $D_1 = D(\rho, \Phi)$ and $D_n = D(\rho^{\otimes n}, \Phi^{\otimes n})$. By subadditivity,
-$$
-D_n \leq n\,D_1.
-$$
-
-To guarantee $D_n \leq \varepsilon_1$, it suffices to enforce the **per-pair** condition $D_1 \leq \varepsilon_1/n$. Thus at the per-pair level the tolerances become $\varepsilon_1/n$ vs. $\varepsilon_2/n$. Since the single-pair sample complexity scales like $(\varepsilon_2^2 - \varepsilon_1^2)^{-2}$, replacing $\varepsilon_j \mapsto \varepsilon_j/n$ shrinks the squared gap by $n^2$, and the **per-coordinate** number of **blocks** needed inflates by $n^4$:
-
-$$
-N_{\text{per-coord}}
-~\gtrsim~
-\frac{32\,n^4}{(\varepsilon_2^2 - \varepsilon_1^2)^2}\,\ln\!\frac{2}{\alpha}.
-$$
-
-We need **all $n$ coordinates** to pass simultaneously with total failure probability $\alpha$. A union bound replaces $\alpha$ by $\alpha/n$, contributing an extra $\log n$ factor:
-
-$$
-N_{\text{naïve (blocks)}}
-~\gtrsim~
-\frac{32\,n^4}{(\varepsilon_2^2 - \varepsilon_1^2)^2}\,\ln\!\frac{2n}{\alpha}.
-$$
-
-**Takeaway.** The naïve per-pair route costs $O(n^4\log n)$ blocks, whereas the collective (fidelity-based) test from the next section needs only $O(n)$ blocks (up to the same $(\varepsilon_2^2 - \varepsilon_1^2)^{-2}$ and $\log(1/\alpha)$ factors). The huge gap in our naïve method comes from shrinking tolerances by $1/n$ at the per-pair level (which explodes sample size by $n^4$); the union bound adds only the mild $\log n$. At first glance the naïve method seems reasonably efficient, but a closer look shows it is actually markedly worse than the collective strategy developed below.
-
-**Remark.** In the easy and medium cases, "per-coordinate" and "per-pair" are interchangeable because **within each block** the state *factorises across coordinates*: easy: $\varrho = \rho^{\otimes n}$; medium: $\varrho = \bigotimes_{i=1}^n \rho_i$. In particular, there is no cross-coordinate entanglement inside a block (pairs may be identical in the easy case and merely different in the medium case). In the hard case, $\varrho$ may be arbitrarily entangled across coordinates, so we use **per-coordinate** language exclusively there to be precise.
-
----
-
-### Global block test using fidelity
-
-Given a global state $\varrho = \rho^{\otimes n}$, for a single pair $\rho$:
-$$
-F_1 ~=~ F(\rho,\Phi),
-\quad
-D_1 ~=~ D(\rho,\Phi),
-$$
-and in the $n$-pair i.i.d. case we have the rules
-$$
-F_n ~:=~ F\bigl(\rho^{\otimes n},\,\Phi^{\otimes n}\bigr) ~=~ F_1^{n},
-\qquad
-D_n ~:=~ D\bigl(\rho^{\otimes n},\,\Phi^{\otimes n}\bigr) ~\leq~ n\,D_1.
-$$
-This means we can express the $n$-pair (block) closeness conditions entirely in terms of the single-pair fidelity $F_1$, thanks to the exact tensor-product multiplicativity rule $F(\rho^{\otimes n},\Phi^{\otimes n}) = F(\rho,\Phi)^n$ (or equivalently $F_n = F_1^n$). Working directly with fidelity avoids the looser trace-distance bound $D(\rho^{\otimes n},\Phi^{\otimes n}) \leq n\,D(\rho,\Phi)$, which would give a much weaker bound than the tight scaling we get from fidelity.
-
-#### Translating hypotheses
-
-Our goal is to distinguish
-$$
-\begin{cases}
-~\mathbf{H_0}: &D_n \,\leq\,\varepsilon_1
-	\quad\iff\quad \rho^{\otimes n}\text{ is “close” to }\Phi^{\otimes n},\\[6pt]
-~\mathbf{H_1}: &D_n \,\geq\,\varepsilon_2
-	\quad\iff\quad \rho^{\otimes n}\text{ is “far” from }\Phi^{\otimes n},
-\end{cases}
-$$
-with $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$. By Fuchs–van de Graaf,
-$$
-1 - F_n ~\leq~ D_n ~\leq~ \sqrt{1 - F_n^{2}},
-$$
-so controlling $F_n$ tightly leads to a corresponding control on $D_n$. Since $F_n = F_1^{n}$, we can use this and the upper bound of Fuchs–van de Graaf to rewrite the hypotheses as fidelity conditions per-pair:
-$$
-\begin{cases}
-~\mathbf{H_0}: \quad &D_n \,\leq\,\varepsilon_1 &\impliedby &F_n^2 ~\geq~ 1 - \varepsilon_1^2
-&\iff
-&F_1 ~\geq~ (1 - \varepsilon_1^2)^{1/(2n)}
-\\[4pt]
-~\mathbf{H_1}: \quad &D_n \,\geq\,\varepsilon_2 &\implies &F_n^2 ~\leq~ 1 - \varepsilon_2^2
-&\iff
-&F_1 ~\leq~ (1 - \varepsilon_2^2)^{1/(2n)}
-\end{cases}\quad.
-$$
-
-You might be wondering why we need a <u>sufficient</u> condition for $\mathbf{H_0}$ and a <u>necessary</u> condition for $\mathbf{H_1}$. This is because we need to guarantee that accepted states are truly close (requiring a sufficient condition) and that far states are rejected (requiring a necessary condition) to prevent **false accepts**.
-
-- **Soundness of acceptance (Accept $\Rightarrow$ Close; avoid false accepts).**
-  Why do we use a "sufficient" $F\!\to\!D$ direction? We want "if the test accepts, the global state is close", i.e. no false accept. That needs an *upper* bound on distance from fidelity, which comes from the *right-hand* FvG:
-  $$
-  D_n \leq \sqrt{1 - F_n^2}.
-  $$
-  So we enforce $F_n \geq \sqrt{1 - \varepsilon_1^2}$ (equivalently $F_1 \geq (1 - \varepsilon_1^2)^{1/(2n)}$), which *forces* $D_n \leq \varepsilon_1$.
-  If instead you used the left-hand side $1 - F_n \leq D_n$ with a threshold $F_n \geq 1-\varepsilon_1$, you could falsely accept a far state. Example: take $\varepsilon_1 = 0.1$ and a state with $F_n = 0.90$. The right-hand FvG still allows $D_n$ to be as high as $\sqrt{1 - 0.9^2} \approx 0.436 > 0.1$, so the state could be far from the target yet would be accepted by this flawed rule.
-
-- **Soundness of rejection (Far $\Rightarrow$ Reject; again avoid false accepts).**
-  Why do we use a "necessary" $D\!\to\!F$ direction? We want every far state to be rejected, i.e. no false accept. We start from "far $\Rightarrow$ small fidelity", and again consider the *right-hand* FvG:
-  $$
-  D_n \geq \varepsilon_2 \implies F_n \leq \sqrt{1 - \varepsilon_2^2}.
-  $$
-  Together with $\sqrt{1 - 2\delta} \leq F_1$, this yields $\delta \geq \delta_{\text{far}} = \frac{1}{2}[1 - (1 - \varepsilon_2^2)^{1/n}]$. Any simpler rule like "reject if $F_n \leq \tau$" with $\tau < \sqrt{1 - \varepsilon_2^2}$ will falsely accept some far states. Example: $\varepsilon_2 = 0.8 \implies \sqrt{1 - \varepsilon_2^2} = 0.6$; a state with $F_n = 0.55$ has $D_n = \sqrt{1 - 0.55^2} \approx 0.835 > \varepsilon_2$ yet would be accepted by $\tau = 0.4$.
-
-**What about completeness?** We will soon see that the proof for completeness (avoiding **false rejects** of close states) is not a *deterministic* guarantee, but a *statistical* one. It's the promise that if you are given a good state, your experiment will correctly identify it with very high confidence $1 - \alpha$. This guarantee comes from the power of the Chernoff-Hoeffding concentration bound, and we will see the full reasoning below.
-
-> **Remark.** You might notice that this explicit discussion of sufficient and necessary conditions was not needed for the single-pair test. This is because the single-pair proof is more direct - in that case, the Asymptotic EPR Identity Bound ($\delta \geq \varepsilon^2/2$) provides a single powerful link between the trace distance $\varepsilon$ and the error rate $\delta$, without needing to use fidelity as an intermediary, so it implicitly contains both the necessary and sufficient logic needed to construct the test. In contrast, the multi-pair proof uses the asymmetric Fuchs-van de Graaf inequalities, forcing us to explicitly analyse the logical direction for each guarantee.
-
-Let's quickly verify that $F_n^2 \geq 1 - \varepsilon_1^2$ is a sufficient condition for $D_n \leq \varepsilon_1$ ($\mathbf{H_0}$):
-$$
-F_n^2 \geq 1 - \varepsilon_1^2 \quad\iff\quad 1 - F_n^2 \leq \varepsilon_1^2
-$$
-by rearranging. Substituting this into the upper bound of Fuchs–van de Graaf yields
-$$
-D_n ~\leq~ \sqrt{1 - F_n^2} ~\leq~ \sqrt{\varepsilon_1^2} ~=~ \varepsilon_1
-$$
-so indeed $[F_n^2 \geq 1 - \varepsilon_1^2] \implies [D_n \leq \varepsilon_1]$. Similarly we can verify that $F_n^2 \leq 1 - \varepsilon_2^2$ is a necessary condition for $D_n \geq \varepsilon_2$ ($\mathbf{H_1}$) by plugging $\mathbf{H_1}$ into the upper bound of Fuchs–van de Graaf:
-$$
-\varepsilon_2 \leq D_n \quad\implies\quad \varepsilon_2 ~\leq~ D_n ~\leq~ \sqrt{1 - F_n^2}.
-$$
-Rearranging
-$$
-\varepsilon_2 \leq \sqrt{1 - F_n^2} \quad\iff\quad F_n^2 \leq 1 - \varepsilon_2^2
-$$
-immediately shows that $[D_n \geq \varepsilon_2] \implies [F_n^2 \leq 1 - \varepsilon_2^2]$ as required.
-
-#### Defining the error rate thresholds
-
-**Lemma (single-pair oracle asymptotic link).** For one call to $\mathbb{O}(\rho_{AB})$, with $\delta = \Pr[Y = 1 \mid M = 1]$, we have $F(\rho_{AB}, \Phi) \geq \sqrt{1 - 2\delta}$.
-
-**Proof sketch.** This lemma is a direct consequence of the Asymptotic EPR Identity Bound established in the single-pair analysis. Since the oracle $\mathbb{O}(\rho_{AB})$ is simply a procedural reframing of a single round of that protocol, the fundamental relationship between the true error rate $\delta$ and the fidelity $F$ remains unchanged. $\quad\square$
-
-Using this lemma directly, the link between fidelity $F_1$ and true error rate $\delta$ is
-$$
-F_1 \geq \sqrt{1 - 2\delta} \quad\iff\quad \delta \geq \frac{1 - F_1^2}{2}.
-$$
-We will use this relation to define thresholds on $\delta$.
-
-> **Convention.** For each basis, we relabel Bob's outcomes if needed so the mismatch rate is $\leq 1/2$ (i.e. replace $\delta_b$ by $\min \{\delta_b, 1 - \delta_b\}$). With this standard symmetrisation, the aggregated $\delta \in [0, 1/2]$ and the bound $F_1 \geq \sqrt{1 - 2\delta}$ is always meaningful.
-
-Concretely, let
-$$
-f(\varepsilon) := \frac{1 - (1 - \varepsilon^2)^{1/n}}{2},
-$$
-and
-$$
-\qquad \delta_{\text{close}} := \frac{1 - (1 - \varepsilon_1^2)^{1/n}}{2} = f(\varepsilon_1),
-\qquad \delta_{\text{far}} := \frac{1 - (1 - \varepsilon_2^2)^{1/n}}{2} = f(\varepsilon_2).
-$$
-
-These choices are justified as follows:
-
-- (**Close**) If $\delta \leq \delta_{\text{close}}$, then $F_1 \geq \sqrt{1 - 2\delta} \geq \sqrt{1-2\delta_{\text{close}}}$, hence
-$$
-F_n \geq (1 - 2\delta_{\text{close}})^{n/2} = \sqrt{1 - \varepsilon_1^{2}},
-$$
-so from above $D_n \leq \varepsilon_1$.
-
-- (**Far**) If $D_n \geq \varepsilon_2$, then $F_n \leq \sqrt{1 - \varepsilon_2^{2}}$, i.e. $F_1 \leq (1 - \varepsilon_2^{2})^{1/(2n)}$. Combining with $\sqrt{1 - 2\delta} \leq F_1$ forces
-$$
-1 - 2\delta \leq (1 - \varepsilon_2^{2})^{1/n} \quad\implies\quad \delta \geq \delta_{\text{far}}.
-$$
-
-#### Bounding the promise gap
-
-The promise gap in $\delta$ is
-$$
-\Delta_{\delta} ~=~ \delta_{\text{far}} - \delta_{\text{close}} ~=~ f(\varepsilon_2) - f(\varepsilon_1).
-$$
-To get a lower bound on the promise gap, we first note that
-$$
-f(\varepsilon) = \frac{1 - (1 - \varepsilon^2)^{1/n}}{2}
-$$
-is continuous on $[0, 1]$ for any $n \geq 2$; we only consider $n \geq 2$ since $n$ is the number of EPR pairs and so $n = 1$ reduces to the single-pair test. Indeed, $f$ is built by composing several maps on $[0, 1]$:
-
-- $\varepsilon \mapsto \varepsilon^2$ (continuous),
-- $x \mapsto 1 - x$ (continuous),
-- $y \mapsto y^{1/n}$ (continuous for $y \geq 0$).
-
-Each of these components is continuous on the domain $[0, 1]$. Hence their composition, $f$, is also continuous on the closed interval $[0, 1]$.
-
-By the fundamental theorem of calculus,
-$$
-\Delta_\delta
-= f(\varepsilon_2)-f(\varepsilon_1)
-= \int_{\varepsilon_1}^{\varepsilon_2} f'(\varepsilon)\,d\varepsilon.
-$$
-For $n\ge2$, differentiating $f(\varepsilon)$ gives
-$$
-f'(\varepsilon) = \frac{\varepsilon}{n}(1 - \varepsilon^2)^{\frac{1}{n} - 1}.
-$$
-Since $0 \leq \varepsilon < 1$ implies $1 - \varepsilon^2 \in (0, 1]$ and $\frac{1}{n} - 1 \leq 0$ as $n \geq 2$, we have
-$$
-(1 - \varepsilon^2)^{\frac{1}{n} - 1} \geq 1 \qquad\left[\,\forall \varepsilon \in [0, 1)\,\right].
-$$
-Multiplying through by $\varepsilon/n$ we get
-$$
-f'(\varepsilon) \geq \frac{\varepsilon}{n}.
-$$
-Therefore,
-$$
-\Delta_\delta = \int_{\varepsilon_1}^{\varepsilon_2} f'(\varepsilon)\,d\varepsilon
-~\geq~ \int_{\varepsilon_1}^{\varepsilon_2}\frac{\varepsilon}{n}\,d\varepsilon
-=\frac{\varepsilon_2^2 - \varepsilon_1^2}{2n}.
-$$
-
-Taking $\varepsilon_2\to 1^{-}$ (and using continuity of $f$) shows the same bound holds when $\varepsilon_2 = 1$. Hence, for all $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$,
-$$
-\Delta_\delta \geq \frac{\varepsilon_2^2 - \varepsilon_1^2}{2n}.
-$$
-> **Note.** At $\varepsilon=1$, the factor $(1 - \varepsilon^2)^{\frac{1}{n} - 1}$ diverges (for $n > 2$), which only strengthens $(1 - \varepsilon^2)^{\frac{1}{n} - 1} \geq 1$ and $f'(\varepsilon) \geq \varepsilon/n$. The integral is interpreted as a limit *from below* when the upper limit is $1$.
-
-#### Decision rule and sample complexity
-
-Define a margin
-$$
-t := \frac{\Delta_{\delta}}{2} = \frac{\delta_{\text{far}} - \delta_{\text{close}}}{2}.
-$$
-Pick a single cutoff inside the gap (the midpoint):
-$$
-\kappa := \frac{\delta_{\text{close}} + \delta_{\text{far}}}{2} = \frac{f(\varepsilon_1) + f(\varepsilon_2)}{2}.
-$$
-
-In the easy (i.i.d.) case the true mismatch rate is identical across coordinates, so we **pool** all matching‑basis trials across all coordinates and blocks; let $S$ denote the set of all matching‑basis indices among the total $T = n \cdot N$ calls.
-
-After running the protocol and computing the empirical mismatch rate $\hat\delta$ on the matching-basis rounds $S$, we define the decision rule as
-> $$
-\textbf{Decision rule (easy case)} =
-\begin{cases}
-\text{“close”} & \text{if } \hat\delta \leq \kappa,\\
-\text{“far”}   & \text{if } \hat\delta > \kappa.
-\end{cases}
-$$
-
-On matching-basis rounds, the indicators $\{ Y_i \}_{i \in S}$ are i.i.d. Bernoulli random variables with mean $\delta$. Chernoff–Hoeffding gives, for any $t > 0$,
-$$
-\Pr\!\left[|\hat\delta - \delta| \geq t\right] \leq 2e^{-2|S|t^2}.
-$$
-- **Completeness** ($\delta \leq \delta_{\text{close}}$):
-  If the *good* event $|\hat\delta - \delta| < t$ holds, then
-  $\hat\delta \leq \delta_{\text{close}} + t = \kappa \Rightarrow$ accept.
-
-- **Soundness** ($\delta \geq \delta_{\text{far}}$):
-  If $|\hat\delta-\delta| < t$, then
-  $\hat\delta > \delta_{\text{far}} - t = \kappa \Rightarrow$ reject.
-
-Therefore, each error (completeness or soundness) occurs only if $|\hat\delta-\delta|\geq t$ (the bad event). To make this probability $\leq \alpha$, it suffices that
-$$
-2e^{-2|S|t^2} \leq \alpha
-\quad\iff\quad
-|S| \geq \frac{2}{\Delta_\delta^{2}}\,\ln\!\frac{2}{\alpha} \qquad (t = \Delta_\delta/2).
-$$
-The bound on $\Delta_\delta$ from the integral earlier states that
-$$
-\Delta_\delta \geq \frac{\varepsilon_2^2 - \varepsilon_1^2}{2n}.
-$$
-From this, we can derive that
-$$
-\begin{aligned}
-\Delta_\delta ~~\geq~~ \frac{\varepsilon_2^2 - \varepsilon_1^2}{2n} &{\quad\iff\quad} \Delta_\delta^2 ~~\geq~~ \left(\frac{\varepsilon_2^2 - \varepsilon_1^2}{2n}\right)^2
-\\[10pt]&{\quad\iff\quad} \Delta_\delta^2 ~~\geq~~ \frac{\left(\varepsilon_2^2 - \varepsilon_1^2\right)^2}{4n^2}
-\\[10pt]&{\quad\iff\quad} \frac{1}{\Delta_\delta^2} ~\leq~~ \frac{4n^2}{\left(\varepsilon_2^2 - \varepsilon_1^2\right)^2}
-\\[15pt]&{\quad\iff\quad} \frac{2}{\Delta_\delta^2} \,\ln\! \frac{2}{\alpha} ~~\leq~~ \frac{8n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2} \,\ln\! \frac{2}{\alpha} \quad[\,=: L\,].
-\end{aligned}
-$$
-Since $\Delta_\delta \geq (\varepsilon_2^2 - \varepsilon_1^2)/(2n)$ and $\frac{2}{\Delta_\delta^2}\,\ln\!\frac{2}{\alpha}$ is strictly decreasing in $\Delta_\delta$, the true requirement is always at most $L$. Therefore, choosing $|S| \geq L$ guarantees the condition is satisfied for all admissible $\Delta_\delta$:
-$$
-|S| \geq \underbrace{\frac{8\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha}}_{\text{Our choice (worst-case }L\text{)}}
-\quad\geq\quad
-\underbrace{\frac{2}{\Delta_\delta^{2}}\,\ln\!\frac{2}{\alpha}}_{\text{What we actually need}}.
-$$
-In other words, a sufficient condition for $|S|$ is:
-$$
-|S| ~~\geq~~ \frac{8\,n^2}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha}.
-$$
-
-Let $T := n \cdot N$ be the total number of single‑pair measurements (oracle calls). Since a call has matching bases with probability $1/2$, a Chernoff bound shows that choosing $T = 4|S|$ (equivalently, $N = 4|S|/n$ blocks) makes the event of getting fewer than $|S|$ matches have probability at most $e^{-|S|/4}$, which is negligibly small for moderate $|S|$. Therefore,
-$$
-N ~=~ \frac{4|S|}{n} ~~\geq~~ \frac{32\,n}{\left( \varepsilon_2^2 - \varepsilon_1^2 \right)^2}\,\ln\!\frac{2}{\alpha}
-\qquad\left[= O\!\left(n\,(\varepsilon_2^2 - \varepsilon_1^2)^{-2}\right)\right],
-$$
-and equivalently (in terms of total oracle calls)
-$$
-T = n \cdot N \geq \frac{32\,n^2}{(\varepsilon_2^2 - \varepsilon_1^2)^2}\,\ln\!\frac{2}{\alpha}.
-$$
-
-So it turns out that extending the test from a single pair to $n$ i.i.d. pairs is **not** free: the sample cost grows linearly in the number of blocks (equivalently, quadratically in the total number of oracle calls). This is because certifying that the entire collection of $n$ states is globally $\varepsilon$-close is much stricter than certifying a single state. A small imperfection in each pair, when compounded over the tensor product, can cause a large global deviation.
-
-To keep the global fidelity $F_n = F_1^n$ high, each single-pair fidelity $F_1$ must be extremely close to $1$. Since the true error rate $\delta$ measures per-pair imperfection, this requirement forces $\delta$ to be much smaller than in the single-pair case. Consequently, the promise gap $\Delta_\delta$ (the separation between the "close" and "far" thresholds) shrinks by about a factor of $n$, compressing the relevant error-rate range into a tiny window near zero.
-
-A core principle of statistics is that the uncertainty of an estimated average is proportional to the inverse square root of the number of samples (in our case, this is $1 / \sqrt{|S|}$). To reliably measure a promise gap that is $n$ times smaller, our estimate for $\Delta_\delta$ must be $n$ times more precise. Achieving this $n$-fold increase in precision requires an $n^2$-fold increase in the **number of pooled calls** (hence $O(n^2)$ total single‑pair measurements) which, when grouped as blocks of size $n$, translates to an $O(n)$ growth in the **number of blocks** $N$.
-
-> **Theorem (Finite-sample tolerant EPR identity test, i.i.d. product version).**
->
-> Let $n \geq 2$ and suppose the global state $\rho^{\otimes n}$ for some bipartite state $\rho$.
-> Fix global trace-distance tolerances $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$ and failure probability $\alpha \in (0,1)$.
-> Define
-> $$
-\begin{aligned}
-&f(\varepsilon) = \frac{1}{2}\!\left[1 - (1 - \varepsilon^2)^{1/n}\right]&,&
-&\delta_{\text{close}} = f(\varepsilon_1),
-\\[10pt]&\delta_{\text{far}} = f(\varepsilon_2)&,&
-\qquad &\kappa = \frac{\delta_{\text{close}} + \delta_{\text{far}}}{2}.
-\end{aligned}
-$$
->
-> **Protocol.** Prepare $N$ (i.i.d.) blocks of $\rho^{\otimes n}$.
-> For each block $j \in [N]$ and coordinate $i \in [n]$, make one call to $\mathbb{O}(\rho)$, obtaining $(M_{(j,i)}, Y_{(j,i)})$.
-> Let
-> $$
-S := \{\, (j,i) \in [N] \times [n] ~:~ M_{(j,i)} = 1 \,\}
-$$
-> be the set of calls with matching bases. Define the *pooled* empirical mismatch rate as
-> $$
-\hat{\delta} := \frac{1}{|S|} \sum_{(j,i) \in S} Y_{(j,i)},
-$$
-> where $Y_{(j,i)} \in \{0,1\}$ for all $(j,i) \in S$.
-> 
-> **Decision rule.** Accept ***iff*** $\hat{\delta} \leq \kappa$.
->
-> If
-> $$
-N ~~\geq~~ \frac{32\,n}{(\varepsilon_2^2 - \varepsilon_1^2)^2} \,\ln\!\frac{2}{\alpha}, \qquad\left[= O\!\left(n\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right]
-$$
-> equivalently, the number of oracle calls, 
-> $$
-T = n \cdot N ~~\geq~~ \frac{32\,n^2}{(\varepsilon_2^2 - \varepsilon_1^2)^2}\,\ln\!\frac{2}{\alpha}, \qquad\left[= O\!\left(n^2\left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right]
-$$
-> then the following statements are true:
-> 
-> - **Completeness.** If $D(\rho^{\otimes n}, \Phi^{\otimes n}) \leq \varepsilon_1$, the test accepts with probability at least $1 - \alpha$.
-> - **Soundness.** If $D(\rho^{\otimes n}, \Phi^{\otimes n}) \geq \varepsilon_2$, the test rejects with probability at least $1 - \alpha$.
-> - **Promise gap.** If $\varepsilon_1 < D(\rho^{\otimes n},\Phi^{\otimes n}) < \varepsilon_2$, no guarantee is made; the test may accept or reject.
-> 
-> *Note.* In the i.i.d. case, all coordinates $i \in [n]$ have the same true mismatch rate, so pooling over $S$ is valid. Matching bases occur with probability $1/2$ independently per coordinate; the constants above already account (via Chernoff-Hoeffding bounds) for obtaining enough matches with high probability.
-
-That completes the "easy" i.i.d. case. Next, we'll remove the identical-pair assumption.
-
----
-
-## Medium case (independent, non-identical pairs)
-
-Here the joint state is a product of possibly different single-pair states
-$$
-\varrho = \rho_{1}\otimes\rho_{2}\otimes\dots\otimes\rho_{n},
-\quad
-\text{vs. } ~
-\Phi^{\otimes n}.
-$$
-with no entanglement across copies but with potentially different single-pair states $\rho_i$. In the context of BB84, each copy is attacked "from scratch" (no cross-round entanglement) but Eve may prepare a different state in every round.
-
-Exactly as before, we want a single classical test that, with failure probability at most $\alpha$, distinguishes
-$$
-\begin{cases}
-~\text{H}_0\text{ (“close”)}  &: D_n \leq \varepsilon_1,\\[6pt]
-~\text{H}_1\text{ (“far”)}    &: D_n \geq \varepsilon_2,
-\end{cases}
-\qquad
-0 \leq \varepsilon_1 < \varepsilon_2 \leq 1,
-$$
-where $D_n := D(\rho_1 \otimes \dots \otimes \rho_n, \Phi^{\otimes n})$.
-
-For each coordinate $i$ (i.e. each position in the $n$-tuple of pairs), let
-$$
-\delta_i := \Pr[\text{mismatch} \mid \text{matching bases on coordinate } i]
-$$
-be the *true* mismatch probability for that coordinate, and let
-$$
-\hat{\delta}_i := \frac{\#\{\text{mismatches on coordinate } i\}}{\#\{\text{matching-basis trials on coordinate } i\}}
-$$
-be its *empirical* mismatch rate from the data.
-
-In the easy case, all $\delta_i$ are identical because of the i.i.d. assumption. So pooling all matching-basis trials into a single $\hat{\delta}$ is equivalent to estimating $\delta_i$ for any $i$. And as we've seen, we only need one concentration bound.
-
-However, for our medium (independent, non-identical) case, the $\delta_i$ may differ. To certify *all* coordinates simultaneously, we need to guarantee that $|\hat{\delta}_i - \delta_i|$ is small **for every** $i$. This unfortunately forces us to run the test on each coordinate separately and then take a **union bound** over the $n$ coordinates, and we'll soon see that this adds an extra $n \log n$ factor in the sample complexity on top of the easy case.
-
-Let's get started. First, we organise repeated i.i.d. copies of the *entire* $n$-tuple into *blocks* using the definition from near the very beginning of this post. As a reminder, in the context of the medium case, a block is one i.i.d. copy of the global product state $\varrho$. Note that in the medium case (in fact, for all three cases) we are still given i.i.d. copies of
-$$
-\varrho = \rho_1 \otimes \rho_2 \otimes \cdots \otimes \rho_n,
-$$
-but within $\varrho$, the individual $\rho_i$ may be different.
-
-After preparing a block, we make independent calls to the single-pair oracle $\mathbb{O}$ on *each* coordinate $i = 1, \dots, n$. The block then outputs
-$$
-\bigl\{ (M_{(j, i)},\,Y_{(j, i)}) \bigr\}_{i=1}^n,
-$$
-where $j$ indexes the block. Explicitly, in block $j$ we obtain for each coordinate $i$:
-
-- a matching indicator $M_{(j, i)} \in \{0, 1\}$, which is $1$ if Alice's and Bob's bases matched for that pair;
-- and, if $M_{(j, i)} = 1$, a mismatch bit $Y_{(j, i)} \in \{0, 1\}$ with $\mathbb{E}[Y_{(j,i)} \mid M_{(j,i)} = 1] = \delta_i$.
-
-We repeat this procedure over $N$ independent blocks. The entire dataset forms an $N \times n$ table:
-$$
-\begin{array}{c|cccc}
-\text{block } j & i=1 & i=2 & \cdots & i=n \\ \hline
-1 & (M_{(1,1)}, Y_{(1,1)}) & (M_{(1,2)}, Y_{(1,2)}) & \cdots & (M_{(1,n)}, Y_{(1,n)}) \\
-2 & (M_{(2,1)}, Y_{(2,1)}) & (M_{(2,2)}, Y_{(2,2)}) & \cdots & (M_{(2,n)}, Y_{(2,n)}) \\
-\vdots & \vdots & \vdots & \ddots & \vdots \\
-N & (M_{(N,1)}, Y_{(N,1)}) & (M_{(N,2)}, Y_{(N,2)}) & \cdots & (M_{(N,n)}, Y_{(N,n)})
-\end{array}
-$$
-
-where each cell comes from a single call to $\mathbb{O}(\rho_i)$. In total, we have made $T = n \cdot N$ calls to the oracle. In this table:
-
-- **Rows** (fixed $j$): contain all $n$ coordinates in the same block, prepared together as one copy of $\varrho$. The $\rho_i$ can be different, so entries in the same row are generally *not* identically distributed.
-- **Columns** (fixed $i$): contain the same coordinate across $N$ i.i.d. blocks. These entries *are* i.i.d. samples from $\rho_i$, since each block contains a fresh copy of it in position $i$.
-
-Therefore, when analysing each coordinate ($i$) separately, the $N$ entries in a column are independent and identically distributed. The union bound will later account for all $n$ coordinates at once.
-
-### A pipeline for the decision rule
-
-For our decision rule, we must reason directly with the **product fidelity**
-$$
-F_n^2 ~=~ \prod_{i=1}^n F_i^2,
-$$
-since this is what determines the global trace distance in $\mathbf{H_0}$ and $\mathbf{H_1}$. Any aggregate statistic of the per-coordinate error rates (such as $\max_i\hat\delta_i$ or an average) can misclassify states: even if one coordinate has a relatively large mismatch rate $\delta_i$ (and thus a lower $F_i$), the remaining coordinates may have fidelities close to $1$, so that the product fidelity $F_n$ still satisfies the global acceptance condition. In this case, a per‐coordinate max rule would incorrectly reject such a state. To align the test with the global criterion, we instead construct **upper confidence bounds** $U_i$ such that, with high probability, $\delta_i \leq U_i$ for all $i$ simultaneously. These bounds give
-$$
-F_i^2 ~\geq~ 1 - 2U_i
-$$
-and hence a **lower confidence bound** on the product fidelity,
-$$
-\widehat{F}_{\text{LCB}}^{\,2} := \prod_{i=1}^n (1 - 2U_i) ~\leq~ F_n^2.
-$$
-
-We then accept iff $\widehat{F}_{\text{LCB}}^{\,2}$ exceeds a threshold, so the decision rule targets the global fidelity condition directly.
-
-In short, we would first establish a per-coordinate UCB on $\delta_i$, use that to establish a LCB on the global fidelity $F_n$, then we can derive a decision rule. Let's break down the pipeline step by step.
-
-#### Per-coordinate UCB on $\delta_i$
-
-For each coordinate $i \in [n]$, define the matching-basis index set across blocks (columns)
-$$
-S_i := \{\, j \in [N] : M_{(j, i)} = 1 \,\}.
-$$
-
-The empirical mismatch rate on coordinate $i$ is
-$$
-\hat\delta_i ~=~ \frac{1}{|S_i|} \sum_{j \in S_i} Y_{(j, i)} \quad\text{(defined when }|S_i| > 0\text{)}.
-$$
-
-Recall the per-coordinate true error rate $\delta_i = \Pr[Y = 1 \mid M = 1]$.
-
-The random variables $\{Y_{(j,i)}\}_{j\in S_i}$ are i.i.d. Bernoulli with mean $\delta_i$. For any $t > 0$, we have the one-sided Hoeffding bound
-$$
-\Pr\!\left[\delta_i - \hat\delta_i \geq t\right] \leq e^{-2|S_i|t^2}.
-$$
-
-Compared to the two-sided Hoeffding bound used earlier, the absolute value on the left-hand side has been dropped. Intuitively, the two-sided version accounts for both deviations above and below the mean, each equally likely, which introduces the extra factor of $2$ in front of the exponential. In the one-sided case, we only consider one direction of deviation, so this factor disappears.
-
-To turn the Hoeffding bound into a high-confidence margin, we pick $t$ so that the bad event $\delta_i > \hat{\delta}_i + t$ occurs with probability at most a chosen budget $\beta$:
-$$
-e^{-2|S_i|t^2} \leq \beta.
-$$
-
-Taking logarithms and rearranging gives
-$$
-t^2 \geq \frac{\ln(1/\beta)}{2|S_i|} 
-\quad\implies\quad
-t \geq \sqrt{\frac{\ln(1/\beta)}{2|S_i|}}.
-$$
-
-Since $|S_i|$ can be different for each coordinate, the margin for $t$ will in general depend on $i$. Therefore, we write it as $t_i$. In practice, choosing $t_i$ larger than necessary would make the bound looser by increasing the UCB $U_i$.
-To keep the bound as tight as possible, we take the smallest $t_i$ that satisfies the inequality (i.e. set it by taking the equality) and set
-$$
-t_i = \sqrt{\frac{\ln(1/\beta)}{2|S_i|}}.
-$$
-
-This choice guarantees that
-$$
-\Pr[\delta_i > \hat{\delta}_i + t_i]  \leq \beta
-$$
-for the given coordinate $i$.
-
-By the union bound, for any events $E_1, \dots, E_n$,
-$$
-\Pr\!\left[ ~\bigcup_{i = 1}^{n} E_i~ \right] ~\leq~ \sum_{i = 1}^n \Pr[E_i].
-$$
-In our context, we want all $n$ coordinates to have valid upper bounds simultaneously. Let $E_i$ be the event that the UCB for coordinate $i$ fails,
-$$
-E_i := \left\{\delta_i > \hat{\delta}_i + t_i\right\},
-$$
-applying the union bound gives
-$$
-\Pr\!\left[\,\exists i: \delta_i > \hat\delta_i + t_i\,\right] ~\leq~ \sum_{i=1}^n \Pr[\delta_i > \hat\delta_i + t_i].
-$$
-
-In words: the probability that at least one coordinate's bound fails is no more than the sum of the individual failure probabilities.
-
-If each coordinate's bound fails with probability at most $\beta$, then by the union bound the probability that *any* coordinate's bound fails is at most $n\beta$. If (by choice) we allocate half of the total error budget $\alpha$ to this step, then we require
-$$
-n\beta \leq \frac{\alpha}{2} \quad\implies\quad \beta \leq \frac{\alpha}{2n}.
-$$
-
-Substituting this $\beta$ into the expression for $t_i$ gives
-$$
-t_i = \sqrt{\frac{\ln(1/\beta)}{2|S_i|}} = \sqrt{\frac{\ln\!\left(\frac{2n}{\alpha}\right)}{2|S_i|}}.
-$$
-
-From the one-sided Hoeffding bound earlier, we can construct a valid UCB on $\delta_i$ by taking the empirical rate and adding the margin:
-$$
-U_i := \hat\delta_i + t_i.
-$$
-
-To enforce our relabeling convention $\delta_i \in [0, \tfrac{1}{2}]$, we take
-$$
-U_i := \min\left\{ \tfrac{1}{2}, \hat\delta_i + t_i \right\}.
-$$
-This cap at $\tfrac{1}{2}$ reflects our per-basis relabeling convention: for each basis, we flip Bob's outcomes if necessary so that the mismatch probability is at most $\tfrac{1}{2}$; values above $\tfrac{1}{2}$ are operationally equivalent to their complement and therefore replaced by $\tfrac{1}{2}$.
-
-Therefore, for all coordinates $i \in [n]$, we have established a upper confidence bound on the per-coordinate true error rate $\delta_i$, and by the union bound all $n$ inequalities $\delta_i \leq U_i$ hold *simultaneously* with probability at least $1 - \tfrac{\alpha}{2}$. Let's now translate this into a lower confidence bound on the global fidelity.
-
-#### LCB on the global fidelity $F_n$
-By the single-pair fidelity-error relation, for each coordinate $i \in [N]$ we have
-$$
-F(\rho_i, \Phi) \geq \sqrt{1 - 2\delta_i}.
-$$
-
-Squaring both sides and substituting the upper confidence bound $U_i$ for $\delta_i$ yields
-$$
-F(\rho_i, \Phi)^2 \geq 1 - 2\delta_i \geq 1 - 2U_i.
-$$
-
-Multiplying over all coordinates,
-$$
-F(\varrho, \Phi^{\otimes n})^2
-~=~ \prod_{i=1}^n F(\rho_i, \Phi)^2
-~\geq~ \prod_{i=1}^n \bigl(1 - 2U_i\bigr).
-$$
-
-We define the lower confidence bound (LCB) on the global fidelity as
-$$
-\widehat{F}_{\text{LCB}}^{\,2} := \prod_{i=1}^n \bigl(1 - 2U_i\bigr),
-$$
-which is non-negative by construction, since $U_i \leq \tfrac{1}{2}$ from our definition. 
-
-
-Therefore, from the union bound construction above, all $n$ inequalities $\delta_i \leq U_i$ hold simultaneously with probability at least $1 - \tfrac{\alpha}{2}$. On this event,
-$$
-\widehat{F}_{\text{LCB}}^{\,2} \leq F(\varrho, \Phi^{\otimes n})^2,
-$$
-
-so $\widehat{F}_{\text{LCB}}^{\,2}$ is a valid lower confidence bound on the global fidelity $F_n^2$ with probability at least $1 - \tfrac{\alpha}{2}$.
-
-(In the final theorem, this will combine with the separate high-probability guarantee from the "enough matches" step to give an overall probability of at least $1 - \alpha$.)
-
-With this LCB on the global fidelity established, we now need to define a decision rule for the test.
-
-#### Decision rule and correctness proof
-
-Define the cutoff
-$$
-\tau := 1 - \frac{\varepsilon_1^2 + \varepsilon_2^2}{2}.
-$$
-Then we accept ***iff*** $\widehat{F}_{\text{LCB}}^{\,2} \geq \tau$:
-> $$
-\textbf{Decision rule (medium case)} =
-\begin{cases}
-\text{“close”} & \text{if } \widehat{F}_{\text{LCB}}^{\,2} \geq \tau,\\[4pt]
-\text{“far”} & \text{if } \widehat{F}_{\text{LCB}}^{\,2} < \tau.
-\end{cases}
-$$
-
-We need to prove the correctness of our decision rule, conditioned on the *good event* $\mathcal{G}$. Correctness includes completeness (close $\Rightarrow$ accept) and soundness (far $\Rightarrow$ reject). But before we get into that, what exactly is the good event in the medium case?
-
-[write what the good event is]
-
----
-
-After this line, everything below is not fully correct
-
----
-
-
-
-As in the i.i.d. case, define the function 
-$$
-f(\varepsilon) := \tfrac{1}{2}\!\left[1 - (1 - \varepsilon^2)^{1/n}\right],
-$$
-the thresholds
-$$
-\delta_{\text{close}} := f(\varepsilon_1), \quad \delta_{\text{far}} := f(\varepsilon_2),
-$$
-the (midpoint) cutoff
-$$
-\kappa := \tfrac{1}{2}(\delta_{\text{close}} + \delta_{\text{far}}),
-$$
-and set the margin
-$$
-t := \tfrac{1}{2}(\delta_{\text{far}} - \delta_{\text{close}}).
-$$
-(As before, $\delta_{\text{far}} - \delta_{\text{close}} = \Delta_\delta \geq \frac{\varepsilon_2^2-\varepsilon_1^2}{2n}$.)
-
-> $$
-\textbf{Decision rule (medium case)} =
-\begin{cases}
-\text{“close”} & \text{if } \max_{i \in [n]} \hat\delta_i < \kappa,\\
-\text{“far”}   & \text{if } \max_{i \in [n]} \hat\delta_i \geq \kappa.
-\end{cases}
-$$
-
-In other words, we accept if and only if the worst-case error rate is strictly less than our cutoff $\kappa$, meaning all our error rates $\hat\delta_i$ has to pass the cutoff test.
-
-Define the **good event**
-$$
-\mathcal G ~:=~ \bigcap_{i=1}^n \left\{\,|\hat\delta_i - \delta_i| < t\,\right\},
-$$
-i.e. *every* column concentrates within the margin $t$. We will set the number of blocks $N$ so that $\Pr[\mathcal G] \geq 1 - \alpha$ using concentration bounds.
-
-Let's quickly show completeness and soundness of our decision rule.
-
-**Completeness (close $\Rightarrow$ accept).** If every coordinate is close i.e. $\delta_i \leq \delta_{\text{close}}$ for all $i$, then on the *good* event $\mathcal{G}$,
-$$
-\hat\delta_i < \delta_i + t ~\le~ \delta_{\text{close}} + t ~=~ \kappa
-\quad\implies\quad
-\max_i \hat\delta_i < \kappa,
-$$
-so we accept.
-
-**Soundness (far $\Rightarrow$ reject).** This requires some work. If the global state $\varrho = \otimes_{i=1}^n \rho_i$ is far i.e. $D(\varrho, \Phi^{\otimes n}) \geq \varepsilon_2$, then by the (right-hand) Fuchs–van de Graaf inequality, the global fidelity, $F_n$, satisfies
-$$
-F_n := F(\varrho, \Phi^{\otimes n}) \leq \sqrt{1 - \varepsilon_2^2}.
-$$
-Fidelity is multiplicative even for *heterogeneous* products:
-$$
-F_n = \prod_{i=1}^n F_i, \quad\text{where } F_i := F(\rho_i,\Phi).
-$$
-Let $\tau := (1 - \varepsilon_2^2)^{1/(2n)}$, so $\tau^n = \sqrt{1 - \varepsilon_2^2}$. If **every** coordinate satisfied $F_i > \tau$, then
-$$
-F_n ~=~ \prod_{i=1}^n F_i ~>~ \tau^n ~=~ \sqrt{1 - \varepsilon_2^2},
-$$
-contradicting the bound for $F_n$ above. Therefore, there has to exist some coordinate $i^\star$ with
-$$
-F_{i^\star} ~\leq~ \tau ~=~ (1 - \varepsilon_2^2)^{1/(2n)}.
-$$
-Now use the single-pair link $F_i \geq \sqrt{1 - 2\delta_i}$ from the lemma above. Rearranging
-$$
-1 - 2\delta_{i^\star} ~\leq~ F_{i^\star}^2 ~\leq~ \tau^2 = (1 - \varepsilon_2^2)^{1/n}
-$$
-gives
-$$
-\delta_{i^\star} ~\geq~ \frac{1 - (1 - \varepsilon_2^2)^{1/n}}{2} ~=~ f(\varepsilon_2) ~=~ \delta_{\text{far}}.
-$$
-On the good event $\mathcal{G}$,
-$$
-\hat\delta_{i^\star} ~>~ \delta_{i^\star} - t ~\geq~ \delta_{\text{far}} - t ~=~ \kappa,
-$$
-so
-$$
-\max_i \hat\delta_i ~\geq~ \hat\delta_{i^\star} ~>~ \kappa,
-$$
-and we reject.
-
-So all we owe now is to make the *good event* $\mathcal{G}$ hold with probability at least $1 - \alpha$ using a concentration bound.
-
----
-
-### Concentration: all coordinates at once
-`Complete writeup`
-
-
----
-
-> **Theorem (Finite-sample tolerant EPR identity test, independent, non-identical pairs).**
->
-> Let $n \geq 2$ and suppose the global state is $\varrho = \rho_1 \otimes \rho_2 \otimes \dots \otimes \rho_n$ for bipartite states $\rho_i$.
-> Fix global trace-distance tolerances $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$ and failure probability $\alpha \in (0,1)$. 
-> Define
-> $$
-\begin{aligned}
-&f(\varepsilon) = \frac{1}{2}\!\left[1 - (1 - \varepsilon^2)^{1/n}\right], & &
-\delta_{\text{close}} = f(\varepsilon_1), \\[6pt]
-&\delta_{\text{far}} = f(\varepsilon_2), & &
-\kappa = \frac{\delta_{\text{close}} + \delta_{\text{far}}}{2}.
-\end{aligned}
-$$
->
-> **Protocol.** Prepare $N$ (i.i.d.) blocks of $\varrho$.
-> For each block $j \in [N]$ and coordinate $i \in [n]$, make one call to $\mathbb{O}(\rho_i)$, obtaining $(M_{(j,i)}, Y_{(j,i)})$.
-> For each coordinate $i$, define
-> $$
-S_i := \{\, j \in [N] ~:~ M_{(j,i)} = 1 \,\}
-$$
-> and compute
-> $$
-\hat{\delta}_i := \frac{1}{|S_i|} \sum_{j \in S_i} Y_{(j,i)},
-$$
-> where $Y_{(j,i)} \in \{0,1\}$ for all $(j,i) \in S_i$.
->
-> **Decision rule.** Accept ***iff*** $\max_{i \in [n]} \hat{\delta}_i < \kappa$.
->
-> If
-> $$
-N ~~\geq~~ \frac{32\,n^2}{(\varepsilon_2^2 - \varepsilon_1^2)^2}\,\ln\!\frac{4n}{\alpha}, \qquad\left[= O\!\left(n^2 \log n \left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right]
-$$
-> equivalently, the number of oracle calls,
-> $$
-T = n \cdot N ~~\geq~~ \frac{32\,n^3}{(\varepsilon_2^2 - \varepsilon_1^2)^2}\,\ln\!\frac{4n}{\alpha}, \qquad\left[= O\!\left(n^3 \log n \left(\varepsilon_2^2 - \varepsilon_1^2\right)^{-2}\right)\right]
-$$
-> then the following statements are true:
->
-> - **Completeness.** If $D(\bigotimes_{i=1}^n \rho_i, \Phi^{\otimes n}) \leq \varepsilon_1$, the test accepts with probability at least $1 - \alpha$.
-> - **Soundness.** If $D(\bigotimes_{i=1}^n \rho_i, \Phi^{\otimes n}) \geq \varepsilon_2$, the test rejects with probability at least $1 - \alpha$.
-> - **Promise gap.** If $\varepsilon_1 < D(\bigotimes_{i=1}^n \rho_i, \Phi^{\otimes n}) < \varepsilon_2$, no guarantee is made; the test may accept or reject.
->
-> *Note.* In the medium case, the $\delta_i$ may differ across coordinates, so each $\hat{\delta}_i$ must be estimated separately. The union bound over all $n$ coordinates yields the $\log(n)$ factor in the sample complexity.
 
 ## Hard case (arbitrary $2n$-qubit state)
 
@@ -1279,6 +582,11 @@ $$
 \quad\text{with}\quad
 \Pi_b=\bigotimes_{i=1}^n\Pi_{b_i}^{(i)}.
 $$
+
+**Output:** $Y_\star \in \{ 0, 1 \}$.
+
+---
+
 We will call $\mathbb{O}_\star$ once per block. Over $N$ i.i.d. blocks we get i.i.d. bits $Y_{\star,1},\dots,Y_{\star,N}$ with mean $\delta_\star$, and we estimate
 $$
 \hat\delta_\star=\frac{1}{N}\sum_{j=1}^N Y_{\star,j}.
@@ -1319,8 +627,9 @@ $$
 $$
 and we require the condition
 $$
-\varepsilon_1 < \varepsilon_2^2/2 \quad(\text{or there's no gap to separate}).
+\varepsilon_1 < \varepsilon_2^2/2.
 $$
+This condition is essential; without it, the promise gap collapses.
 ### Decision rule
 
 Set
@@ -1331,7 +640,7 @@ c_\star := \frac{\delta^\text{close}_\star+\delta^\text{far}_\star}{2}
 = \frac{2\varepsilon_1+\varepsilon_2^2}{4}.
 $$
 
-> **Rule.** After $N$ blocks, compute $\hat\delta_\star$.
+> **Rule.** After running $\mathbb{O}_\star$ on each of the $N$ blocks, compute $\hat\delta_\star$.
 > Accept “**close**” ***iff*** $\hat\delta_\star \leq c_\star$; otherwise say “**far**”.
 
 This mirrors our cutoff $c = \frac{2\varepsilon_1+\varepsilon_2^2}{4}$ in the single-pair case.
@@ -1344,17 +653,17 @@ $$
 $$
 On the good event $\mathcal{G} = \left\{ |\hat\delta_\star - \delta_\star| < t \right\}$:
 
-* If $D\le \varepsilon_1$ then $\delta_\star\le\delta^\text{close}_\star=c_\star-t$, hence $\hat\delta_\star \leq c_\star$ $\Rightarrow$ **accept**.
-* If $D\ge \varepsilon_2$ then $\delta_\star\ge\delta^\text{far}_\star=c_\star+t$, hence $\hat\delta_\star > c_\star$ $\Rightarrow$ **reject**.
+* If $D \leq \varepsilon_1$ then $\delta_\star \leq\delta^\text{close}_\star = c_\star-t$, hence $\hat\delta_\star \leq c_\star$ $\Rightarrow$ **accept**.
+* If $D \geq \varepsilon_2$ then $\delta_\star \geq\delta^\text{far}_\star = c_\star+t$, hence $\hat\delta_\star > c_\star$ $\Rightarrow$ **reject**.
 
 Thus each error happens only if the good event $\mathcal{G}$ fails.
 
-Pick $t=(\varepsilon_2^2-2\varepsilon_1)/4$ and demand the tail $\le\alpha$:
+Pick $t = (\varepsilon_2^2-2\varepsilon_1) / 4$ and demand the tail $\leq \alpha$:
 
 $$
-2e^{-2Nt^2}\le \alpha
+2e^{-2Nt^2} \leq \alpha
 \quad\Longleftrightarrow\quad
-\boxed{\ N\ \ge\ \frac{8}{(\varepsilon_2^2-2\varepsilon_1)^2}\,\ln\!\frac{2}{\alpha}\ }.
+\boxed{\ N\ \geq\ \frac{8\,\ln(2/\alpha)}{(\varepsilon_2^2 - 2\varepsilon_1)^2}\ }.
 $$
 
 As a reminder, this result is fully adversarial within each block (the realistic lab setting), but assumes the source provides i.i.d. blocks across runs, so that we can estimate the block-level error rate from many independent samples. Let's package everything together cleanly.
@@ -1428,82 +737,7 @@ $$
 N = O\!\left[\, \frac{n}{\alpha^2\,\Delta^6}\,\Bigl(\ln\frac{1}{\alpha}\Bigr)^2\,\log^2\Bigl(\frac{1}{\alpha\,\Delta^2}\ln\frac{1}{\alpha}\Bigr) \,\right].
 $$
 
-Therefore, our tolerant identity test remains sound even against a single adversarial global source, with only a linear dependence on the block size $n$ and polylogarithmic factors in $1/\alpha$ and $1/\Delta$. The i.i.d. guarantees lift cleanly to the strongest non-i.i.d. model.
-
-### Connecting to Natarajan–Vidick (sequential witness test)
-
-We now look at extensions beyond our baseline (i.i.d. arbitrary $2n$-qubit blocks) test and connect our work to the robust self-testing framework of [Natarajan and Vidick (2016)](https://arxiv.org/pdf/1610.03574). Their paper develops a nonlocal game that certifies the presence of many EPR pairs and corresponding Pauli measurements. At the core of their construction lies an operator $O_n$ whose expectation value acts as a **dimension witness**: it is maximised only by $\ket{\text{EPR}}^{\otimes n}$.
-
-Formally, they define
-$$
-O_n \;:=\; \Bigl(\tfrac12(\sigma_X\!\otimes\!\sigma_X + \sigma_Z\!\otimes\!\sigma_Z)\Bigr)^{\!\otimes n}
-\;=\; 2^{-n}\!\!\sum_{P\in\{X,Z\}^n}\!\!(\sigma_P\!\otimes\!\sigma_P),
-$$
-where
-$$
-P = (P_1, \dots, P_n) \quad\text{and}\quad \sigma_P:=\bigotimes_{i=1}^n \sigma_{P_i}.
-$$
-For every bipartite state $\rho$, they established the fact that $\mathrm{Tr}(O_n\,\rho) \leq 1$, with equality ***iff*** $\rho = \ket{\mathrm{EPR}}^{\otimes n}$ (up to local isometries).
-
-In our sequential, local-measurement picture, Alice and Bob already perform exactly the operations that realise $\mathrm{Tr}(O_n\,\rho)$:
-
-- On each of the $n$ qubit pairs, they jointly choose a random basis $W\in\{Z,X\}$ and measure $W \otimes W$.
-- For every trial they compute the **parity product**
-  $$
-  S \;=\; \prod_{i=1}^n (-1)^{x_i\oplus \tilde x_i}\in\{\pm1\},
-  $$
-  where $x_i,\tilde x_i$ are their binary measurement outcomes. Let's unpack this expression.
-    - Each factor $(-1)^{x_i\oplus \tilde x_i}$ encodes whether Alice and Bob’s results on the $i$-th pair agree or differ: the XOR ($\oplus$) equals $0$ when the bits match and $1$ when they differ, so this term is $+1$ for agreement and $-1$ for disagreement.
-    - Taking the product over all $n$ pairs compresses all correlations into a single value $S\in\{\pm1\}$, which is $+1$ if an even number of outcomes differ and $-1$ if an odd number do.
-    - Thus $S$ records the **overall parity** of Alice and Bob’s results (a single number summarising their total correlation pattern).
-- Averaging $S$ over $N$ repeated trials gives an **empirical score**
-  $$
-  \hat s \;=\; \frac{1}{N}\sum_{i=1}^N S_i.
-  $$
-- Each $S_i \in \{\pm 1\}$ is the measured outcome of the observable
-  $$
-  \bigotimes_{i=1}^n (\sigma_{W_i}\!\otimes\!\sigma_{W_i})
-  $$
-  corresponding to that trial’s random choice of bases $W_1, \dots, W_n$.
-  Since every measurement setting $P\in\{X,Z\}^n$ is chosen uniformly at random, the expected value of a single-trial outcome is
-  $$
-  \mathbb{E}[S] \;=\; 2^{-n}\!\!\sum_{P\in\{X,Z\}^n} \langle\sigma_P\!\otimes\!\sigma_P\rangle_\rho \;=\; 2^{-n}\!\!\sum_{P\in\{X,Z\}^n}\!\mathrm{Tr}\big[(\sigma_P\!\otimes\!\sigma_P)\,\rho\big]
-  \;=\; \mathrm{Tr}(O_n\,\rho),
-  $$
-  where the last equality follows directly from the definition $O_n = 2^{-n}\sum_{P\in\{X,Z\}^n}(\sigma_P\!\otimes\!\sigma_P)$.
-  
-- Hence, our test statistic $\hat s$ is an *unbiased estimator* of the NV witness value, meaning that its expected value equals the true theoretical quantity $\mathrm{Tr}(O_n\,\rho)$. In other words, if Alice and Bob repeat the procedure many times, their average empirical score converges to the exact expectation of $O_n$ on $\rho$. Showing that our statistic is *unbiased* is the heart of the argument: it verifies that the average outcome of our sequential test equals the theoretical expectation of $O_n$.
-
-Operationally, this shows that our “test” and their “game” implement the **same measurement**, just interpreted differently: ours is a *sequential local test* using classical post-processing of outcomes, and theirs as a *two-prover non-local game* described by the operator $O_n$.
-
-Therefore, we can simply claim two key statements from Natarajan–Vidick and restate them in our language:
-
-1. **Dimension witness.**
-   If $\mathrm{Tr}(O_n\,\rho) \geq 1-\varepsilon$, then
-   $$
-   F(\rho, \ket{\mathrm{EPR}}^{\otimes n})\;\geq\; 1-\varepsilon.
-   $$
-   *Interpretation:* high score implies the state has high fidelity with $\ket{\mathrm{EPR}}^{\otimes n}$.
-
-2. **Robust self-test - needs verifying.**
-   If the test (or our score) achieves success $1-\varepsilon$, then there exist local isometries $\Phi_A, \Phi_B$ such that
-   $$
-   \big\|\,(\Phi_A\otimes\Phi_B)(\rho) - \ket{\mathrm{EPR}}^{\otimes n}\!\bra{\mathrm{EPR}}^{\otimes n}\,\big\|_1
-   \;=\; \mathrm{poly}(\varepsilon).
-   $$
-   *Interpretation:* near-optimal performance forces the shared state to be polynomially close to $n$ ideal EPR pairs, up to local *embedding*. You can think of "embedding" as hiding the ideal state inside a bigger space that might contain irrelevant junk - maybe Alice's and Bob's devices have extra qubits, but you can locally project out the right subspace that contains exactly the ideal $n$ EPR pairs.
-
-This means our sequential local test is **exactly evaluating** the same operator $O_n$. Therefore, we can directly import NV’s guarantees:
-
-* **Completeness:** ideal EPR pairs yield score $1$.
-* **Soundness:** any state scoring $\geq 1-\varepsilon$ must be $\mathrm{poly}(\varepsilon)$-close to $\ket{\mathrm{EPR}}^{\otimes n}$.
-  Hence, $O_n$ provides a rigorous bridge between our *empirical test statistic* and a formal self-testing statement from the literature - no new algebraic work needed beyond verifying the unbiasedness above.
-
----
-
-ok the only thing is the caveat that we haven't used the Pauli-braiding thingy so we can't just claim $\mathrm{poly}(\varepsilon)$. is this factually correct? and also check everything here and double check which part of the paper we are actually referncing because the numbers are (i believe) not correct.
-
-Next, we analyse whether our test is noise-tolerant.
+Therefore, our tolerant identity test remains sound even against a single adversarial global source, with only a linear dependence on the block size $n$ and polylogarithmic factors in $1/\alpha$ and $1/\Delta$. The i.i.d. guarantees lift cleanly to the strongest non-i.i.d. model. Next, we analyse whether our test is *noise-tolerant*.
 
 ### Noise tolerance
 
@@ -1556,29 +790,48 @@ This additive viewpoint aligns naturally with our tolerant identity test, which 
 $$
 \bigl\|\rho^{\otimes n} - \Phi^{\otimes n}\bigr\|_1 ~\leq~ n\,\bigl\|\rho - \Phi\bigr\|_1,
 $$
-meaning that small, constant per-copy imperfections accumulate linearly rather than exponentially. However, AFY's theorem is stated for games with a classical-quantum gap $\Delta = \mathrm{qval}(G) - \mathrm{cval}(G) > 0$. In our setting we are running a classical sequential test (no entangled provers/game), so there is no such gap parameter to even define! (Effectively $\Delta = 0$ for us.)
+meaning that small, constant per-copy imperfections accumulate linearly rather than exponentially. So one might hope our test inherits noise tolerance from this property. There are two problems though.
 
-**Question:** Can we still show that our test is noise-tolerant ("acceptance does not collapse exponentially under constant per-pair noise")?
+Firstly, AFY's theorem is stated for games with a classical-quantum gap $\Delta = \mathrm{qval}(G) - \mathrm{cval}(G) > 0$. In our setting we are running a classical sequential test (no entangled provers/game), so there is no such gap parameter to even define! (Effectively $\Delta = 0$ for us.)
 
-**Answer:** Yes. Recall that $\Pr[\text{accept}] = 1 - \delta_\star \geq 1 - \varepsilon_1$; this alone shows that our test is noise-tolerant because the per-block acceptance probability is uniformly bounded below by $1 - \varepsilon_1$, with no dependence on $n$. Hence there is no "exponential collapse" with system size; our test is noise-tolerant.
+Moreover, although our analysis uses trace distance, which is subadditive, what matters for noise tolerance is the *acceptance criterion*, not just the distance measure. Our current oracle $\mathbb{O}_\star$ uses a *multiplicative* acceptance rule within each block:
 
+> $Y_\star = 0$ if and only if <u>***all***</u> $n$ pairs within the block match their respective bases.
 
-because our acceptance rule is *additive* (an average), and our analysis is in trace distance, which is subadditive, and so we obtain an $O(\nu)$ shift of the mean and concentration around it. (In contrast, parity-product witnesses like $O_n$ we saw earlier are multiplicative and so suffer exponential decay under constant local noise; we therefore do not use $O_n$ to argue tolerance.) Let's make this precise.
+Under the noise model $\rho = (1-\nu)\Phi + \nu\tau$ per pair, each pair independently matches with probability $1-\nu$. The probability that all $n$ pairs match is therefore $(1-\nu)^n \approx e^{-n\nu}$.
 
----
-
-I think the bits above are ok now. however the math below need "fixing" - just make sure we're using trace distance (the original block test before the main theorem result in the hard case) instead of anything from NV section.
-
-On each of the $N$ tested blocks we obtain a score $s_i\in[-1,1]$ from our local $Z/X$ rule, and set
+The problem is that requiring **all** $n$ pairs within each block to match means
 $$
-\hat s = \frac{1}{N}\sum_{i=1}^N s_i.
+\Pr[\text{block passes}] = (1-\nu)^n \xrightarrow{n \to \infty} 0.
 $$
-For the ideal input $\Phi^{\otimes n}$ we have $\mathbb{E}[\hat s] = 1$. Under the local noise model $\rho = (1 - \nu) \Phi + \nu\tau$ (per pair, so a block is $\rho^{\otimes n}$),
+Even if each pair matches with high probability (say $1-\nu = 0.9999$), for large $n$ we have $(0.9999)^n \to 0$. This means almost every block will fail ($Y_\star = 1$), driving $\hat{\delta}_\star \to 1$. As the block size $n$ grows, the test will reject regardless of the threshold $c_\star < 1$. This is exactly the multiplicative collapse that plagues fidelity-based tests! Unfortunately, the test as currently stated is **NOT** noise-tolerant.
+
+So, while the state $\rho^{\otimes n}$ remains reasonably close to $\Phi^{\otimes n}$ as trace distance grows at most linearly with $n$, our all-or-nothing acceptance rule causes the test to reject it as acceptance probability decays exponentially with $n$. To make our test noise-tolerant, we can modify the acceptance criterion n the block oracle $\mathbb{O}_\star$ to tolerate some fraction of failing pairs:
+
+> Accept a block if at least $(1 - \gamma)n$ pairs match, for some $0 < \gamma \ll 1$.
+
+This is the only change needed. Our test procedure remains the same:
+- run the modified oracle $\mathbb{O}'_\star$ on each of the $N$ blocks,
+- compute $\hat\delta_\star = \tfrac{1}{N} \sum_{j=1}^N Y_{\star, j}$,
+- accept ***iff*** $\hat\delta_\star \leq c_\star$.
+
+**Choosing $\gamma$ for noise tolerance.** To tolerate noise rate $\nu$, we set $\gamma > \nu$ with a sufficient gap. Let $M$ denote the number of matching pairs in a block. Under the noise model, $\mathbb{E}[M] = n(1-\nu)$. By Hoeffding's inequality,
 $$
-\mathbb{E}[\hat s] = (1 - \nu) \cdot 1 + \nu \cdot \theta
+\Pr[M < (1-\gamma)n] = \Pr\left[\frac{M}{n} < \mathbb{E}[M/n] - (\gamma - \nu)\right] \leq \exp\bigl(-2n(\gamma-\nu)^2\bigr).
 $$
-for some $\theta \in [-1, 1]$, hence
+Thus, if $\gamma > \nu$, the probability that a block fails decays **exponentially** with $n$. For large $n$, each block passes with probability $\approx 1 - \exp(-2n(\gamma-\nu)^2) \approx 1$. This **additive** threshold condition requires only a $(1-\gamma)$ fraction of pairs to match rather than all pairs, so we've broken out of the multiplicative collapse. The concentration ensures that as $n$ grows, blocks become *more* reliable, not less, achieving noise tolerance.
+
+### Future work
+
+Our protocol currently tests whether $\varrho$ is close to the **specific** maximally entangled state $\Phi^{\otimes n} = \ket{\text{EPR}}\!\bra{\text{EPR}}^{\otimes n}$. A straightforward extension is to test closeness to any **specified** maximally entangled state $\Phi_U^{\otimes n}$, where $\Phi_U = (\mathbb{I} \otimes U)\ket{\Phi}\!\bra{\Phi}(\mathbb{I} \otimes U^\dagger)$ for some <u>known</u> unitary $U \in U(2)$. This is trivial because
 $$
-\bigl\|\mathbb{E}[\hat s] - 1\bigr\| \leq 2\nu.
+D\big(\varrho,\Phi_U^{\otimes n}\big)
+= D\big((\mathbb{I} \otimes U^\dagger)^{\otimes n}\varrho\,(\mathbb{I} \otimes U)^{\otimes n}\ ,\ \Phi^{\otimes n}\big),
 $$
-So constant per-pair noise causes only an **additive** $O(\nu)$ shift in the mean! Our test is noise-tolerant.
+so Bob can simply apply $U^\dagger$ locally before running the original protocol.
+
+However, one might ask the more general question: *How close is $\varrho$ to being maximally entangled?* That is, what is the distance to its **closest** maximally entangled state
+$$
+\min_{U \in U(2)} \left[\,D(\varrho, \Phi_U^{\otimes n})\,\right]
+$$
+where $U$ is not known? To test this tolerantly against thresholds $0 \leq \varepsilon_1 < \varepsilon_2 \leq 1$, one approach would use an $\epsilon$-covering net $\mathcal{U} \subseteq U(2)$ and run our protocol for each $U \in \mathcal{U}$. However, whether this can be done efficiently, i.e., in parallel (and while preserving noise-tolerance), requires more work.

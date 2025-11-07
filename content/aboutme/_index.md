@@ -7,21 +7,19 @@ ShowBreadCrumbs: false
 
 ### 👤 Basics
 
-🎂 **Birthday:** 14 Dec 2004 (Sagittarius).
+🎂 **Birthday:** 14 Dec (Sagittarius).
 
 📐 **MBTI:** [INTJ-A](https://www.16personalities.com/intj-personality) (Architect).
 
 🔮 **[The Chariot (VII)](https://en.wikipedia.org/wiki/The_Chariot_(tarot_card)):** My first ever tarot draw from the Major Arcana. I don't see tarot as fortune-telling, but as a mirror - a reflection of where you are, not where you'll end up.
 
-The Chariot shows a lone warrior leaving the safety of the city, guided by black and white sphinxes. He *steers* these opposing forces without any reins - not controlling them completely, but redirecting their energy toward a chosen destination.
+The Chariot shows a lone warrior leaving the safety of the city, guided by black and white sphinxes. He *steers* these opposing forces without any reins. He's not controlling them completely, but redirecting their energy toward a chosen destination.
 
-Control here isn't about force. It is the ability to hold your centre while riding the chaos.
-
-For me, The Chariot is about discipline, pursuit, and momentum: the reminder that to stop is to regress, and there's no real ending to the journey.
+Control here isn't about force; rather, it is the ability to hold your centre while riding the chaos. For me, The Chariot is about discipline, pursuit, and momentum. It reminds that to stop is to regress, and there's no real ending to the journey.
 
 The Chariot always moves forward, because motion itself is what keeps opposing forces in harmony: ambition and doubt, order and chaos, fear and courage. This balance is what keeps your inner war from consuming you.
 
----
+<!-- ---
 
 ### 🎒 Stories
 
@@ -31,13 +29,13 @@ The Chariot always moves forward, because motion itself is what keeps opposing f
 
 **League of Legends:** Playing it for 8 years built my emotional calluses. After enough crushing defeats, I learned that tilting only digs the hole deeper. It ended up making me emotionally steadier, almost stoic, both in-game and in life.
 
----
+--- -->
 
-### ⚡ Hobbies
+<!-- ### ⚡ Hobbies
 
 **Gym:** Currently on a cut, tracking lifts and macros like an IFBB pro (400-500 caloric deficit). Strong pound-for-pound, but aesthetics-wise, no gifted genetics whatsoever. Although my size isn't convincing yet, I'm always down for a conversation about my training philosophy.
 
-**Tea:** I'm not a coffee guy. Grew up around tea drinkers, and now I nerd out over oolong and high-mountain teas.
+**Tea:** I'm not a coffee guy. Grew up around tea drinkers, and now I nerd out over all kind of loose-leaf teas.
 
 **Anime:** *JoJo's Bizarre Adventure* (season 2 in particular!) & *Cyberpunk: Edgerunners*.
 
@@ -51,7 +49,7 @@ The Chariot always moves forward, because motion itself is what keeps opposing f
 - **SKAI ISYOURGOD:** recent discovery, on heavy rotation. Got a [playlist](https://tidal.com/playlist/355f86c1-ed69-45cf-a7e4-63fbf359149b) on TIDAL, repping Canton.
 - **Tame Impala:** *The Slow Rush* and *Currents*.
 - **Deftones.**
-- …and way too many others to list (about 50 from NCS alone).
+- …and way too many others to list (about 50 from NCS alone). -->
 
 ---
 
@@ -71,6 +69,8 @@ My personal board of directors: [Charlie Munger](https://www.stripe.press/poor-c
 
 ### 🌌 My answers to the big questions
 
+Decided to add this part after being asked these questions in a street interview.
+
 #### 🏆 Success
 **"What is your definition of success?"**
 
@@ -83,13 +83,13 @@ My personal board of directors: [Charlie Munger](https://www.stripe.press/poor-c
 
 Success is not easy to define directly, but to me, its opposite is simple - failure is leaving regrets on the table, knowing you could have done better. By inversion, success is when you have pushed as far as you could, leaving nothing undone. It is when you have played the cards you were dealt to the best of your ability.
 
-To me, true success is when your work outlives your name. Most of us live around eighty years, and here is a sobering thought: do you know your great-grandparent's name? Most people cannot. In a hundred years, it is likely no one will remember who you were. That is why your work, your ideas, your values, and your stories matter infinitely more than your DNA.
+To me, true success is when your work outlives your name. Most of us live around eighty years, and here is a sobering thought: *do you know your great-grandparent's name?* Most people don't. In a hundred years, it is likely no one will remember who you were. That is why your work, your ideas, your values, and your stories matter infinitely more than your DNA.
 
-The true extension of life is not biological but intellectual. DNA halves every generation - your child carries half, your grandchild one quarter, then one eighth, approaching zero with frightening speed. But ideas can live forever. Confucius is the perfect example. His bloodline has diluted to dust, yet his ideas still shape civilisations.
+The true extension of life is not biological but intellectual. DNA halves every generation - your child carries half, your grandchild one quarter, then one eighth, approaching zero with frightening speed. But ideas can live forever. Confucius is the perfect example. His bloodline has diluted to dust, yet his ideas are still relevant today.
 
-The same is true in science. You probably do not know who Fritz Haber was, but his process for turning atmospheric nitrogen into ammonia feeds billions today. Half the nitrogen atoms in your body come from his invention. His name has faded, but his work literally lives inside you.
+The same is true in science. You probably do not know who Fritz Haber was, but you should! His process for turning atmospheric nitrogen into ammonia feeds billions today, and about half of the nitrogen atoms in your body come from his invention. His name has faded, but his work literally lives inside you.
 
-That is success: to create something so real, so lasting, that even when you are forgotten, your work continues transforming lives, feeding people, shaping minds, and living on in the world itself.
+To me, that is success: to create something so real, so lasting, that even when you are forgotten, your work continues transforming lives, feeding people, shaping minds, and living on in the world itself.
 </details>
 
 ---
@@ -106,22 +106,20 @@ That is success: to create something so real, so lasting, that even when you are
 
 Wealth is control of time, comfort, and attention without bending your values. The opposite of wealth is compulsion: when bills, status games, or fear dictate your day. Money is a tool, not an identity; it should widen your options and strengthen your integrity.
 
-Wealth has many factors, but material-wise, the test is simple. If more money would not change how you spend today, you are already operating from wealth. If it would, then you are still buying back control.
+Wealth has many factors, but material-wise, the test is simple: if more money would not change how you spend today, you are already operating from wealth. If it would, then you are still buying back control.
 
 Wealth is not being paper-rich with no time for family or those you care about. And it is not endless time with the people you love but no resources to create the life you want. Nor is it having money but lacking the health, energy, or company to enjoy it.
 
-Real wealth is the balance that gives you the time, the means, and the vitality to choose freely. It makes your life resilient to shocks, lets you walk away from bad deals, and funds work that matters while protecting the people you love.  
-
-Wealth is quiet control, not loud consumption. It is having many doors open, and the clarity to walk through the ones that align with your values.
+Real wealth is the balance that gives you the time, the means, and the vitality to choose freely. It makes your life resilient to shocks, lets you walk away from bad deals, and funds work that matters to you while protecting the people you love. Wealth is quiet control, not loud consumption. It is having many doors open, and the clarity to walk through the ones that align with your values.
 
 </details>
 
----
+<!-- ---
 
 #### 🎯 Purpose
 **"What is your purpose?"**
 
-> My purpose is to take on hard problems that matter. `im still thinking about this`
+> My purpose is to take on hard problems that matter.
 
 <details>
 <summary>Read my full answer</summary>
@@ -136,4 +134,4 @@ The Chariot taught me something important: to stop is to regress. Purpose is pur
 
 My purpose is to build, to solve, and to leave something behind that endures. If I can push against limits, take care of my people, and create work that still speaks when I am gone, then I have lived with purpose.
 
-</details>
+</details> -->
