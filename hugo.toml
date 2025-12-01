@@ -25,9 +25,14 @@ theme = "PaperMod"
   math = true
   mainSections = ["journal", "research"]
 
-  [params.homeInfoParams]
-    Title = "<span id='greeting'>Hi there! 👋</span>"
-    Content = "I'm Howard, a CS student passionate about AI, quantum computing, and the ideas that move humanity forward. I enjoy deep conversations on breakthrough tech, philosophy, gym, investments, and bold visions for the future."
+  [params.profileMode]
+    enabled = true
+    title = "<span id='greeting'>Hi there! 👋</span>"
+    subtitle = "I'm Howard, a CS student passionate about quantum computing, AI, and the ideas that move humanity forward. I enjoy deep conversations on breakthrough tech, philosophy, gym, investments, and bold visions for the future."
+    imageUrl = "images/myphoto.png"
+    imageTitle = "Howard"
+    imageWidth = 250
+    imageHeight = 250
 
   [[params.socialIcons]]
     name = "instagram"

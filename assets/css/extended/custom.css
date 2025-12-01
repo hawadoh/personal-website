@@ -1,6 +1,7 @@
-/* ================================
-   Very minor change
-   ================================ */
+/* Add space between profile image and title */
+.profile img {
+  margin-bottom: 2rem;
+}
 
 /* desktop-only portion of footer: hide on screens ≤768px */
 .only-desktop {
